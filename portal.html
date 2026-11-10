@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="pt-PT" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal do Fornecedor</title>
+<script src="dados.js?v=2026-11-09a"></script>
+<script src="portal-online.js?v=2026-11-10a"></script>
+<script src="precos.js"></script>
+<script src="chat.js?v=2026-11-07a"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1d2a12;--azul:#3d5a1e;--red:#b8860b;--bg:#F5F6F0;--line:#e0e4d6;--mut:#6f7764;--txt:#1f2a17;--ok:#11845B;--bad:#cf2938}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 "Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--txt)}
+header{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:8px 22px;flex-wrap:wrap}
+header img{height:58px}
+header .t{border-left:1px solid var(--line);padding-left:16px}
+header .t b{display:block;color:var(--navy);font-size:16px;letter-spacing:.02em}header .t b span{color:var(--red)}
+header .t small{color:var(--mut)}
+header .d{margin-left:auto;display:flex;gap:10px;align-items:center}
+.maq{font-size:12px;font-weight:800;padding:5px 10px;border-radius:99px;background:#fff4d6;color:#8a5a00}
+.btn{border:0;background:var(--azul);color:#fff;border-radius:9px;padding:10px 16px;font-weight:800;cursor:pointer;font-size:14px}
+.btn.light{background:#eef1e6;color:var(--navy)}
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
+.login{max-width:420px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 10px 30px #0000000f}
+.login h1{margin:0 0 4px;color:var(--navy);font-size:22px}.login p{color:var(--mut);margin:0 0 16px}
+label{display:block;font-size:11px;color:var(--mut);font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:12px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid #cfd6c2;border-radius:10px;font:inherit;background:#fffdf2}
+.msg{margin-top:12px;padding:9px 11px;border-radius:9px;font-size:13px}.msg.err{background:#fdecea;color:#8b1c1c}.msg.ok{background:#e9f7f0;color:#0b6b45}.msg.info{background:#fff6e5;color:#7a4b00}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.hero h1{margin:0;color:var(--navy);font-size:24px}.hero p{margin:4px 0 0;color:var(--mut)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.m{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.m small{display:block;color:var(--mut);font-weight:800;font-size:11px;letter-spacing:.04em;text-transform:uppercase}.m b{font-size:22px;color:var(--azul)}
+.m.big{background:linear-gradient(135deg,#2c3d1c,#5b7a24);border:0}.m.big b{color:#fff}.m.big small{color:#dfe8c8}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 4px;color:var(--azul);font-size:17px}.card .sub{color:var(--mut);font-size:12px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#eef1e6;color:#4a5640;text-align:left;padding:9px 10px;white-space:nowrap;font-size:12px}
+td{border-bottom:1px solid #e8ebe0;padding:8px 10px}
+.num{text-align:right;white-space:nowrap}
+tfoot td{font-weight:800;background:#f6f8f1}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:800;background:#eef1e6;color:#4a5640;white-space:nowrap}
+.pill.ok{background:#e3f4ea;color:#0b6b45}.pill.w{background:#fff1d6;color:#8a5a00}.pill.bio{background:#e6f4d8;color:#3d6b12}
+.nota{font-size:12px;color:var(--mut);margin-top:10px}
+.duo{display:grid;grid-template-columns:2.2fr 1fr;gap:16px}
+.pc{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:9px 12px;margin-bottom:8px}.pc small{display:block;color:var(--mut);font-size:11px}.pc b{font-size:20px}.up{color:#11845B}.dn{color:#cf2938}.eq{color:var(--mut)}
+.sem td,.sem th{padding:5px 6px;font-size:12px}
+tr.tal{cursor:pointer}tr.tal:hover td{background:#f4f8ec}.tk{font-size:12px;white-space:nowrap}.tk small{color:var(--mut)}
+.partilha{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:8px;font-size:12px}.partilha small{color:#b8860b}
+.pBt{display:inline-flex;gap:5px;align-items:center;padding:5px 10px;color:#fff;font-weight:700;text-decoration:none;font-size:12px}.pBt.wa{background:#25d366}.pBt.ml{background:#3d5a1e}.pBt.fi{background:#b8860b}
+.mTal{position:fixed;inset:0;background:#141a0dcc;z-index:50;display:flex;align-items:stretch;justify-content:center;padding:24px}
+.mTal .cx{background:#fff;width:min(1250px,100%);display:grid;grid-template-columns:380px 1fr;overflow:hidden}
+.mTal .inf{padding:18px 20px;overflow:auto;border-right:1px solid var(--line)}.mTal .inf h2{margin:0 0 2px;font-size:20px}
+.mTal .bl{border:1px solid var(--line);padding:10px 12px;margin-top:12px}.mTal .bl h3{margin:0 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.mTal .l{display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:13px}.mTal .l span{color:var(--mut)}.mTal .l.g{font-size:17px;border-top:1px dashed var(--line);margin-top:4px;padding-top:6px}.mTal .l.g span{color:var(--txt);font-weight:700}
+.mTal .vis{background:#5b5f57;display:flex;flex-direction:column;min-width:0}.mTal .tbs{display:flex;gap:6px;padding:8px;flex-wrap:wrap;align-items:center}
+.mTal .tbs button{border:0;padding:7px 12px;font-weight:700;cursor:pointer;background:#eef1e6;color:var(--navy)}.mTal .tbs button.on{background:#7cd23a;color:#141a0d}.mTal .tbs .x{margin-left:auto;background:#141a0d;color:#fff}
+.mTal .corpo{flex:1;overflow:auto;padding:14px;text-align:center}.mTal .corpo canvas,.mTal .corpo img{max-width:100%;background:#fff;box-shadow:0 6px 20px #0005}
+.mTal .bl.expl{border:2px solid #b8860b;background:#fff8e6}.mTal .bl.expl h3{color:#8a6408}.mTal .bl.expl p{margin:0;font-size:13px;line-height:1.5}
+@media(max-width:800px){.mTal{padding:0}.mTal .cx{grid-template-columns:1fr;overflow:auto}.mTal .vis{min-height:70vh}}.duo>*{min-width:0}
+.seg{display:inline-flex;gap:4px;flex-wrap:wrap}.seg button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 10px;font:700 12px inherit;color:var(--azul);cursor:pointer}.seg button.on{background:var(--azul);color:#fff;border-color:var(--azul)}
+.card h2.f{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+@media(max-width:900px){.duo{grid-template-columns:1fr}}
+@media(max-width:800px){.metrics{grid-template-columns:1fr 1fr}header img{height:44px}}
+@media print{header .d,.noprint{display:none}body{background:#fff}.card{border:0}[data-sep]{display:block!important}}
+.sepP{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 18px}
+.sepP button{display:flex;gap:12px;align-items:center;text-align:left;border:1.5px solid #e3e6dc;background:#fff;padding:12px 16px;border-radius:3px;cursor:pointer;font:inherit;color:#141a0d;transition:border-color .15s,box-shadow .15s}
+.sepP button:hover{border-color:#141a0d}
+.sepP button .i{width:48px;height:48px;display:grid;place-items:center;background:#eef3e4;color:#141a0d;border-radius:12px;flex:none;transition:background .15s}
+.sepP button b{display:block;font-size:16px;font-weight:800}.sepP button small{display:block;color:#5a6350;font-size:12px}
+.ofer{display:flex;gap:8px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:#141a0d;background:#eefadf;border:1px solid #a9df7c;padding:8px 10px;border-radius:3px;margin:8px 0 0}.ofer input{width:auto;margin-top:2px}
+.barraAdm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.partilha{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:0;font-size:12px}.partilha>b{font-size:12px;color:#5a6350;font-weight:700;margin-right:2px}
+.pBt{display:inline-flex;gap:6px;align-items:center;padding:8px 12px;font-weight:700;text-decoration:none;font-size:13px;border-radius:3px;background:#fff!important;color:#141a0d!important;border:1.5px solid #e3e6dc;transition:border-color .15s}
+.pBt:hover{border-color:#141a0d}.pBt svg{width:16px;height:16px}.pBt.wa svg{fill:#25d366}.pBt.ml svg{stroke:#141a0d}.pBt.fi{background:#141a0d!important;color:#fff!important;border-color:#141a0d}
+.pilA{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:3px;font-size:12px;font-weight:700;background:#141a0d;color:#fff}.pilA.x{background:#fde8e7;color:#b42318}
+.sepP button.on{background:#141a0d;border-color:#141a0d;color:#fff}.sepP button.on small{color:#c9d3bb}.sepP button.on .i{background:#7cd23a;color:#141a0d}
+@media(max-width:700px){.sepP{grid-template-columns:1fr}}
+/* ===== O mesmo tema do programa (07-11-2026, pedido do Ricardo): fundo claro, quase preto, verde-lima no que se carrega, cantos retos ===== */
+:root{--navy:#141a0d;--azul:#141a0d;--bg:#f4f5f0;--line:#e3e6dc;--mut:#5a6350;--txt:#141a0d;--lima:#7cd23a;--lima2:#68b92c;--campo:#f6f7f2;--r:3px}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--bg)}
+header{border-bottom:0;box-shadow:0 1px 0 var(--line)}
+header .t b{font-weight:800}header .t b span{color:#5b7a24}
+.maq,.pill,.btn,.seg button,.msg,.login,.card,.m,.pc,input,select,textarea{border-radius:var(--r)!important}
+.card,.m,.login{border:1px solid var(--line);box-shadow:0 1px 0 #e3e6dc,0 14px 34px #1b240f12}
+.card h2{color:var(--navy);font-weight:800;letter-spacing:-.01em;font-size:18px}
+.hero h1{font-weight:800;letter-spacing:-.02em;font-size:28px}
+.m b{color:var(--navy);font-weight:800}
+.m.big{background:#141a0d}.m.big b{color:var(--lima)}.m.big small{color:#c9d3bb}
+.btn{background:#141a0d;font-weight:700;transition:filter .15s}.btn:hover{filter:brightness(1.3)}.btn.light{background:#eef0e8;color:#141a0d}
+input,select,textarea{background:var(--campo);border:1.5px solid var(--line);font:500 14px Inter,"Segoe UI",sans-serif;outline:0}
+input:focus,select:focus,textarea:focus{background:#fff;border-color:#141a0d;box-shadow:0 0 0 4px #7cd23a40}
+th{background:#f0f2ea;color:#3a4230;font-weight:700}
+.seg button{color:#141a0d}.seg button.on{background:#141a0d;border-color:#141a0d;color:#fff}
+tr.tal:hover td{background:#f1f8e8}
+/* pedir o pagamento, com aspeto de loja */
+.loja{padding:22px}
+.lojaCab{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+.lojaCab h2{font-size:22px!important;margin:0 0 4px}
+.saldo{background:#141a0d;color:#fff;padding:12px 18px;border-radius:var(--r);min-width:230px}
+.saldo small{display:block;color:#c9d3bb;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}.saldo b{display:block;font-size:30px;color:var(--lima);letter-spacing:-.02em}.saldo span{font-size:12px;color:#c9d3bb}
+.lojaSec{font-weight:800;font-size:15px;margin:18px 0 10px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.lojaSec small{font-weight:500;color:var(--mut);font-size:12px}
+.ped{border:1.5px solid var(--line);border-radius:3px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.pedC{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.pedC span{color:var(--mut);font-size:13px}.pedC .pedD{flex:1;color:var(--txt)}
+.pedN{margin-top:6px;font-size:13px;color:#8a5a00;background:#fff6e5;padding:6px 10px;border-radius:3px}.pedN.ok{color:#0b6b45;background:#e3f4ea}
+.lojaGr{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.lpGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.lp{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s,transform .15s}
+.lp:hover{transform:translateY(-2px);box-shadow:0 14px 30px #1b240f1a}
+.lp.on{border-color:var(--lima);box-shadow:0 0 0 3px #7cd23a40}
+.lpF{height:150px;background:linear-gradient(180deg,#eef3e4,#fff);display:flex;align-items:flex-end;justify-content:center;padding-bottom:12px;position:relative}
+.lpF svg{filter:drop-shadow(0 10px 12px #0002)}
+.lpN{position:absolute;top:10px;right:10px;background:var(--lima);color:#141a0d;font-weight:800;font-size:13px;padding:3px 9px;border-radius:var(--r)}
+.lpI{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.lpI b{font-size:16px}.lpI small{color:var(--mut);font-size:12px;min-height:30px}
+.lpP{font-size:22px;font-weight:800;letter-spacing:-.02em}.lpP .pgU{display:block;font-size:12px;font-weight:600;color:var(--mut);letter-spacing:0}.lpP small{font-size:12px;color:var(--mut);font-weight:600;min-height:0}
+.qtd{display:flex;align-items:center;gap:6px;margin-top:6px}
+.qtd button{width:38px;height:38px;border:0;background:#141a0d;color:#fff;font-size:20px;font-weight:700;border-radius:var(--r);cursor:pointer}.qtd button:hover{filter:brightness(1.3)}
+.qtd input{width:70px;text-align:center;font-weight:800;font-size:16px;padding:7px 4px}.qtd span{font-size:12px;color:var(--mut)}
+.lpR{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.lpR button{border:1px solid var(--line);background:#eef0e8;padding:5px 9px;font:700 12px Inter,sans-serif;border-radius:var(--r);cursor:pointer}.lpR button:hover{background:#e1f3cf}
+.cesto{position:sticky;top:12px;background:#fff;border:1.5px solid #141a0d;border-radius:var(--r);padding:16px}
+.cesto h3{margin:0 0 10px;font-size:17px;font-weight:800}
+.cl{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.cl b{display:block;font-size:14px}.cl small{color:var(--mut);font-size:11.5px}.cl span{font-weight:800;white-space:nowrap}
+.cl button{border:0;background:#fde8e7;color:#b42318;width:26px;height:26px;border-radius:var(--r);cursor:pointer;font-weight:800}
+.vz{color:var(--mut);font-size:13px}
+.barra{height:8px;background:#eef0e8;border-radius:var(--r);margin:14px 0 8px;overflow:hidden}.barra i{display:block;height:100%;background:var(--lima)}
+.ct{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0}.ct b{font-size:22px;letter-spacing:-.02em}.ct.s b{font-size:15px}.ct.s span{color:var(--mut);font-size:13px}
+.av{color:#cf2938;font-weight:700;font-size:13px;margin:6px 0 0}
+.btn.grande{width:100%;margin-top:12px;padding:14px;font-size:16px;background:var(--lima);color:#141a0d}.btn.grande:hover{filter:none;background:var(--lima2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:900px){.lojaGr{grid-template-columns:1fr}.cesto{position:static}}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Ryrox Agro">
+  <div class="t"><b>PORTAL DO FORNECEDOR <span>· MUNDO DO AZEITE</span></b><small>As suas entregas de azeitona e os resultados do lagar</small></div>
+  <div class="d"><span class="maq">MAQUETE · dados de exemplo</span><span id="quem"></span></div>
+</header>
+<div id="app"></div>
+<script>
+// Portal do fornecedor: cada produtor vê só as entregas das suas propriedades, com os resultados do lagar e o preço de compra
+// da azeitona combinado com ele. Não vê maquias nem dados de outros produtores.
+// Desde 03-11-2026 (pedido do Ricardo) vê também o preço do azeite como no Dashboard (mercados, preços lançados à mão e a linha
+// "O nosso custo" da Ryrox) com os preços desta semana e a oscilação semana a semana (sem o valor do azeite dele).
+// Maquete: o login é simulado (o código aparece no ecrã). Na versão a sério: Supabase Auth (código por e-mail) e
+// regras na base de dados (RLS) que só devolvem as linhas desse produtor.
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+const kg = v => Math.round(v||0).toLocaleString("pt-PT")+" kg";
+const eur = v => (v||0).toLocaleString("pt-PT",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const pc = (v,d=2) => v==null ? "—" : v.toLocaleString("pt-PT",{minimumFractionDigits:d,maximumFractionDigits:d})+" %";
+const dtl = s => s.split("-").reverse().join("/");
+let D = mdaCarregar();
+const SES = "mda-portal-sessao";
+const ses = () => { try{ return JSON.parse(sessionStorage.getItem(SES)) }catch(e){ return null } };
+const grava = v => { try{ v ? sessionStorage.setItem(SES, JSON.stringify(v)) : sessionStorage.removeItem(SES) }catch(e){} };
+// a Ryrox pode abrir o portal como um fornecedor, para ver o que ele vê (portal.html?ver=P1)
+const ver = new URLSearchParams(location.search).get("ver");
+let campSel = null, sepP = "painel";
+// símbolos dos separadores, desenhados em traço (07-11-2026, pedido do Ricardo: mais modernos que os emojis)
+const IC_SEP = {
+  painel: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16v-3M11 16v-6M15 16v-4"/><path d="M7 9.5l4-2.5 3 2 3.5-3" stroke="#5b9a1e"/><circle cx="17.5" cy="6" r="1.2" fill="#5b9a1e" stroke="none"/></svg>`,
+  colheita: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20c5-3 9-8 12-15"/><path d="M8.5 13.5c-2.6-.2-4.4-1.6-5-3.8 2.5-.3 4.4.9 5 3.8z" fill="#cfe6b0"/><path d="M12.2 8.6c-.6-2.5.1-4.6 2-5.9.9 2.3.2 4.4-2 5.9z" fill="#cfe6b0"/><path d="M11 15.5c2.4.6 4.4 0 5.6-1.7-2.2-1.2-4.3-.8-5.6 1.7z" fill="#cfe6b0"/><ellipse cx="17.6" cy="9.4" rx="2.3" ry="3" transform="rotate(-30 17.6 9.4)" fill="#3f5222" stroke="#2f3d17"/><ellipse cx="7.2" cy="18.4" rx="2.1" ry="2.7" transform="rotate(25 7.2 18.4)" fill="#6f8a3a" stroke="#2f3d17"/></svg>`,
+  financeiro: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5V18a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H17v3"/><path d="M4 8h15a1 1 0 0 1 1 1v3"/><rect x="14" y="11.5" width="7" height="4.5" rx="1.2" fill="#e9f4dc"/><circle cx="16.6" cy="13.75" r=".9" fill="currentColor" stroke="none"/></svg>`
+};
+
+function produtorPorEmail(email){
+  return D.produtores.find(p=>p.portal&&p.portal.ativo&&(p.portal.email||"").toLowerCase()===email.trim().toLowerCase());
+}
+function ecraLogin(passo, email, msg){
+  $("quem").innerHTML = "";
+  // entrada com o e-mail e a palavra-passe de cada pessoa (dados na ficha da entidade, 09-11-2026)
+  $("app").innerHTML = `<div class="login"><h1>Entrar</h1><p>Use o e-mail e a palavra-passe que a Ryrox lhe enviou.</p>
+    <label>E-mail</label><input id="lEmail" type="email" autocomplete="username" placeholder="o.seu@email.pt" value="${esc(email||"")}">
+    <label style="margin-top:10px">Palavra-passe</label><input id="lCod" type="password" autocomplete="current-password">
+    <button class="btn" id="lEntrar" style="width:100%;margin-top:14px">Entrar</button>
+    ${msg||""}<p style="margin-top:14px;font-size:13px;color:var(--mut)">Não tem acesso ou esqueceu-se da palavra-passe? Peça à Ryrox.</p></div>`;
+  $("lEntrar").onclick = async ()=>{ const em=$("lEmail").value, cod=$("lCod").value.trim(), b=$("lEntrar");
+    let r = null;
+    if(window.MDA_ONLINE){ b.disabled = true; b.textContent = "A entrar…";   // na internet: a base de dados confirma e devolve os dados
+      try{ r = await MDA_ONLINE.entrar(em, cod) }catch(e){ return ecraLogin(1, em, `<div class="msg err">${esc(e.message)}</div>`) } }
+    else r = mdaEntrar(em, cod);
+    if(!r) return ecraLogin(1, em, '<div class="msg err">O e-mail ou a palavra-passe não estão certos. Confirme na mensagem da Ryrox.</div>');
+    grava({id:r.p.id, pessoa:r.a.id, email:r.a.email}); mostra(); };
+  ["lEmail","lCod"].forEach(k=>$(k).onkeydown = ev=>{ if(ev.key==="Enter") $("lEntrar").click() });
+}
+
+function portal(pid, admin){
+  const p = by(D.produtores,pid);
+  const props = D.propriedades.filter(h=>h.prod===pid), zonas = D.campos.filter(c=>c.prod===pid);
+  const todas = D.entregas.filter(e=>zonas.some(z=>z.id===e.campo));
+  const camps = [...new Set(todas.map(e=>campanhaDe(e.data)).filter(Boolean))].sort().reverse();
+  if(!campSel || !camps.includes(campSel)) campSel = camps[0] || D.conf.campanha;
+  const E = todas.filter(e=>campanhaDe(e.data)===campSel).sort((a,b)=>b.data.localeCompare(a.data));
+  let T = {kg:0,az:0,val:0,rbk:0,rbs:0,rls:0,acK:0,acS:0,su:0,fK:0,fS:0,hK:0,hS:0,mK:0,mS:0,prov:false};
+  const linhas = E.map(e=>{
+    const z = by(D.campos,e.campo), h = by(D.propriedades,z.prop), kgL = liquido(e), R = rl(e), az = R==null ? null : kgL*R/100, c = mdaCompra(e);
+    const su = mdaSuja(e), fo = mdaFolha(e), MS = msE(e.rb,e.hum); T.su+=su||0; if(!su) T.suF=(T.suF||0)+1; if(fo){T.fK+=fo.kg;T.fS+=su} if(e.hum!=null){T.hK+=kgL;T.hS+=e.hum*kgL} if(MS!=null){T.mK+=kgL;T.mS+=MS*kgL}
+    if(c.maquia){ const q = T.mq = T.mq||{az:0,kg:0,val:0,cl:{}}; q.az+=c.maquia.az; q.kg+=c.maquia.kg; q.val+=c.valor; const k = c.maquia.classe+"|"+c.maquia.preco+"|"+c.maquia.merc+"|"+c.maquia.data, o = q.cl[k] = q.cl[k]||{classe:c.maquia.classe,preco:c.maquia.preco,merc:c.maquia.merc,data:c.maquia.data,az:0,kg:0,val:0}; o.az+=c.maquia.az; o.kg+=c.maquia.kg; o.val+=c.valor }
+    T.kg+=kgL; T.az+=az||0; T.val+=c.valor; if(e.rb!=null){T.rbk+=kgL;T.rbs+=e.rb*kgL;T.rls+=R*kgL} if(e.acidez!=null&&az){T.acK+=az;T.acS+=e.acidez*az} T.prov = T.prov||c.provisorio||e.estado!=="Validado";
+    return `<tr class="tal" data-tal="${esc(e.id)}" title="Ver o talão e o ticket da pesagem"><td style="white-space:nowrap">${dtl(e.data)}</td><td style="white-space:nowrap"><b>${esc(e.id)}</b> <small style="color:var(--azul)">ver ▸</small></td><td class="tk">${tkTxt(e)}</td><td>${esc(h.nome||"")} · ${esc(z.nome.split("·").pop().trim())}</td><td>${esc(z.variedade)} ${z.bio?'<span class="pill bio">bio</span>':""}</td>
+      <td class="num">${su?kg(su):"—"}</td><td class="num"><b>${kg(kgL)}</b></td><td class="num">${fo?kg(fo.kg)+`<br><small style="color:var(--mut)">${pc(fo.pct,1)}</small>`:"—"}</td><td class="num">${pc(e.hum,1)}</td><td class="num">${pc(e.rb)}</td><td class="num">${pc(R)}</td><td class="num">${pc(msE(e.rb,e.hum))}</td><td class="num">${e.acidez==null?"—":pc(e.acidez)}</td><td>${e.rb==null?"—":esc(e.classe||"")}</td>
+      <td class="num">${az==null?'<span class="pill w">à espera do lagar</span>':kg(az)}</td><td class="num">${c.maquia?`${n1p(c.maquia.kg)} kg × ${c.maquia.preco!=null?c.maquia.preco.toLocaleString("pt-PT",{minimumFractionDigits:2})+" €":"—"}<br><small>${n1p(c.maquia.pct)} % · ${esc(c.maquia.classe.toLowerCase())}</small>`:c.preco.toLocaleString("pt-PT",{minimumFractionDigits:3})+" €"}</td><td class="num"><b>${eur(c.valor)}</b>${c.provisorio?'<br><small>provisório</small>':""}</td>
+      <td><span class="pill ${e.estado==="Validado"?"ok":"w"}">${e.estado==="Validado"?"Confirmada":"Em verificação"}</span></td></tr>`; }).join("");
+  // a Ryrox vê a mesma página que o fornecedor vê no B2B (a mesma função portal()); só esta barra de cima é diferente
+  $("quem").innerHTML = admin ? `<span class="barraAdm"><span class="pilA" title="A Ryrox vê exatamente o que o fornecedor vê no B2B">👁 A ver como ${esc(p.nome)}</span>${p.portal&&p.portal.ativo?"":'<span class="pilA x" title="Dê acesso na ficha do fornecedor (Tabelas › Entidades)">Sem acesso ao B2B</span>'}${partilha(p)}</span>` : `<b>${esc(p.nome)}</b> <button class="btn light" id="sair">Sair</button>`;
+  if($("pFich")) $("pFich").onclick = ev=>{ ev.preventDefault(); ficheiroCliente(p); chatRegista(p.id, "Ficheiro do portal preparado para enviar ao cliente", "interna", "ryrox") };
+  // o link do portal enviado por WhatsApp ou e-mail fica registado nas mensagens (toda a comunicação na mesma conversa)
+  document.querySelectorAll(".pBt.wa,.pBt.ml").forEach(a=>a.addEventListener("click", ()=>chatRegista(p.id, textoPartilha(p), a.classList.contains("wa")?"whatsapp":"email", "ryrox")));
+  document.querySelectorAll(".pBt[data-anexo='1']").forEach(a=>a.onclick=async ev=>{ ev.preventDefault(); const u = a.href, w = a.target ? window.open("", "_blank") : null; await ficheiroCliente(p); if(w) w.location = u; else location.href = u });
+  if($("sair")) $("sair").onclick = ()=>{ grava(null); if(window.MDA_ONLINE) MDA_ONLINE.sair(); mostra() };
+  const contrato = p.contrato==="maquia" ? `maquia de ${(+p.pct||0).toLocaleString("pt-PT")} % do azeite produzido, em azeite ou em dinheiro ao preço do dia (${esc(p.mercado||MDA_MERC_MAQUIA)})` : p.contrato==="indexado" ? "preço indexado ao azeite (provisório até ao fecho do preço)" : p.contrato==="exploracao" ? "contrato de exploração com valor anual" : p.contrato==="pct" ? `${(+p.pct||0).toLocaleString("pt-PT")} % da azeitona colhida, a ${(+p.preco||0).toLocaleString("pt-PT",{minimumFractionDigits:3})} € por kg` : `preço fixo de ${(p.preco||0).toLocaleString("pt-PT",{minimumFractionDigits:3})} € por kg de azeitona`;
+  const CC = contaCorrente(p, E);
+  $("app").innerHTML = `<div class="wrap">
+    <div class="hero"><div><h1>Olá, ${esc(p.nome)}</h1><p>As entregas de azeitona das suas propriedades e o que deram no lagar. Contrato de compra: ${contrato}.</p></div>
+      <div class="noprint" style="display:flex;gap:8px;align-items:end"><div><label style="margin-top:0">Campanha</label><select id="camp" style="width:auto">${(camps.length?camps:[campSel]).map(c=>`<option ${c===campSel?"selected":""}>${c}</option>`).join("")}</select></div><button class="btn light" onclick="print()">Imprimir</button></div></div>
+    ${""/* CC: a conta corrente desta campanha, uma só conta para o saldo do Receber e o extrato */}
+    <nav class="sepP noprint">${[["painel",IC_SEP.painel,"Painel","como está a campanha"],["entregas",IC_SEP.colheita,"Colheita",`${E.length} ${E.length===1?"talão":"talões"} no lagar`],["receber",IC_SEP.financeiro,"Financeiro",CC.saldo<-0.005?`deve ${eur2(-CC.saldo)} à Ryrox`:`a receber ${eur2(CC.saldo)}`]]
+      .map(([k,i,t,s])=>`<button data-sp="${k}" class="${k===sepP?"on":""}"><span class="i">${i}</span><span><b>${t}</b><small>${s}</small></span></button>`).join("")}</nav>
+    <div data-sep="painel">
+    <div class="metrics">
+      <div class="m"><small>Azeitona entregue</small><b>${kg(T.kg)}</b></div>
+      <div class="m"><small>Rendimento líquido médio</small><b>${T.rbk?pc(T.rls/T.rbk):"—"}</b>${T.rbk?`<small>bruto ${pc(T.rbs/T.rbk)} − perda no lagar</small>`:""}</div>
+      <div class="m"><small>Azeite produzido</small><b>${kg(T.az)}</b></div>
+      <div class="m big"><small>${T.mq?"A sua maquia, ao dia de hoje":"Valor da azeitona"+(T.prov?" (provisório)":"")}</small><b>${eur(T.val)}</b>${T.mq?`<small>ou ${n1p(T.mq.kg)} kg de azeite</small>`:""}</div></div>
+    ${T.mq?`<section class="card"><h2>A sua maquia ao dia de hoje · ${n1p(+p.pct||0)} % do azeite produzido</h2><div class="sub">A conta é feita ao preço de hoje e fica fechada no dia em que lhe pagarmos. A classe de cada entrega vê-se pela acidez; o preço é o dessa classe em ${esc(p.mercado||MDA_MERC_MAQUIA)}, a região onde colhemos.</div>
+      <table><thead><tr><th>Classe (pela acidez)</th><th class="num">Azeite produzido</th><th class="num">${n1p(+p.pct||0)} % para si</th><th class="num">Preço de hoje</th><th class="num">Em dinheiro</th></tr></thead><tbody>
+      ${Object.values(T.mq.cl).map(o=>`<tr><td><b>${esc(o.classe)}</b></td><td class="num">${kg(o.az)}</td><td class="num"><b>${n1p(o.kg)} kg</b></td><td class="num">${o.preco!=null?o.preco.toLocaleString("pt-PT",{minimumFractionDigits:2})+" €/kg<br><small>"+esc(o.merc)+" · semana de "+dtl(o.data)+"</small>":"sem preço"}</td><td class="num"><b>${eur(o.val)}</b></td></tr>`).join("")}</tbody>
+      <tfoot><tr><td>Total</td><td class="num">${kg(T.mq.az)}</td><td class="num">${n1p(T.mq.kg)} kg</td><td></td><td class="num">${eur(T.mq.val)}</td></tr></tfoot></table>
+      <div class="metrics" style="margin:14px 0 0"><div class="m"><small>Pode receber em azeite</small><b>${n1p(T.mq.kg)} kg</b></div><div class="m big"><small>Ou em dinheiro, ao preço de hoje</small><b>${eur(T.mq.val)}</b></div></div></section>`:""}
+    <div class="duo"><section class="card"><h2 class="f"><span>Preço do azeite</span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><select id="pMerc" style="width:auto;padding:5px 8px;background:#fff"></select><span class="seg" id="pPer"></span></span></h2>
+      <div class="sub" id="pSub"></div><div style="height:400px;position:relative"><canvas id="gPreco"></canvas></div><div class="nota" id="pFonte"></div></section>
+      <section class="card"><h2>Preços desta semana</h2><div class="sub">Por classe, no mercado escolhido no gráfico, e a variação face à semana anterior.</div><div id="pHoje"></div>
+        <h2 style="margin-top:14px;font-size:15px">Oscilação por semana</h2><div id="pSem" style="overflow:auto"></div></section></div>
+    </div><div data-sep="entregas">
+    <section class="card"><h2>A sua colheita no lagar · campanha ${esc(campSel)}</h2><div class="sub">Peso do lagar (é este que conta), análise do lagar e valor da azeitona ao preço contratado. As entregas "em verificação" ainda podem mudar.</div>
+      <div style="overflow:auto"><table><thead><tr><th>Data</th><th>Talão</th><th>Ticket de pesagem</th><th>Propriedade · zona</th><th>Variedade</th><th class="num">Azeitona suja</th><th class="num">Azeitona limpa<br><small>é este peso que conta</small></th><th class="num">Folha e terra</th><th class="num">Humidade</th><th class="num">Rend. bruto</th><th class="num">Rend. líquido</th><th class="num">Rend. MS</th><th class="num">Acidez</th><th>Classe</th><th class="num">Azeite</th><th class="num">Preço</th><th class="num">Valor</th><th>Estado</th></tr></thead>
+      <tbody>${linhas||'<tr><td colspan="18" style="color:var(--mut)">Ainda não há entregas nesta campanha.</td></tr>'}</tbody>
+      ${linhas?`<tfoot><tr><td colspan="5">Total</td><td class="num">${kg(T.su)}${T.suF?`<br><small>falta em ${T.suF}</small>`:""}</td><td class="num"><b>${kg(T.kg)}</b></td><td class="num">${T.fS?kg(T.fK)+`<br><small>${pc(T.fK/T.fS*100,1)}</small>`:""}</td><td class="num">${T.hK?pc(T.hS/T.hK,1):""}</td><td class="num">${T.rbk?pc(T.rbs/T.rbk):""}</td><td class="num"><b>${T.rbk?pc(T.rls/T.rbk):""}</b></td><td class="num">${T.mK?pc(T.mS/T.mK):""}</td><td class="num" title="média ponderada pelo azeite de cada entrega"><b>${T.acK?pc(T.acS/T.acK):""}</b></td><td></td><td class="num">${kg(T.az)}</td><td></td><td class="num">${eur(T.val)}</td><td></td></tr></tfoot>`:""}</table></div>
+      <div class="nota">Rendimento líquido = rendimento bruto menos o desconto do lagar. Rend. MS = rendimento sobre a matéria seca (sem a água da azeitona). No total, a humidade e os rendimentos são médias ponderadas pelos kg de cada entrega, e a acidez pelo azeite de cada entrega: pesa mais a entrega maior. Azeitona suja = como chegou ao lagar; azeitona limpa = depois de tirar a folha e a terra (é esta que conta).</div></section>
+    <section class="card"><h2>As suas propriedades</h2><table><thead><tr><th>Propriedade</th><th>Modo de produção</th><th>Certificado bio válido até</th><th>Zonas</th></tr></thead><tbody>
+      ${props.map(h=>`<tr><td><b>${esc(h.nome)}</b></td><td>${esc((by(D.tabelas.modos,h.modo).nome)||"")}</td><td>${h.cert?dtl(h.cert):"—"}</td><td>${D.campos.filter(c=>c.prop===h.id).map(z=>`${esc(z.variedade)} (${(z.ha||0).toLocaleString("pt-PT")} ha)`).join(", ")}</td></tr>`).join("")}</tbody></table>
+      <div class="nota">Se algum dado não estiver certo, fale com a Ryrox Agro.</div></section></div>
+    <div data-sep="receber">${(()=>{ try{ return pedidoHtml(p, T) }catch(e){ console.error("pedido", e); return "" } })()}${contaHtml(p, CC, admin)}</div></div>`;
+  // separadores (07-11-2026, pedido do Ricardo): Painel, Entregas e Receber, para o portal ser simples de navegar
+  const mostraSep = () => { document.querySelectorAll("[data-sep]").forEach(d=>d.hidden = d.dataset.sep!==sepP); document.querySelectorAll("[data-sp]").forEach(b=>b.classList.toggle("on", b.dataset.sp===sepP)) };
+  document.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{ sepP = b.dataset.sp; mostraSep(); if(sepP==="painel") precoPortal(); window.scrollTo({top:0}) });
+  mostraSep(); ligaConta(p, admin);
+  $("camp").onchange = ev=>{ campSel=ev.target.value; portal(pid, admin) };
+  document.querySelectorAll("tr.tal").forEach(r=>r.onclick=()=>abreTalao(E.find(e=>e.id===r.dataset.tal)));
+  precoPortal(); try{ ligaPedido(p, T, admin) }catch(e){ console.error("pedido", e) }
+}
+
+// ---- pedir o pagamento (07-11-2026, pedido do Ricardo): o fornecedor pede o que lhe devemos em dinheiro ou em azeite.
+// Com aspeto de loja (o cliente não conhece artigos): cartões com a garrafa desenhada, − / + e um cesto com vários artigos
+// (garrafas de vários tamanhos, azeite a granel e dinheiro, misturados). No embalado paga a embalagem com a margem da Ryrox.
+// O pedido aparece no programa, em Financeiro › Pedidos dos fornecedores.
+const eur2 = v => (v||0).toLocaleString("pt-PT",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const litTxt = l => l<1 ? l.toLocaleString("pt-PT",{minimumFractionDigits:2})+" L" : l.toLocaleString("pt-PT")+" L";
+const kg1 = v => (v||0).toLocaleString("pt-PT",{maximumFractionDigits:1});
+const pedidosDe = pid => (D.pedidosPag||[]).filter(x=>x.prod===pid && x.campanha===campSel && x.estado!=="Recusado");
+// o preço do azeite ao kg para o pedido: na maquia, o da maquia de hoje; nos outros contratos, o do virgem extra hoje no Alentejo Central
+const fonteTxt = h => `${h.manual?h.merc:h.merc} · ${dtl(h.data)}`;
+function precoPedido(T){ if(T.mq && T.mq.kg) return {kg:T.mq.val/T.mq.kg, txt:"o da sua maquia, pela classe de cada entrega"};
+  const u = mdaPrecoHoje("Virgem extra"); return u ? {kg:u.preco, txt:`virgem extra, ${fonteTxt(u)}`} : null }
+// o azeite engarrafado vale o preço de hoje da classe do azeite da garrafa (tabela do Alentejo Central ou o lançado à mão)
+function precoGarrafa(l){ const pr = D.produtos.find(x=>+x.litros===l), classe = mdaClasseProd(pr), h = mdaPrecoHoje(classe); return h ? {kg:h.preco, classe, txt:`${classe.toLowerCase()} · ${fonteTxt(h)}`} : null }
+// a garrafa desenhada (a altura cresce com o tamanho); o garrafão de 5 L é um garrafão
+function garrafaSvg(l){
+  // vidro verde-escuro, rótulo creme e tampa verde-lima, iguais em todos os tamanhos (07-11-2026, pedido do Ricardo)
+  const vidro = "#2f3d17", brilho = "#4d6326", rot = "#f6f1df", tampa = "#7cd23a", L = litTxt(l);
+  const rotulo = (x, y, w, h, f) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${rot}"/><text x="${x+w/2}" y="${y+h*.34}" font-family="Inter,Arial" font-size="${f*.85}" font-weight="700" text-anchor="middle" fill="${vidro}">MUNDO DO</text><text x="${x+w/2}" y="${y+h*.6}" font-family="Inter,Arial" font-size="${f}" font-weight="800" text-anchor="middle" fill="${vidro}">AZEITE</text><text x="${x+w/2}" y="${y+h*.86}" font-family="Inter,Arial" font-size="${f*.9}" font-weight="700" text-anchor="middle" fill="#5b7a24">${L}</text>`;
+  // garrafão de 5 L: corpo largo de vidro verde, gargalo curto e asa
+  if(l>=5) return `<svg width="104" height="128" viewBox="0 0 84 104"><rect x="33" y="0" width="18" height="9" rx="2" fill="${tampa}"/><rect x="35" y="9" width="14" height="9" fill="${vidro}"/><path d="M60 22c9 0 13 6 13 13v6" stroke="${vidro}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M35 18h14c0 6 30 8 30 26v52a8 8 0 0 1-8 8H13a8 8 0 0 1-8-8V44c0-18 30-20 30-26z" fill="${vidro}"/><path d="M14 46c0-10 10-15 18-17v66h-9a9 9 0 0 1-9-9z" fill="${brilho}" opacity=".45"/>${rotulo(15, 52, 54, 34, 7.5)}</svg>`;
+  // garrafas: 0,25 / 0,50 / 0,75 L e a de 3 L (mais alta e mais larga)
+  const big = l>=3, h = {0.25:72, 0.5:96, 0.75:118, 3:136}[l] || 100, w = big ? h*.5 : h*.36;
+  return big
+    ? `<svg width="${w}" height="${h}" viewBox="0 0 50 100"><rect x="19" y="0" width="12" height="9" rx="1.5" fill="${tampa}"/><path d="M19 9h12v10c0 4 15 7 15 19v56a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V38c0-12 15-15 15-19z" fill="${vidro}"/><path d="M9 42c0-6 5-10 9-11v65H12a3 3 0 0 1-3-3z" fill="${brilho}" opacity=".45"/>${rotulo(4, 48, 42, 32, 6.4)}</svg>`
+    : `<svg width="${w}" height="${h}" viewBox="0 0 36 100"><rect x="14" y="0" width="8" height="10" rx="1.5" fill="${tampa}"/><path d="M14 10h8v14c0 4 10 8 10 18v54a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V42c0-10 10-14 10-18z" fill="${vidro}"/><path d="M8 44c0-5 3-9 6-10v62H10a2 2 0 0 1-2-2z" fill="${brilho}" opacity=".45"/>${rotulo(4, 52, 28, 30, 5.2)}</svg>`;
+}
+const SVG_GRANEL = `<svg width="92" height="110" viewBox="0 0 80 96"><rect x="8" y="14" width="64" height="78" rx="6" fill="#dfe6cf"/><rect x="8" y="40" width="64" height="52" rx="4" fill="#e4c24a" opacity=".75"/><rect x="26" y="4" width="16" height="12" rx="2" fill="#7cd23a"/><rect x="50" y="20" width="16" height="6" rx="3" fill="#b9c4a3"/><text x="40" y="70" font-family="Inter,Arial" font-size="11" font-weight="800" text-anchor="middle" fill="#2f3d17">A GRANEL</text></svg>`;
+const SVG_EURO = `<svg width="96" height="96" viewBox="0 0 80 80"><rect x="4" y="18" width="72" height="44" rx="5" fill="#141a0d"/><circle cx="40" cy="40" r="13" fill="#7cd23a"/><text x="40" y="46" font-family="Inter,Arial" font-size="17" font-weight="800" text-anchor="middle" fill="#141a0d">€</text><circle cx="14" cy="40" r="3" fill="#7cd23a"/><circle cx="66" cy="40" r="3" fill="#7cd23a"/></svg>`;
+let cesto = {}, ofertaExtra = false;   // {"0.5": unidades, granel: kg, dinheiro: €}
+// o que vale cada artigo do cesto
+function linhaCesto(k, q, pr){
+  if(k==="dinheiro") return {k, q, total:q, kg:0, emb:0, nome:"Em dinheiro", det:"transferência bancária"};
+  if(k==="granel") return {k, q, total:q*pr.kg, kg:q, emb:0, nome:`${kg1(q)} kg a granel`, det:`${kg1(q)} kg × ${eur2(pr.kg)}`};
+  const l = +k, e = mdaEmbalagem(l), pg = precoGarrafa(l) || pr, kg = q*l*DENS, va = kg*pg.kg, ve = q*e.preco;
+  return {k, q, l, total:va+ve, kg, emb:ve, falta:e.falta, nome: (MDA_CAIXA[l]||1)>1 ? `${q/MDA_CAIXA[l]} ${q/MDA_CAIXA[l]===1?"caixa":"caixas"} de ${MDA_CAIXA[l]} × ${litTxt(l)} (${q} garrafas)` : `${q} × garrafão ${litTxt(l)}`, det:`azeite ${eur2(va)} + embalagem ${e.falta?"a confirmar":eur2(ve)}`};
+}
+// ---- conta corrente do fornecedor (07-11-2026, pedido do Ricardo): o que entregou (a seu favor), os pedidos (encomendas de azeite
+// e pagamentos pedidos) e os pagamentos lançados no programa, com o saldo corrido. Um pedido pago no programa gera um pagamento (PG)
+// com a referência do pedido: aqui conta só o pedido, para não contar duas vezes. A oferta da Ryrox abate o pedido (valor zero no extra).
+// Cada linha é picada (conferida) pela Ryrox; o fornecedor vê o ✓.
+const valPedido = x => Math.max(0, (+x.total||0) - (+x.oferta||0));
+function contaCorrente(p, E){
+  E = E || D.entregas.filter(e=>D.campos.some(z=>z.id===e.campo && z.prod===p.id) && campanhaDe(e.data)===campSel);
+  const L = [], conc = D.conciliacao||{};
+  E.forEach(e=>{ const c = mdaCompra(e); if(c.valor>0) L.push({k:"E|"+e.id, data:e.data, doc:e.id, descr:`Entrega de azeitona · ${kg(liquido(e))}${c.maquia?` · maquia ${n1p(c.maquia.kg)} kg de azeite ao preço de hoje`:""}`, cred:c.valor, prov:c.provisorio||e.estado!=="Validado"}) });
+  (D.pedidosPag||[]).filter(x=>x.prod===p.id && x.campanha===campSel && x.estado!=="Recusado").forEach(x=>L.push({k:"P|"+x.id, data:x.data, doc:x.id, descr:`Pedido: ${x.descr}${+x.oferta?` · oferta da Ryrox ${eur2(x.oferta)}`:""}`, deb:valPedido(x), estado:x.estado, ped:x}));
+  (D.pagamentos||[]).filter(g=>g.ent===p.id && g.campanha===campSel && g.tipo==="pagamento" && !/PP-\d+/.test(g.ref||"")).forEach(g=>L.push({k:"G|"+g.id, data:g.data, doc:g.id, descr:`Pagamento · ${g.forma||""}${g.ref?" · "+g.ref:""}`, deb:+g.valor||0, estado:"Pago"}));
+  L.sort((a,b)=>a.data.localeCompare(b.data)||(a.cred?-1:1)); let s = 0; L.forEach(x=>{ s += (x.cred||0) - (x.deb||0); x.saldo = s; x.conc = !!conc[x.k] });
+  return {L, saldo:s, cred:L.reduce((t,x)=>t+(x.cred||0),0), deb:L.reduce((t,x)=>t+(x.deb||0),0)};
+}
+function contaHtml(p, CC, admin){
+  const est = {Pedido:["Pedido","w"], Aceite:["Aceite","ok"], Pago:["Pago / entregue","ok"]}, n = CC.L.filter(x=>x.conc).length;
+  return `<section class="card"><h2 class="f"><span>Conta corrente · campanha ${esc(campSel)}</span><span class="pill ${CC.saldo<-0.005?"w":"ok"}" style="font-size:13px">${CC.saldo<-0.005?"Deve à Ryrox "+eur2(-CC.saldo):"A seu favor "+eur2(CC.saldo)}</span></h2>
+    <div class="sub">Tudo o que se passou na sua conta: as entregas de azeitona (a seu favor), os pedidos de azeite e de pagamento e os pagamentos. O saldo vai somando linha a linha. ✓ = conferido pela Ryrox.</div>
+    <div class="metrics" style="margin:10px 0 14px"><div class="m"><small>A seu favor (entregas)</small><b>${eur2(CC.cred)}</b></div><div class="m"><small>Pedidos e pagamentos</small><b>${eur2(CC.deb)}</b></div><div class="m big"><small>Saldo</small><b>${eur2(CC.saldo)}</b></div><div class="m"><small>Conferido</small><b>${n} de ${CC.L.length}</b></div></div>
+    <div style="overflow:auto"><table><thead><tr><th>Data</th><th>Documento</th><th>Descrição</th><th class="num">A seu favor</th><th class="num">Pedido / pago</th><th class="num">Saldo</th><th>Estado</th><th title="Conferido pela Ryrox">✓</th></tr></thead><tbody>
+    ${CC.L.map(x=>`<tr><td style="white-space:nowrap">${dtl(x.data)}</td><td><b>${esc(x.doc)}</b></td><td>${esc(x.descr)}</td><td class="num">${x.cred?eur2(x.cred)+(x.prov?'<br><small style="color:var(--mut)">ao preço de hoje</small>':""):""}</td><td class="num">${x.deb!=null?eur2(x.deb):""}</td>
+      <td class="num"><b style="${x.saldo<-0.005?"color:#cf2938":""}">${eur2(x.saldo)}</b></td><td>${x.estado?`<span class="pill ${(est[x.estado]||["",""])[1]}">${(est[x.estado]||[x.estado])[0]}</span>`:'<span class="pill ok">Entregue</span>'}</td>
+      <td>${admin?`<input type="checkbox" data-conc="${esc(x.k)}" ${x.conc?"checked":""} title="Picar: conferido">`:x.conc?'<b style="color:#11845B">✓</b>':""}</td></tr>`).join("")||'<tr><td colspan="8" style="color:var(--mut)">Ainda não há movimentos nesta campanha.</td></tr>'}</tbody>
+    <tfoot><tr><td colspan="3">Total</td><td class="num">${eur2(CC.cred)}</td><td class="num">${eur2(CC.deb)}</td><td class="num">${eur2(CC.saldo)}</td><td colspan="2"></td></tr></tfoot></table></div>
+    <div class="nota">As entregas com maquia valem ao preço do azeite de hoje até serem pagas. Se o saldo ficar negativo, é o que deve à Ryrox.</div></section>`;
+}
+function ligaConta(p, admin){
+  if(!admin) return;
+  document.querySelectorAll("[data-conc]").forEach(c=>c.onchange=()=>{ D = mdaCarregar(); D.conciliacao = D.conciliacao||{};
+    if(c.checked) D.conciliacao[c.dataset.conc] = {data:new Date().toISOString().slice(0,10)}; else delete D.conciliacao[c.dataset.conc];
+    localStorage.setItem(MDA_CHAVE, JSON.stringify(D)); portal(p.id, admin) });
+}
+function pedidoHtml(p, T){
+  return `<section class="card noprint loja" id="pedCard"></section>`;
+}
+function ligaPedido(p, T, admin){
+  const el = $("pedCard"); if(!el) return;
+  const desenha = () => {
+    const ja = pedidosDe(p.id), CC = contaCorrente(p, null), usado = T.val - CC.saldo, saldo = Math.max(0, CC.saldo), pr = precoPedido(T);
+    const L = pr ? Object.entries(cesto).filter(([,q])=>q>0).map(([k,q])=>linhaCesto(k,q,pr)) : [], tot = L.reduce((t,x)=>t+x.total,0), resta = saldo - tot, pct = saldo ? Math.min(100, tot/saldo*100) : 0;
+    const passa = tot > saldo + 0.005, est = {Pedido:"w", Aceite:"ok", Pago:"ok"};
+    // f: garrafas por caixa (o campo mostra caixas, o cesto guarda garrafas)
+    const qtd = (k, passo, un, f=1) => `<div class="qtd"><button data-m="${k}" data-p="${passo}" aria-label="menos">−</button><input data-q="${k}" data-f="${f}" type="number" min="0" step="${f>1?1:passo}" value="${(cesto[k]||0)/f}"><span>${un}</span><button data-a="${k}" data-p="${passo}" aria-label="mais">+</button></div>`;
+    const cartao = (k, svg, nome, sub, preco, passo, un, extra="", f=1) => `<div class="lp ${(cesto[k]||0)>0?"on":""}"><div class="lpF">${svg}${(cesto[k]||0)>0?`<span class="lpN">${k==="dinheiro"?eur2(cesto[k]):k==="granel"?kg1(cesto[k])+" kg":f>1?`${cesto[k]/f} cx · ${cesto[k]} gf.`:cesto[k]}</span>`:""}</div>
+      <div class="lpI"><b>${nome}</b><small>${sub}</small><div class="lpP">${preco}</div>${qtd(k, passo, un, f)}${extra}</div></div>`;
+    const garrafas = MDA_FORMATOS.filter(l=>l<5).map(l=>{ const e = mdaEmbalagem(l), pg = precoGarrafa(l)||pr, un = pg ? l*DENS*pg.kg + e.preco : 0;
+      return cartao(String(l), garrafaSvg(l), `Garrafa ${litTxt(l)}`, `${pg?`${esc((pg.classe||"virgem extra").toLowerCase())} a ${eur2(pg.kg)}/kg: azeite ${eur2(l*DENS*pg.kg)}`:"—"} + embalagem ${e.falta?"a confirmar":eur2(e.preco)}`, pg?`${eur2(un*(MDA_CAIXA[l]||1))}<small>/caixa de ${MDA_CAIXA[l]||1}</small><span class="pgU">${eur2(un)} por garrafa</span>`:"—", MDA_CAIXA[l]||1, "caixas", "", MDA_CAIXA[l]||1) }).join("");
+    const garrafao = MDA_FORMATOS.filter(l=>l>=5).map(l=>{ const e = mdaEmbalagem(l), pg = precoGarrafa(l)||pr, un = pg ? l*DENS*pg.kg + e.preco : 0;
+      return cartao(String(l), garrafaSvg(l), `Garrafão ${litTxt(l)}`, `${pg?`${esc((pg.classe||"virgem extra").toLowerCase())} a ${eur2(pg.kg)}/kg: azeite ${eur2(l*DENS*pg.kg)}`:"—"} + embalagem ${e.falta?"a confirmar":eur2(e.preco)}`, pg?`${eur2(un)}<small>/garrafão</small>`:"—", 1, "un.") }).join("");
+    el.innerHTML = `<div class="lojaCab"><div><h2>Receber o que lhe devemos</h2><div class="sub">Escolha como quer receber: em azeite engarrafado, a granel ou em dinheiro. Pode juntar vários no mesmo pedido.</div></div>
+        <div class="saldo"><small>${CC.saldo<-0.005?"Deve à Ryrox":"A receber"} · campanha ${esc(campSel)}</small><b>${eur2(Math.abs(CC.saldo))}</b><span>entregas ${eur2(CC.cred)}${CC.deb?` · já pedido ou pago ${eur2(CC.deb)}`:""}</span></div></div>
+      ${!pr ? '<p class="pill w">Ainda não há preço do azeite de hoje: fale com a Ryrox.</p>' : `
+      <div class="lojaGr"><div>
+        <div class="lojaSec">Azeite engarrafado, à caixa <small>Garrafas só à caixa (0,25 L: 12 · 0,50 L: 6 · 0,75 L: 6 · 3 L: 3); o garrafão de 5 L à unidade. O azeite ao preço de hoje da sua classe, na tabela do Alentejo Central${(()=>{ const ve = mdaPrecoHoje("Virgem extra"), vg = mdaPrecoHoje("Virgem"); return ve ? ` (virgem extra ${eur2(ve.preco)}/kg${vg?`, virgem ${eur2(vg.preco)}/kg`:""}, ${esc(fonteTxt(ve))})` : "" })()}; mais a embalagem (garrafa, rótulo, caixa e embalamento)</small></div>
+        <div class="lpGrid">${garrafas}${garrafao}</div>
+        <div class="lojaSec">A granel e em dinheiro</div>
+        <div class="lpGrid">${cartao("granel", SVG_GRANEL, "Azeite a granel", "levanta no seu recipiente", `${eur2(pr.kg)}<small>/kg</small>`, 10, "kg")}${cartao("dinheiro", SVG_EURO, "Em dinheiro", "transferência para a sua conta", "o valor que escolher", 50, "€", `<div class="lpR"><button data-tudo="1">Tudo o que falta</button></div>`)}</div>
+      </div>
+      <aside class="cesto"><h3>O seu pedido</h3>
+        ${L.length ? L.map(x=>`<div class="cl"><div><b>${x.nome}</b><small>${x.det}</small></div><span>${eur2(x.total)}</span><button data-x="${x.k}" title="Tirar">×</button></div>`).join("") : '<p class="vz">Ainda não escolheu nada. Carregue em + nos cartões.</p>'}
+        <div class="barra"><i style="width:${pct}%;${passa?"background:#cf2938":""}"></i></div>
+        <div class="ct"><span>Total do pedido</span><b>${eur2(tot)}</b></div>
+        <div class="ct s"><span>${passa?"Passa o que pode pedir em":"Fica por pedir"}</span><b ${passa?'style="color:#cf2938"':""}>${eur2(Math.abs(resta))}</b></div>
+        ${L.some(x=>x.kg)?`<div class="ct s"><span>Azeite</span><b>${kg1(L.reduce((t,x)=>t+x.kg,0))} kg</b></div>`:""}
+        ${passa?(admin?`<label class="ofer"><input type="checkbox" id="pdOferta" ${ofertaExtra?"checked":""}> O que passa (${eur2(tot-saldo)}) é <b>oferta da Ryrox</b>, a valor zero</label>`:'<p class="av">O que passa fica na sua conta corrente, a dever à Ryrox.</p>'):""}
+        <label>Nota para a Ryrox (opcional)</label><input id="pdNota" placeholder="ex.: IBAN, onde levantar, rótulo…">
+        <button class="btn grande" id="pdEnviar" ${L.length?"":"disabled"}>Enviar pedido</button>
+      </aside></div>`}
+      ${ja.length ? `<div class="lojaSec">Onde está a sua encomenda</div>${ja.slice().reverse().map(x=>`<div class="ped"><div class="pedC"><b>${esc(x.id)}</b><span>${dtl(x.data)}</span><span class="pedD">${esc(x.descr)}${+x.oferta?` · 🎁 oferta da Ryrox ${eur2(x.oferta)}`:""}</span><b>${eur2(valPedido(x))}</b></div>${mdaTrilho(x)}${x.eb&&x.estado==="Requisitado"?`<div class="pedN">O lagar está a embalar a sua encomenda.</div>`:x.estado==="No armazém"?`<div class="pedN ok">Já está no nosso armazém: combinamos consigo a entrega ou o levantamento.</div>`:""}</div>`).join("")}` : ""}`;
+    const poe = (k, v) => { cesto[k] = Math.max(0, Math.round((+v||0)*100)/100); desenha() };
+    el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>poe(b.dataset.a, (cesto[b.dataset.a]||0) + +b.dataset.p));
+    el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>poe(b.dataset.m, (cesto[b.dataset.m]||0) - +b.dataset.p));
+    el.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>poe(b.dataset.r, (cesto[b.dataset.r]||0) + +b.dataset.n));
+    el.querySelectorAll("[data-q]").forEach(i=>i.onchange=()=>poe(i.dataset.q, Math.max(0, i.dataset.f>1 ? Math.round(+i.value||0) : +i.value||0) * (+i.dataset.f||1)));
+    el.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>poe(b.dataset.x, 0));
+    const tudo = el.querySelector("[data-tudo]"); if(tudo) tudo.onclick = () => { const outros = L.filter(x=>x.k!=="dinheiro").reduce((t,x)=>t+x.total,0); poe("dinheiro", Math.max(0, Math.floor((saldo-outros)*100)/100)) };
+    const of = $("pdOferta"); if(of) of.onchange = () => { ofertaExtra = of.checked; desenha() };
+    const env = $("pdEnviar"); if(env) env.onclick = () => { if(!L.length) return; const extra = Math.max(0, Math.round((tot - saldo)*100)/100);
+      D = mdaCarregar(); D.pedidosPag = D.pedidosPag||[]; let n = D.pedidosPag.length+1; while(D.pedidosPag.some(x=>x.id==="PP-"+String(n).padStart(4,"0"))) n++;
+      const tipos = [...new Set(L.map(x=>x.k==="dinheiro"?"dinheiro":x.k==="granel"?"granel":"embalado"))];
+      D.pedidosPag.push({id:"PP-"+String(n).padStart(4,"0"), prod:p.id, campanha:campSel, data:new Date().toISOString().slice(0,10), tipo: tipos.length>1?"misto":tipos[0],
+        descr: L.map(x=>x.nome).join(" + "), total:Math.round(tot*100)/100, kg:L.reduce((t,x)=>t+x.kg,0)||null, emb:L.reduce((t,x)=>t+x.emb,0)||null, embFalta:L.some(x=>x.falta),
+        linhas:L.map(x=>({k:x.k, q:x.q, litros:x.l||null, kg:x.kg||null, emb:x.emb||null, total:Math.round(x.total*100)/100, nome:x.nome})), precoKg:pr.kg,
+        nota:$("pdNota").value.trim(), estado:"Pedido", por:admin?"Ryrox (a ver como o fornecedor)":"Fornecedor no portal", extra:extra||null, oferta:admin&&ofertaExtra&&extra?extra:0});
+      localStorage.setItem(MDA_CHAVE, JSON.stringify(D)); cesto = {}; ofertaExtra = false;
+      chatRegista(p.id, `Pedido ${D.pedidosPag[D.pedidosPag.length-1].id}: ${L.map(x=>x.nome).join(" + ")} (${eur2(tot)})`, "chat", admin?"ryrox":"cliente"); portal(p.id, admin); $("pedCard").scrollIntoView({block:"start"}) };
+  };
+  desenha();
+}
+
+// ---- partilhar com o cliente (05-11-2026, pedido do Ricardo): na visão do cliente, enviar o link do portal por WhatsApp ou por e-mail.
+// O link é o endereço do portal (D.conf.portalUrl quando estiver online); o cliente entra com o e-mail e o código.
+const IC_WA = '<svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3 2.4.9 2.9.8 3.4.7.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.6 15.6 2.1 13.8 2.1 12 2.1 6.5 6.5 2.1 12 2.1S21.9 6.5 21.9 12 17.5 21.8 12 21.8zM12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12S18.6 0 12 0z"/></svg>';
+const IC_MAIL = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>';
+function linkPortal(){ return (D.conf.portalUrl||"").trim() }
+function textoPartilha(p){ const em = (mdaAcessos(p)[0]||{}).email||p.email||"";
+  if(!linkPortal()) return `Bom dia,
+
+Segue em anexo a página com as suas entregas de azeitona da campanha ${campSel||D.conf.campanha}: os talões com os tickets da pesagem, os rendimentos e a acidez do lagar, o azeite produzido e o valor ao dia de hoje.
+
+Abra o ficheiro no telemóvel ou no computador; ao carregar num talão vê a pesagem e os tickets.
+
+Com os melhores cumprimentos,
+Ricardo Luz · Ryrox Agro`;
+  return `Bom dia,
+
+Já pode acompanhar as suas entregas de azeitona da campanha ${campSel||D.conf.campanha} no Portal do Fornecedor da Ryrox Agro: os talões com os tickets da pesagem, os rendimentos e a acidez do lagar, o azeite produzido e o valor ao dia.
+
+${linkPortal()}
+
+Para entrar, escreva o seu e-mail${em?" ("+em+")":""} e o código de 6 algarismos que lhe enviamos.
+
+Com os melhores cumprimentos,
+Ricardo Luz · Ryrox Agro` }
+function partilha(p){ const tel = String(p.tel||"").replace(/\D/g,""), n = tel.length===9 ? "351"+tel : tel, em = (mdaAcessos(p)[0]||{}).email||p.email||"", txt = textoPartilha(p);
+  const local = !linkPortal();
+  return `<span class="partilha"><b>Enviar o portal:</b>
+    <a class="pBt wa" data-anexo="${local?1:""}" target="_blank" title="Enviar o link por WhatsApp${n?"":" (escolhe o contacto no WhatsApp)"}" href="https://wa.me/${n}?text=${encodeURIComponent(txt)}">${IC_WA} WhatsApp</a>
+    <a class="pBt ml" data-anexo="${local?1:""}" title="Enviar o link por e-mail${em?" para "+esc(em):""}" href="mailto:${encodeURIComponent(em)}?subject=${encodeURIComponent("Ryrox Agro · Portal do Fornecedor")}&body=${encodeURIComponent(txt)}">${IC_MAIL} E-mail</a>
+    <a class="pBt fi" id="pFich" href="#" title="Descarrega uma página com tudo lá dentro (talões, tickets, fotografias), que o cliente abre em qualquer telemóvel ou computador. Fica nas Transferências: junte-a à mensagem como anexo.">📄 Ficheiro</a>
+</span>` }
+
+// ---- talão no B2B (04-11-2026, pedido do Ricardo): ao carregar no talão o fornecedor vê a pesagem e o ticket digitalizado do lagar,
+// como na Validação. Só os tickets de azeitona suja e limpa (os anexos internos não aparecem). Nesta maquete as digitalizações
+// estão no navegador (IndexedDB "mda-ficheiros", o mesmo do programa de gestão).
+const n1p = v => (v||0).toLocaleString("pt-PT",{minimumFractionDigits:1,maximumFractionDigits:1});
+const nTk = v => String(v||"").replace(/^ticket\s*/i,"").trim();
+const tkTxt = e => { const a = nTk(e.numDoc), b = nTk(e.ticketLimpo);
+  return [a&&`<b>${esc(a)}</b> <small>suja</small>`, b&&`<b>${esc(b)}</b> <small>limpa</small>`].filter(Boolean).join(" · ") || "—" };
+const tiraFich = k => new Promise(ok=>{ const r = indexedDB.open("mda-ficheiros",1); r.onupgradeneeded = ()=>r.result.createObjectStore("f");
+  r.onerror = ()=>ok(null); r.onsuccess = ()=>{ try{ const q = r.result.transaction("f").objectStore("f").get(k); q.onsuccess = ()=>ok(q.result||null); q.onerror = ()=>ok(null) }catch(e){ ok(null) } } });
+let talAb = null, talPag = 0;
+function abreTalao(e){
+  if(!e) return; talAb = e; talPag = 0;
+  const sc = (e.scans||[]).filter(x=>x.papel==="sujo"||x.papel==="limpo"||(x.papel==="anexo"&&x.forn)), o = e.pesoOrigem||{}, R = rl(e), kgL = liquido(e), sujo = (+e.bruto||0)-(+e.tara||0), az = R==null ? null : kgL*R/100;
+  const z = by(D.campos,e.campo), h = by(D.propriedades,z.prop), L = (a,b,c="") => `<div class="l ${c}"><span>${a}</span><b>${b}</b></div>`;
+  let m = $("mTal"); if(!m){ m = document.createElement("div"); m.id = "mTal"; m.className = "mTal"; document.body.appendChild(m) }
+  m.innerHTML = `<div class="cx"><div class="inf"><small style="color:var(--mut)">${dtl(e.data)} · ${esc(h.nome||"")}</small><h2>Talão ${esc(e.id)}</h2>
+    <div class="tk" style="font-size:13px">Ticket de pesagem: ${tkTxt(e)}</div>
+    ${o.bruto&&o.tara?`<div class="bl"><h3>Pesagem à saída${o.local?" da "+esc(o.local):""}</h3>${L("Camião cheio",kg(o.bruto))}${L("Camião vazio",kg(o.tara))}${L("Azeitona suja",kg(o.bruto-o.tara),"g")}</div>`:""}
+    ${e.explicForn?`<div class="bl expl"><h3>Porque é que os pesos são diferentes</h3><p>${esc(e.explicForn).replace(/\n/g,"<br>")}</p></div>`:""}
+    <div class="bl"><h3>Pesagem no lagar${nTk(e.numDoc)?" · ticket "+esc(nTk(e.numDoc)):""}</h3>${e.mat?L("Matrícula",esc(e.mat)):""}${e.bruto?L(o.bruto&&+o.bruto===+e.bruto?"Peso bruto (o da saída"+(o.local?" da "+esc(o.local):"")+")":"Peso bruto (entrada)",kg(e.bruto))+L("Tara (saída)",kg(e.tara))+L("Azeitona suja",kg(sujo),"g"):""}</div>
+    ${e.kgLimpo?`<div class="bl"><h3>Azeitona limpa${nTk(e.ticketLimpo)?" · ticket "+esc(nTk(e.ticketLimpo)):""}</h3>${L("Azeitona limpa (é este peso que conta)",kg(e.kgLimpo),"g")}${sujo>0&&!e.sujoParte?L("Folha e terra",pc((1-e.kgLimpo/sujo)*100,1)):""}</div>`:""}
+    <div class="bl"><h3>Análise do lagar</h3>${L("Humidade",pc(e.hum,1))}${L("Rendimento bruto",pc(e.rb))}${L("Rendimento líquido",pc(R))}${L("Rendimento sobre matéria seca",pc(msE(e.rb,e.hum)))}${L("Acidez",e.acidez==null?"—":pc(e.acidez))}${L("Classe",e.rb==null?"—":esc(e.classe||""))}${L("Azeite",az==null?"à espera do lagar":kg(az),"g")}</div></div>
+    <div class="vis"><div class="tbs">${sc.map((x,j)=>`<button data-tp="${j}" class="${j===0?"on":""}">${x.papel==="sujo"?"Ticket azeitona suja"+(nTk(e.numDoc)?" n.º "+esc(nTk(e.numDoc)):""):x.papel==="limpo"?"Ticket azeitona limpa"+(nTk(e.ticketLimpo)?" n.º "+esc(nTk(e.ticketLimpo)):""):"📷 "+esc(x.nome||"fotografia")}</button>`).join("")}<button class="x" id="mtFecha">Fechar ✕</button></div>
+      <div class="corpo" id="mtCorpo">${sc.length?'<p style="color:#fff">a abrir o ticket…</p>':'<p style="color:#fff">Este talão ainda não tem o ticket digitalizado.</p>'}</div></div></div>`;
+  $("mtFecha").onclick = fechaTalao; m.onclick = ev=>{ if(ev.target===m) fechaTalao() };
+  m.querySelectorAll("[data-tp]").forEach(b=>b.onclick=()=>{ talPag = +b.dataset.tp; m.querySelectorAll("[data-tp]").forEach(x=>x.classList.toggle("on",x===b)); mostraTicket(sc[talPag]) });
+  if(sc.length) mostraTicket(sc[0]);
+}
+function fechaTalao(){ const m = $("mTal"); if(m) m.remove(); talAb = null }
+document.addEventListener("keydown", ev=>{ if(ev.key==="Escape" && talAb) fechaTalao() });
+// a digitalização desenhada numa imagem (o PDF sem as margens brancas, a fotografia reduzida), para o ficheiro do cliente
+async function ticketImg(sc){
+  const f = await tiraFich(sc.fich); if(!f) return null;
+  const u = URL.createObjectURL(f.blob), cv = document.createElement("canvas");
+  if(!sc.pdf){ const im = new Image(); await new Promise(ok=>{ im.onload = ok; im.onerror = ok; im.src = u }); if(!im.width) return null;
+    const k = Math.min(1, 1600/Math.max(im.width,im.height)); cv.width = im.width*k; cv.height = im.height*k; cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height); return cv.toDataURL("image/jpeg",0.8) }
+  if(!window.pdfjsLib) return null;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const pg = await (await pdfjsLib.getDocument(u).promise).getPage(sc.pag||1), v1 = pg.getViewport({scale:1}), vt = pg.getViewport({scale:Math.min(3, 1400/v1.width)});
+  cv.width = vt.width; cv.height = vt.height; await pg.render({canvasContext:cv.getContext("2d"), viewport:vt}).promise;
+  const W = cv.width, H = cv.height, px = cv.getContext("2d").getImageData(0,0,W,H).data, escuro = (x,y) => { const i = (y*W+x)*4; return px[i]+px[i+1]+px[i+2] < 660 };
+  let x0 = W, y0 = H, x1 = 0, y1 = 0;
+  for(let y=0; y<H; y+=3) for(let x=0; x<W; x+=3) if(escuro(x,y)){ if(x<x0) x0=x; if(x>x1) x1=x; if(y<y0) y0=y; if(y>y1) y1=y; }
+  if(x1-x0 < W*0.15 || y1-y0 < H*0.1){ x0 = 0; y0 = 0; x1 = W; y1 = H; }
+  const mg = Math.round(W*0.015); x0 = Math.max(0,x0-mg); y0 = Math.max(0,y0-mg); x1 = Math.min(W,x1+mg); y1 = Math.min(H,y1+mg);
+  const c = document.createElement("canvas"); c.width = x1-x0; c.height = y1-y0; c.getContext("2d").drawImage(cv, x0, y0, c.width, c.height, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg",0.85) }
+
+// ---- ficheiro para o cliente (05-11-2026, pedido do Ricardo): uma página HTML que se abre em qualquer sítio (telemóvel, computador,
+// sem internet), com tudo lá dentro: os números deste fornecedor, os talões, os tickets e as fotografias. Só leva os dados dele.
+// Fica com os valores do dia em que se faz; envia-se como anexo por WhatsApp ou e-mail.
+const aData = u => fetch(u).then(r=>r.blob()).then(b=>new Promise(ok=>{ const fr = new FileReader(); fr.onload = ()=>ok(fr.result); fr.readAsDataURL(b) })).catch(()=>u);
+const JS_CLIENTE = `function ab(id){const t=T[id];if(!t)return;const m=document.createElement("div");m.id="mTal";m.className="mTal";
+m.innerHTML='<div class="cx"><div class="inf">'+t.inf+'</div><div class="vis"><div class="tbs">'+t.tk.map((k,j)=>'<button data-j="'+j+'" class="'+(j?"":"on")+'">'+k.t+'</button>').join("")+'<button class="x">Fechar ✕</button></div><div class="corpo">'+(t.tk.length?'<img src="'+t.tk[0].src+'">':'<p style="color:#fff">Este talão ainda não tem o ticket digitalizado.</p>')+'</div></div></div>';
+document.body.appendChild(m);const f=()=>m.remove();m.querySelector(".x").onclick=f;m.onclick=ev=>{if(ev.target===m)f()};
+m.querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>{m.querySelectorAll("[data-j]").forEach(x=>x.classList.toggle("on",x===b));m.querySelector(".corpo").innerHTML='<img src="'+t.tk[+b.dataset.j].src+'">'})}
+document.querySelectorAll("tr.tal").forEach(r=>r.onclick=()=>ab(r.dataset.tal));
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"){const m=document.getElementById("mTal");if(m)m.remove()}});`;
+async function ficheiroCliente(p){
+  const bt = $("pFich"); if(bt){ bt.textContent = "a preparar…"; bt.style.pointerEvents = "none" }
+  try{
+    const T = {};
+    for(const r of document.querySelectorAll("tr.tal")){ const e = D.entregas.find(x=>x.id===r.dataset.tal); if(!e) continue;
+      abreTalao(e); const m = $("mTal"), inf = m.querySelector(".inf").innerHTML, bts = [...m.querySelectorAll("[data-tp]")].map(b=>b.textContent); fechaTalao();
+      const sc = (e.scans||[]).filter(x=>x.papel==="sujo"||x.papel==="limpo"||(x.papel==="anexo"&&x.forn)), tk = [];
+      for(let j=0;j<sc.length;j++){ const src = await ticketImg(sc[j]); if(src) tk.push({t:bts[j], src}) }
+      T[e.id] = {inf, tk} }
+    const doc = document.documentElement.cloneNode(true);
+    doc.querySelectorAll("script,#mTal").forEach(x=>x.remove());
+    // os gráficos passam a imagem
+    const vivos = [...document.querySelectorAll("#app canvas")]; [...doc.querySelectorAll("#app canvas")].forEach((c,i)=>{ const im = document.createElement("img"); im.src = vivos[i].toDataURL("image/png"); im.style.maxWidth = "100%"; c.replaceWith(im) });
+    doc.querySelectorAll("#pPer,#pMerc,.noprint").forEach(x=>x.remove());
+    const cs = doc.querySelector("#camp"); if(cs){ const sp = document.createElement("b"); sp.textContent = "Campanha " + campSel; cs.replaceWith(sp) }
+    const mq = doc.querySelector(".maq"); if(mq) mq.remove();
+    doc.querySelector("#quem").innerHTML = `<b>${esc(p.nome)}</b> <small style="color:var(--mut)">· situação a ${dtl(new Date().toISOString().slice(0,10))}</small>`;
+    const lg = doc.querySelector("header img"); if(lg) lg.src = await aData(lg.getAttribute("src"));
+    const js = document.createElement("script"); js.textContent = "const T=" + JSON.stringify(T).replace(/<\//g,"<\\/") + ";\n" + JS_CLIENTE;
+    doc.querySelector("body").appendChild(js);
+    const html = "<!doctype html>\n" + doc.outerHTML;
+    const a = document.createElement("a"), nome = ("Ryrox Agro - Portal do Fornecedor - " + p.nome + " - " + new Date().toISOString().slice(0,10)).replace(/[\\/:*?"<>|]/g,"") + ".html";
+    a.href = URL.createObjectURL(new Blob([html], {type:"text/html"})); a.download = nome; a.click();
+  } finally { if(bt){ bt.textContent = "📄 Ficheiro para o cliente"; bt.style.pointerEvents = "" } }
+}
+
+async function mostraTicket(sc){
+  const el = $("mtCorpo"), f = await tiraFich(sc.fich); if(!el) return;
+  if(!f) return el.innerHTML = '<p style="color:#fff">O ticket digitalizado não está disponível.</p>';
+  const u = URL.createObjectURL(f.blob);
+  if(!sc.pdf) return el.innerHTML = `<img src="${u}" alt="ticket">`;
+  if(!window.pdfjsLib) return el.innerHTML = `<iframe src="${u}#page=${sc.pag}&view=FitH" style="width:100%;height:100%;min-height:640px;border:0;background:#fff"></iframe>`;
+  try{ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const pg = await (await pdfjsLib.getDocument(u).promise).getPage(sc.pag||1), v1 = pg.getViewport({scale:1});
+    // desenha a página e corta o branco à volta do papel, como na Validação
+    const t = document.createElement("canvas"), vt = pg.getViewport({scale:Math.min(4, 1600/v1.width)}); t.width = vt.width; t.height = vt.height;
+    await pg.render({canvasContext:t.getContext("2d"), viewport:vt}).promise;
+    const W = t.width, H = t.height, px = t.getContext("2d").getImageData(0,0,W,H).data, escuro = (x,y) => { const i = (y*W+x)*4; return px[i]+px[i+1]+px[i+2] < 660 };
+    let x0 = W, y0 = H, x1 = 0, y1 = 0;
+    for(let y=0; y<H; y+=3) for(let x=0; x<W; x+=3) if(escuro(x,y)){ if(x<x0) x0=x; if(x>x1) x1=x; if(y<y0) y0=y; if(y>y1) y1=y; }
+    if(x1-x0 < W*0.15 || y1-y0 < H*0.1){ x0 = 0; y0 = 0; x1 = W; y1 = H; }
+    const mg = Math.round(W*0.015); x0 = Math.max(0,x0-mg); y0 = Math.max(0,y0-mg); x1 = Math.min(W,x1+mg); y1 = Math.min(H,y1+mg);
+    const c = document.createElement("canvas"); c.width = x1-x0; c.height = y1-y0; c.getContext("2d").drawImage(t, x0, y0, c.width, c.height, 0, 0, c.width, c.height);
+    if(!$("mtCorpo")) return; el.innerHTML = ""; el.appendChild(c);
+  }catch(err){ el.innerHTML = `<iframe src="${u}#page=${sc.pag}&view=FitH" style="width:100%;height:100%;min-height:640px;border:0;background:#fff"></iframe>` }
+}
+
+// ---- preço do azeite: o mesmo gráfico do Dashboard (Comissão Europeia, preços lançados à mão e o nosso custo) ----
+const PR = typeof MDA_PRECOS!=="undefined" ? MDA_PRECOS : {series:{},fonte:"",atualizado:""};
+const COR_CL = {"Virgem extra":"#3d6b12","Virgem":"#b8860b","Lampante":"#a3402a"};
+let pMerc = "Alentejo Central", pPer = 365, gPreco = null;
+function precoPortal(){
+  const mercs = Object.keys(PR.series); if(!mercs.includes(pMerc)) pMerc = mercs[0]||"";
+  $("pMerc").innerHTML = mercs.map(m=>`<option ${m===pMerc?"selected":""}>${m}</option>`).join(""); $("pMerc").onchange = ev=>{ pMerc = ev.target.value; precoPortal() };
+  $("pPer").innerHTML = [[31,"1 mês"],[90,"3 meses"],[182,"6 meses"],[365,"1 ano"],[9999,"tudo"]].map(([d,t])=>`<button data-d="${d}" class="${d===pPer?"on":""}">${t}</button>`).join("");
+  document.querySelectorAll("#pPer button").forEach(b=>b.onclick=()=>{ pPer = +b.dataset.d; precoPortal() });
+  const ser = PR.series[pMerc]||{}, semanas = [...new Set(Object.values(ser).flatMap(s=>s.map(x=>x[0])))].sort();
+  let desde = new Date(Date.now()-pPer*864e5).toISOString().slice(0,10);
+  if(semanas.length>1 && semanas.filter(d=>d>=desde).length<2) desde = semanas[semanas.length-2];
+  const man = (D.precosManuais||[]).filter(x=>x.data>=desde), datas = new Set(man.map(x=>x.data));
+  Object.values(ser).forEach(s=>s.forEach(([d])=>{ if(d>=desde) datas.add(d) }));
+  const labels = [...datas].sort(), cEV = (D.conf.custoAzeiteVE||{}).v;
+  const ds = Object.keys(COR_CL).filter(c=>ser[c]).map(c=>{ const m = Object.fromEntries(ser[c]); return {label:c+" · "+pMerc,data:labels.map(d=>m[d]??null),borderColor:COR_CL[c],backgroundColor:COR_CL[c],spanGaps:true,tension:.25,pointRadius:2,borderWidth:2} });
+  if(cEV) ds.push({label:"O nosso custo (virgem extra)",data:labels.map(()=>cEV),borderColor:"#1d2a12",borderDash:[6,4],pointRadius:0,borderWidth:1.5});
+  if(man.length) ds.push({label:"Lançados à mão (Poolred, propostas, vendas)",data:labels.map(d=>{ const x = man.find(y=>y.data===d); return x?x.preco:null }),showLine:false,pointRadius:6,pointStyle:"rectRot",borderColor:"#7a2a6f",backgroundColor:"#7a2a6f"});
+  if(window.Chart){ if(gPreco) gPreco.destroy();
+    gPreco = new Chart($("gPreco"),{type:"line",data:{labels:labels.map(d=>d.split("-").reverse().join("/")),datasets:ds},
+      options:{maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom",labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>c.raw==null?null:`${c.dataset.label}: ${c.raw.toLocaleString("pt-PT",{minimumFractionDigits:2})} €/kg`}}},
+        scales:{y:{title:{display:true,text:"€/kg"},ticks:{callback:v=>v.toLocaleString("pt-PT",{minimumFractionDigits:2})}},x:{ticks:{maxTicksLimit:10,font:{size:10}}}}}}); }
+  else $("gPreco").parentNode.innerHTML = '<p class="nota">Gráfico indisponível sem ligação à internet.</p>';
+  const vs = Object.keys(COR_CL).filter(c=>ser[c]&&ser[c].length>1).map(c=>{ const s = ser[c], a = s[s.length-2][1], u = s[s.length-1][1]; return `${c} ${eur(u)} (${u===a?"= sem mudança":(u>a?"▲ ":"▼ ")+eur(Math.abs(u-a))} na semana)` });
+  $("pSub").textContent = `Preços semanais à saída do lagar em ${pMerc}. Última semana: ${vs.join(" · ")||"—"}. Atualizados a ${PR.atualizado?dtl(PR.atualizado):"—"}.`;
+  $("pFonte").textContent = `Fonte: ${PR.fonte||"—"}. Os preços lançados à mão são da Poolred, de propostas de compra ou de vendas fechadas.${cEV?` A linha tracejada é o custo do azeite virgem extra da Ryrox (calculado a ${dtl(D.conf.custoAzeiteVE.data)}).`:""}`;
+  // preços desta semana e oscilação semana a semana (03-11-2026, pedido do Ricardo: em vez do valor do azeite de cada um)
+  const vari = (u,a) => a==null ? '<span class="eq">—</span>' : u===a ? '<span class="eq">= 0,00</span>' : `<span class="${u>a?"up":"dn"}">${u>a?"▲":"▼"} ${Math.abs(u-a).toLocaleString("pt-PT",{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
+  $("pHoje").innerHTML = Object.keys(COR_CL).map(c=>{ const up = mdaUltimoPreco(c,pMerc); if(!up) return "";
+    const s = (PR.series[up.merc]||{})[c]||[], a = s.length>1 ? s[s.length-2][1] : null;
+    return `<div class="pc" style="--c:${COR_CL[c]}"><div><small>${c}${up.merc!==pMerc?" · "+esc(up.merc):""} · ${dtl(up.data)}</small><b>${eur(up.preco)}/kg</b></div><div style="font-weight:800">${vari(up.preco,a)}</div></div>` }).join("") || '<p class="nota">Sem preços recentes neste mercado.</p>';
+  const cls = Object.keys(COR_CL).filter(c=>ser[c]), sem = [...new Set(cls.flatMap(c=>ser[c].map(x=>x[0])))].sort().reverse().slice(0,10);
+  const pr = (c,d) => { const x = (ser[c]||[]).find(y=>y[0]===d); return x ? x[1] : null }, ant = (c,d) => { const x = (ser[c]||[]).filter(y=>y[0]<d).pop(); return x ? x[1] : null };
+  $("pSem").innerHTML = sem.length ? `<table class="sem"><thead><tr><th>Semana</th>${cls.map(c=>`<th class="num" style="color:${COR_CL[c]}">${c}</th>`).join("")}</tr></thead><tbody>${sem.map(d=>`<tr><td>${dtl(d)}</td>${cls.map(c=>{ const u = pr(c,d); return `<td class="num">${u==null?"—":`<b>${u.toLocaleString("pt-PT",{minimumFractionDigits:2})}</b><br>${vari(u,ant(c,d))}`}</td>` }).join("")}</tr>`).join("")}</tbody></table><div class="nota">€/kg à saída do lagar em ${esc(pMerc)}.</div>` : '<p class="nota">Sem preços neste mercado.</p>';
+}
+
+function mostra(){
+  D = mdaCarregar();
+  if(ver && by(D.produtores,ver).id) return portal(ver, true);
+  const s = ses();
+  // a sessão só vale enquanto a pessoa continuar com acesso (a Ryrox pode tirá-lo na ficha)
+  if(s && s.id){ const p = by(D.produtores,s.id), a = p.portal && p.portal.ativo && mdaAcessos(p).find(x=>x.ativo!==false && (s.pessoa ? x.id===s.pessoa : x.email===s.email)); if(a) return portal(s.id, false); grava(null); }
+  ecraLogin(1);
+}
+window.addEventListener("storage", ev=>{ if(ev.key===MDA_CHAVE) mostra() });
+mostra();
+// mensagens: o fornecedor fala com a Ryrox; a Ryrox, a ver como ele, escreve também por WhatsApp, e-mail ou nota interna
+chatIniciar({modo: ver ? "ryrox" : "cliente", prod: () => ver || (ses()||{}).id, depois: d => { D = d }});
+</script>
+</body>
+</html>
