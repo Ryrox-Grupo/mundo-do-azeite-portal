@@ -14,6 +14,8 @@
   const rpc = async (fn, body) => { const r = await fetch(URL_SB + fn, {method:"POST", headers:{"apikey":CHAVE_PUB, "Authorization":"Bearer "+CHAVE_PUB, "Content-Type":"application/json"}, body:JSON.stringify(body)});
     if(!r.ok) throw new Error("Sem ligação ao servidor ("+r.status+")"); return r.json() };
 
+  // na internet os dados são os verdadeiros: sai o aviso de maquete
+  const est = document.createElement("style"); est.textContent = ".maq{display:none!important}"; document.head.appendChild(est);
   // os dados vêm da sessão (depois de entrar); antes disso, nada
   mdaCarregar = function(){ return ler(SS_D) || vazio() };
 
