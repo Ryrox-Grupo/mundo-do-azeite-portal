@@ -178,8 +178,8 @@ function produtorPorEmail(email){
 function ecraLogin(passo, email, msg){
   $("quem").innerHTML = "";
   // entrada com o e-mail e a palavra-passe de cada pessoa (dados na ficha da entidade, 09-11-2026)
-  $("app").innerHTML = `<div class="login"><h1>Entrar</h1><p>Use o e-mail e a palavra-passe que a Ryrox lhe enviou.</p>
-    <label>E-mail</label><input id="lEmail" type="email" autocomplete="username" placeholder="o.seu@email.pt" value="${esc(email||"")}">
+  $("app").innerHTML = `<div class="login"><h1>Entrar</h1><p>Use o e-mail (ou utilizador) e a palavra-passe que a Ryrox lhe enviou.</p>
+    <label>E-mail ou utilizador</label><input id="lEmail" type="text" autocapitalize="none" autocomplete="username" placeholder="e-mail ou utilizador" value="${esc(email||"")}">
     <label style="margin-top:10px">Palavra-passe</label><input id="lCod" type="password" autocomplete="current-password">
     <button class="btn" id="lEntrar" style="width:100%;margin-top:14px">Entrar</button>
     ${msg||""}<p style="margin-top:14px;font-size:13px;color:var(--mut)">Não tem acesso ou esqueceu-se da palavra-passe? Peça à Ryrox.</p></div>`;
