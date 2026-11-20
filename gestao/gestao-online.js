@@ -9,7 +9,9 @@
   const CHAVE_PUB = "sb_publishable_bCbZeDaIvcuvT1gQ_jDV2A_7F8DarY4";   // chave pública: só deixa chamar as funções do portal e da gestão
   const K_D = "mda-gestao-dados", K_C = "mda-gestao-cred";
   const ler = (s, k) => { try{ return JSON.parse(s.getItem(k)) }catch(e){ return null } };
-  const rpc = async (fn, body) => { const r = await fetch(URL_SB + fn, {method:"POST", headers:{"apikey":CHAVE_PUB, "Authorization":"Bearer "+CHAVE_PUB, "Content-Type":"application/json"}, body:JSON.stringify(body)});
+  // o servidor às vezes demora a acordar: tenta até 3 vezes antes de dar erro
+  const rpc = async (fn, body) => { for(let i = 0; ; i++){ try{ return await rpc1(fn, body) }catch(e){ if(i >= 2) throw new Error("Sem ligação ao servidor. Tente outra vez daqui a pouco."); await new Promise(r=>setTimeout(r, 1500)) } } };
+  const rpc1 = async (fn, body) => { const r = await fetch(URL_SB + fn, {method:"POST", headers:{"apikey":CHAVE_PUB, "Authorization":"Bearer "+CHAVE_PUB, "Content-Type":"application/json"}, body:JSON.stringify(body)});
     if(!r.ok) throw new Error("Sem ligação ao servidor ("+r.status+")"); return r.json() };
   const vazio = () => { const e = mdaExemplo(); Object.keys(e).forEach(k=>{ if(Array.isArray(e[k])) e[k] = [] }); return e };
 
