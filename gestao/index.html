@@ -12,7 +12,7 @@
 <script src="dados.js?v=2026-11-09a"></script>
 <script src="gestao-online.js?v=2026-11-20b"></script>
 <script src="../precos.js"></script>
-<script src="chat.js?v=2026-11-07a"></script>
+<script src="chat.js?v=2026-11-21a"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -921,7 +921,7 @@ function guiasTHtml(pst){
     ${G.map(g=>{ const c = confGuia(g); return `<tr style="${g.anulada?"opacity:.55":""}"><td><b>${esc(g.id)}</b>${c.bio&&c.conv?' <span class="pill w">bio + conv.</span>':c.bio?' <span class="pill bio">bio</span>':""}</td><td>${dtl(g.data)} ${esc(g.hora)}<br><small class="t">${esc(g.matricula||"")}</small></td><td>${esc(nomeE(g.lagar))}</td>
       <td class="num">${c.n}</td><td class="num">${kg(c.br)}</td><td class="num">${kg(c.liq)}</td><td class="num">${c.E.length?kg(c.lagar)+`<br><small class="t">${c.E.map(e=>esc(e.id)).join(", ")}</small>`:"—"}</td>
       <td>${g.anulada?`<span class="pill bad">anulada</span><br><small class="t">${esc(g.anulada.motivo)}</small>`:txtConf(c)}</td>
-      <td style="white-space:nowrap"><button class="act light sm" data-gtp="${g.id}">🖨 Guia</button> ${g.anulada?"":`<button class="act ${gtEd===g.id?"sec":"light"} sm" data-gte="${g.id}">✎ Editar</button>`} ${!g.anulada&&!c.E.length?`<button class="act light sm" data-gta="${g.id}">Anular</button>`:""}</td></tr>
+      <td style="white-space:nowrap"><button class="act light sm" data-gtp="${g.id}">🖨 Guia</button> ${chatDocBt(g.id, g.lagar, "Guia de transporte "+g.id, "guiaT")} ${g.anulada?"":`<button class="act ${gtEd===g.id?"sec":"light"} sm" data-gte="${g.id}">✎ Editar</button>`} ${!g.anulada&&!c.E.length?`<button class="act light sm" data-gta="${g.id}">Anular</button>`:""}</td></tr>
       ${gtEd===g.id?`<tr><td colspan="9">${editorGuiaT(g,c)}</td></tr>`:""}
       ${gtSel===g.id?`<tr><td colspan="9"><div class="box" style="margin:0"><h3>Anular a guia ${esc(g.id)}</h3><div class="sub">Os talões voltam a ficar à espera no posto. A guia fica guardada como anulada.</div>
         <div class="grid2"><div><label>Motivo</label><input id="gtaMot"></div><div><label>&nbsp;</label><div class="botoes"><button class="act" id="gtaOk">Anular a guia</button><button class="act light" id="gtaNao">Fechar</button></div></div></div></div></td></tr>`:""}`}).join("")
@@ -1107,7 +1107,7 @@ function rec(){
       return `<tr style="${r.anulada?"opacity:.55;text-decoration:line-through":""}"><td><b>${esc(r.id)}</b></td><td>${esc(r.hora)}</td>${f.todosPostos?`<td>${esc(posto(r.posto).nome||r.posto)}</td>`:""}<td>${esc(nomeE(r.prod))} · ${esc(hh.nome||"—")} ${hh.bio?'<span class="pill bio">bio</span>':""}</td><td>${esc(r.variedade||"—")}${r.qual?`<br><small class="t">${esc(nomeQ(r.qual))}${r.preco!=null?" · "+n3(r.preco)+" €/kg":""}</small>`:""}</td>
         <td class="num">${kg(r.bruto)}<br><small class="t">${r.origemPeso==="balanca"?"balança":"à mão"}</small></td><td class="num">${n1(r.pct)} %<br><small class="t">${esc(r.motivo)}</small></td><td class="num"><b>${kg(liqRec(r))}</b></td>
         <td>${r.anulada?`<span class="pill bad">anulado</span><br><small class="t">${esc(r.anulada.motivo)}</small>`:r.guia?`<span class="pill ok">guia ${esc(r.guia)}</span>`:'<span class="pill w">no posto</span>'}</td>
-        <td style="white-space:nowrap;text-decoration:none"><button class="act light sm" data-rt="${r.id}">🖨 Talão</button> <a class="act light sm" style="text-decoration:none" target="_blank" href="${waTalao(r)}">WhatsApp</a> ${r.anulada?"":`<button class="act ${recEd===r.id?"sec":"light"} sm" data-re="${r.id}">✎ Editar</button>`} ${r.anulada||r.guia?"":`<button class="act light sm" data-ra="${r.id}">Anular</button>`}</td></tr>
+        <td style="white-space:nowrap;text-decoration:none"><button class="act light sm" data-rt="${r.id}">🖨 Talão</button> ${chatDocBt(r.id, r.prod, "Receção "+r.id, "rec")} <a class="act light sm" style="text-decoration:none" target="_blank" href="${waTalao(r)}">WhatsApp</a> ${r.anulada?"":`<button class="act ${recEd===r.id?"sec":"light"} sm" data-re="${r.id}">✎ Editar</button>`} ${r.anulada||r.guia?"":`<button class="act light sm" data-ra="${r.id}">Anular</button>`}</td></tr>
         ${recEd===r.id?`<tr><td colspan="${f.todosPostos?10:9}">${editorRec(r)}</td></tr>`:""}
         ${recAnular===r.id?`<tr><td colspan="${f.todosPostos?10:9}"><div class="box" style="margin:0"><h3>Anular o talão ${esc(r.id)}</h3><div class="sub">O talão fica guardado como anulado, com o motivo. Se for preciso, emite-se um talão novo com os dados certos.</div>
           <div class="grid2"><div><label>Motivo</label><input id="raMot" placeholder="ex.: peso mal escrito"></div><div><label>&nbsp;</label><div class="botoes"><button class="act" id="raOk">Anular o talão</button><button class="act light" id="raNao">Fechar</button></div></div></div></div></td></tr>`:""}`}).join("") || `<tr><td colspan="9" class="vazio">Sem receções neste dia${f.todosPostos?"":" neste posto"}.</td></tr>`}</tbody>
@@ -2562,7 +2562,7 @@ function ligaCabDoc(x){
     D.entregas.splice(D.entregas.indexOf(x)+1, 0, n); selG = id; up() };
   if($("cdRetNao")) $("cdRetNao").onclick = ()=>{ retifAberta = null; render() };
   if($("cdRetGrava")) $("cdRetGrava").onclick = ()=>{ const m = $("cdRetMot").value.trim(); if(!m) return $("cdRetMot").focus();
-    x.retif = {estado:"Pedida", data:hoje(), motivo:m, antes:x.estado}; x.estado = "Retificação pedida"; retifAberta = null;
+    x.retif = {estado:"Pedida", data:hoje(), motivo:m, antes:x.estado}; x.estado = "Retificação pedida"; retifAberta = null; { const c = D.guias.includes(x) ? chatDocG(x) : chatDocT(x); chatAlteracao(c.prod, c, "Retificação pedida: "+m) }
     const ent = D.guias.includes(x) ? x.prest : x.lagar, c = recs(ent).reduce((o,r)=>({tel:o.tel||r.tel, email:o.email||r.email}),{}), txt = textoRetif(x), tel = String(c.tel||"").replace(/\D/g,"");
     grava(); render();
     $("ficha").insertAdjacentHTML("afterbegin", `<div class="alerta info">Retificação registada. Enviar ao emissor: <a target="_blank" href="https://wa.me/${tel?(tel.length===9?"351"+tel:tel):""}?text=${encodeURIComponent(txt)}">WhatsApp</a> · <a href="mailto:${encodeURIComponent(c.email||"")}?subject=${encodeURIComponent("Retificação de documento "+(x.numDoc||""))}&body=${encodeURIComponent(txt)}">E-mail</a></div>`) };
@@ -2781,6 +2781,7 @@ function fichaGuia(g){
     <tr class="tot2"><td>Total do dia (reparte-se pelos ${kg(kgDoDia(g.campo,g.data))} entregues deste campo neste dia)</td><td class="v">${eur(c.total)}</td></tr></table></div>
   <div class="botoes">${g.estado!=="Validado"?`<button class="act ok" id="bAprov">${porConfirmar(g).length?"✔ Está tudo certo · aprovar":"✔ Aprovar"}</button>${temR?`<button class="act sec" id="bUsaR">Aprovar com o registo Ryrox</button>`:""}<button class="act bad" id="bDev">Devolver ao prestador</button><button class="act light" id="bApG">Apagar guia</button>`:`<button class="act light" id="bReab">Reabrir</button>`}</div>${g.estado==="Validado"?'<div class="sub">Uma guia validada não se apaga: reabra-a primeiro.</div>':""}
   <div class="box"><h3>Histórico</h3><div class="linha">${g.hist.map(h=>`<div>${h}</div>`).join("")}</div></div>`;
+  $("ficha").insertAdjacentHTML("beforeend", chatCaixa(chatDocG(g)));
   const up = ()=>{ grava(); render() };
   $("gData").onchange=ev=>{g.data=ev.target.value;up()}; ligaProcura("gCampo", itensCampos().filter(i=>!donoG(g)||by(D.campos,i.v).prod===donoG(g)), v=>{ g.campo = v; g.dono = by(D.campos,v).prod || g.dono; confirma(g,"onde"); aprendeGuia(g,"onde"); up() }); $("gPrest").onchange=ev=>{g.prest=ev.target.value;const o=D.obras.find(x=>x.prest===g.prest);g.obra=o?o.id:"";up()};
   $("gObra").onchange=ev=>{g.obra=ev.target.value;up()}; ligaLanc(g);
@@ -2801,12 +2802,12 @@ function fichaGuia(g){
   $("addMeio").onchange=ev=>{if(ev.target.value){(g.meios=g.meios||[]).push({m:ev.target.value,h:8});up()}};
   const agora = ()=>new Date().toLocaleString("pt-PT",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).replace(",","");
   if($("bAprov")) $("bAprov").onclick=()=>{ const pc = porConfirmar(g); if(pc.length){ g.hist.push(`${agora()} ${quemUsa()} confirmou tudo o que estava a vermelho (${pc.map(k=>CONF_NOMES[k]).join(", ")})`); g.porConf = {} }
-    g.estado="Validado"; g.hist.push(agora()+" Aprovada pelo responsável"); aprendeGuia(g); up()};
+    g.estado="Validado"; g.hist.push(agora()+" Aprovada pelo responsável"); chatAlteracao(g.prest, chatDocG(g), "Guia aprovada"); aprendeGuia(g); up()};
   if($("gReler")) $("gReler").onclick=async()=>{ $("gReler").disabled = true; $("gReler").textContent = "a ler…"; try{ await relerGuia(g) }catch(e){ alert("A leitura falhou: "+e.message); render() } };
   marcaConf(g);
-  if($("bUsaR")) $("bUsaR").onclick=()=>{g.P.horas=g.R.horas;g.P.litros=g.R.litros;g.estado="Validado";g.hist.push(agora()+" Aprovada com os valores do registo Ryrox; prestador avisado por WhatsApp");up()};
+  if($("bUsaR")) $("bUsaR").onclick=()=>{g.P.horas=g.R.horas;g.P.litros=g.R.litros;g.estado="Validado";g.hist.push(agora()+" Aprovada com os valores do registo Ryrox; prestador avisado por WhatsApp");chatAlteracao(g.prest, chatDocG(g), "Guia aprovada com os valores do registo Ryrox");up()};
   if($("bDev")) $("bDev").onclick=()=>{g.estado="Devolvido";g.hist.push(agora()+" Devolvida ao prestador para corrigir (WhatsApp)");up()};
-  if($("bReab")) $("bReab").onclick=()=>{g.estado="Por validar";g.hist.push(agora()+" Reaberta");up()};
+  if($("bReab")) $("bReab").onclick=()=>{g.estado="Por validar";g.hist.push(agora()+" Reaberta");chatAlteracao(g.prest, chatDocG(g), "Guia reaberta");up()};
   if($("bApG")) $("bApG").onclick=()=>{ if($("bApG").dataset.ok!=="1"){$("bApG").dataset.ok="1";$("bApG").textContent="Clique outra vez para apagar";return} D.guias.splice(D.guias.indexOf(g),1); selG=null; up() };
   ligaEmissor(g.id);
   $("vTit").textContent = "Guia "+g.id; $("vOrig").textContent = g.via;
@@ -2900,6 +2901,7 @@ function fichaTalao(e){
     <tr><td>Custo por kg de azeitona</td><td class="v">${eur(r.cKgAzeitona)}</td></tr>
     <tr class="tot2"><td>Custo por kg de azeite</td><td class="v">${r.nosso?eur(r.cKgAzeite):"—"}</td></tr></table></div>
   <div class="botoes">${e.estado!=="Validado"?'<button class="act ok" id="tAprov">✔ Validar talão</button><button class="act light" id="tApT">Apagar talão</button>':'<button class="act light" id="tReab">Reabrir</button>'}</div>${e.estado==="Validado"?'<div class="sub">Um talão validado não se apaga: reabra-o primeiro.</div>':""}`;
+  $("ficha").insertAdjacentHTML("beforeend", chatCaixa(chatDocT(e)));
   const up=()=>{grava();render()};
   const nv = v => v==="" ? null : +v;
   $("tData").onchange=ev=>{e.data=ev.target.value;up()}; $("tLag").onchange=ev=>{e.lagar=ev.target.value;delete e.acordo;up()}; $("tAco").onchange=ev=>{if(ev.target.value)e.acordo=ev.target.value;else delete e.acordo;up()}; ligaProcura("tCampo", itensCampos(), v=>{ e.campo = v; up() });
@@ -2918,7 +2920,7 @@ function fichaTalao(e){
   $("tAc").onchange=ev=>{e.acidez=nv(ev.target.value); const a=classePorAcidez(e.acidez); if(a) e.classe=a; up()};
   $("tCp").onchange=ev=>{e.cp=ev.target.value;up()}; $("tCh").onchange=ev=>{e.ctHum=nv(ev.target.value);up()}; $("tCr").onchange=ev=>{e.ctRb=nv(ev.target.value);up()};
   if($("tApT")) $("tApT").onclick=()=>{ if($("tApT").dataset.ok!=="1"){$("tApT").dataset.ok="1";$("tApT").textContent="Clique outra vez para apagar";return} D.entregas.splice(D.entregas.indexOf(e),1); selG=null; up() };
-  if($("tAprov")) $("tAprov").onclick=()=>{e.estado="Validado";up()}; if($("tReab")) $("tReab").onclick=()=>{e.estado="Por validar";up()};
+  if($("tAprov")) $("tAprov").onclick=()=>{e.estado="Validado";chatAlteracao(chatDocT(e).prod, chatDocT(e), "Talão validado");up()}; if($("tReab")) $("tReab").onclick=()=>{e.estado="Por validar";chatAlteracao(chatDocT(e).prod, chatDocT(e), "Talão reaberto");up()};
   ligaEmissor(e.id);
   $("vTit").textContent = "Talão "+e.id; $("vOrig").textContent = (e.scans||[]).length ? e.scans.map(c=>c.scan).join(" + ") : fotos[e.id] ? (fotoTipo[e.id]==="application/pdf"?"Ficheiro importado (PDF)":"Imagem importada") : "Digitalização";
   $("vImg").innerHTML = temDoc(e) ? visorDoc(e.id) : `<div class="papel"><h4>${r.l.nome.toUpperCase()}<br><small>TALÃO DE PESAGEM ${e.id}</small></h4>
@@ -3105,7 +3107,7 @@ function embalamentos(LL){
     const kgE = e.linhas.reduce((t,l)=>t+(e.estado==="Recebido"?kgLinha(l):(+l.qtd||0)*by(D.produtos,l.produto).litros*DENS),0), cE = e.linhas.reduce((t,l)=>t+(e.estado==="Recebido"?embLinha(l):(+l.qtd||0)*mdaCustoEmbUn(l)),0);
     return `<tr><td><b>${e.id}</b>${e.pedido?` <span class="pill w">${esc(e.pedido)}</span>`:""}${e.nota?`<br><small class="t">${esc(e.nota)}</small>`:""}</td><td>${dt(e.data)}</td><td>${esc(nomeE(e.embalador))}</td><td>${esc(nomeLocal(e.destino))}</td><td>${ped}</td><td class="num">${kg(kgE)}</td><td class="num">${eur(cE)}</td>
       <td><span class="pill ${e.estado==="Recebido"?"ok":e.estado==="Cancelado"?"":"w"}">${e.estado}${e.estado==="Recebido"&&e.recebido?" "+dt(e.recebido):""}</span></td>
-      <td style="white-space:nowrap"><button class="act light sm" data-req="${e.id}">📄 Requisição</button> ${e.estado==="Pedido"?`<button class="act sec sm" data-rec="${e.id}">Registar receção</button> <button class="act light sm" data-ecan="${e.id}">Cancelar</button>`:""}</td></tr>
+      <td style="white-space:nowrap"><button class="act light sm" data-req="${e.id}">📄 Requisição</button> ${chatDocBt(e.id, e.embalador, "Embalamento "+e.id, "emb")} ${e.estado==="Pedido"?`<button class="act sec sm" data-rec="${e.id}">Registar receção</button> <button class="act light sm" data-ecan="${e.id}">Cancelar</button>`:""}</td></tr>
       ${recebendo===e.id?`<tr><td colspan="9"><div class="box" style="margin:0"><h3>Receção de ${e.id}: quantas unidades chegaram?</h3><div class="grid4">${e.linhas.map((l,i)=>`<div><label>${esc(by(D.produtos,l.produto).formato)} (pedidas ${un(l.qtd)})</label><input type="number" data-recq="${i}" value="${l.qtd}"></div>`).join("")}<div><label>Data da receção</label><input type="date" id="recData" value="${hoje()}"></div></div>
         <div class="botoes" style="margin-top:8px"><button class="act ok" id="recOk">✔ Confirmar receção: entra no stock em ${esc(nomeLocal(e.destino))}</button><button class="act light" id="recNao">Fechar</button></div></div></td></tr>`:""}`}).join("")+"</tbody>";
   document.querySelectorAll("[data-req]").forEach(b=>b.onclick=()=>requisicao(by(D.embalamentos,b.dataset.req)));
@@ -3330,7 +3332,7 @@ function vend(){
   const fatTxt = v => v.fatura ? `<br><span class="pill ok">🧾 faturada${v.fatura.numFornecedor||v.fatura.numInterno?" "+esc(v.fatura.numFornecedor||v.fatura.numInterno):""}</span>`
     : `<br><span class="pill w">⏳ aguarda fatura${v.faturacao?" · pedida a "+dtl(v.faturacao.data):""}</span>`;
   $("tabVend").innerHTML = V.length ? `<thead><tr><th>Venda</th><th>Data</th><th>Canal</th><th>Cliente</th><th>Artigos</th><th class="num">Total</th><th>Estado</th><th></th></tr></thead><tbody>`+V.slice().reverse().map(v=>`<tr><td><b>${v.id}</b></td><td>${dt(v.data)}</td><td>${v.canal}${v.local&&v.local!=="CASA"?`<br><small class="t">de ${esc(nomeLocal(v.local))}</small>`:""}</td><td>${nomeE(v.cliente)}${v.clienteNome?`<br><small class="t">${v.clienteNome}</small>`:""}</td><td>${v.linhas.map(descLinha).join("<br>")}</td><td class="num"><b>${eur(totalVenda(v))}</b></td><td><span class="pill ${est(v.estado)}">${v.estado}</span>${fatTxt(v)}</td>
-    <td style="white-space:nowrap"><button class="act light sm" data-vtal="${v.id}">🧾 Talão</button> ${!v.fatura?`<button class="act ${v.faturacao?"light":"sec"} sm" data-vfat="${v.id}">✉ ${v.faturacao?"Pedir outra vez":"Mandar faturar"}</button> ${v.faturacao?`<button class="act light sm" data-vnf="${v.id}">Ainda não pedir</button> `:""}`:""}${v.estado==="Por expedir"?`<button class="act light sm" data-ex="${v.id}">Marcar expedida</button>`:v.estado==="Por pagar"?`<button class="act light sm" data-pg="${v.id}">Marcar paga</button>`:""} ${["Por expedir","Por pagar"].includes(v.estado)?`<button class="act light sm" data-vdel="${v.id}">Apagar</button>`:""}</td></tr>`).join("")+"</tbody>" : '<tr><td class="vazio">Nenhuma venda com estes filtros.</td></tr>';
+    <td style="white-space:nowrap"><button class="act light sm" data-vtal="${v.id}">🧾 Talão</button> ${chatDocBt(v.id, v.cliente, "Venda "+v.id, "venda")} ${!v.fatura?`<button class="act ${v.faturacao?"light":"sec"} sm" data-vfat="${v.id}">✉ ${v.faturacao?"Pedir outra vez":"Mandar faturar"}</button> ${v.faturacao?`<button class="act light sm" data-vnf="${v.id}">Ainda não pedir</button> `:""}`:""}${v.estado==="Por expedir"?`<button class="act light sm" data-ex="${v.id}">Marcar expedida</button>`:v.estado==="Por pagar"?`<button class="act light sm" data-pg="${v.id}">Marcar paga</button>`:""} ${["Por expedir","Por pagar"].includes(v.estado)?`<button class="act light sm" data-vdel="${v.id}">Apagar</button>`:""}</td></tr>`).join("")+"</tbody>" : '<tr><td class="vazio">Nenhuma venda com estes filtros.</td></tr>';
   document.querySelectorAll("[data-vtal]").forEach(b=>b.onclick=()=>abreTalaoVenda(by(D.vendas,b.dataset.vtal)));
   document.querySelectorAll("[data-vfat]").forEach(b=>b.onclick=()=>{ const v = by(D.vendas,b.dataset.vfat), c = dadosCli(v.cliente);
     v.comFatura = true; pedidoFaturacao(v); grava(); render() });
@@ -3869,7 +3871,7 @@ function fichaEnt(id){
     ${fld("Nome","data-ef=nome",r0.nome)}${fld("NIF","data-ef=nif",r0.nif||"")}${fld("Morada","data-ef=morada",r0.morada||"")}${fld("Código postal",'data-ef=codPostal placeholder="0000-000"',r0.codPostal||"")}${fld("Localidade","data-ef=local",r0.local||"")}
     ${fld("Telefone","data-ef=tel",r0.tel||"")}${fld("E-mail","data-ef=email",r0.email||"")}${fld("Responsável / contacto","data-ef=contacto",r0.contacto||"")}${fld("Notas","data-ef=notas",r0.notas||"")}</div>
     <div style="margin-top:10px"><label>Papéis desta entidade</label>${Object.entries(PAPEIS).map(([k,v])=>`<label class="chk"><input type="checkbox" data-pap="${k}" ${tem(k)?"checked":""}> ${v[0]}</label>`).join("")}</div>
-    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div>`;
+    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div>${chatCaixa({prod:id})}`;
 
   if(tem("produtor")||tem("cliente")){ const p = by(D.produtores,id), Hs = D.propriedades.filter(x=>x.prod===id), vars=lista("variedades");
     h += `${tem("produtor")?`<div class="box"><h3>Fornecedor (produtor) · compra da azeitona</h3><div class="grid4">
@@ -3887,7 +3889,7 @@ function fichaEnt(id){
     <div class="box"><h3><span>Acesso ao portal do fornecedor (B2B)</span>${(p.portal||{}).ativo?`<span class="pill ok">ativo · ${mdaAcessos(p).filter(a=>a.ativo!==false).length} pessoa(s)</span>`:'<span class="pill">sem acesso</span>'}</h3>
       <div class="sub">Cada pessoa do fornecedor entra com o seu e-mail e a sua palavra-passe e vê só as entregas das propriedades dele: pesos, humidade, rendimentos, acidez, classe, azeite, o valor da azeitona, a conta corrente e a loja. Não vê os custos da Ryrox nem os dados de outros fornecedores. "Ver o portal como ele" mostra exatamente a mesma página.</div>
       <div class="grid4">${sel("Acesso do fornecedor","data-pt=ativo",[["1","Ativo"],["0","Sem acesso"]],(p.portal||{}).ativo?"1":"0")}<div><label>Acesso desde</label><input readonly class="ro" value="${(p.portal||{}).desde?dtl(p.portal.desde):"—"}"></div><div></div>
-        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatAbre('${id}')">💬 Mensagens com ele</button></div></div>
+        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatAbre('${id}')">💬 Conversa com ele</button></div></div>
       ${acessoHtml(p, r0)}</div>`:""}
     <div class="box"><h3><span>Mapa das propriedades</span><button class="act light sm" id="bMapa">${mapaAberto?"Minimizar mapa":"Mostrar mapa"}</button></h3>
       ${mapaAberto?`<div class="sub" id="mapaDica">Escolha uma propriedade ou zona e carregue em "Desenhar perímetro": clique nos cantos e feche no primeiro ponto (Esc cancela). O desenho fica a ser a delimitação oficial e o centro serve para o estado do tempo.</div><div id="mapaProd" style="height:460px;border-radius:12px;border:1px solid var(--line)"></div>`:""}</div>
@@ -4277,7 +4279,14 @@ async function gestaoPublicar(){ const k = chaveGestao(); if(!k) return;
 const gestaoAgenda = (ms=60000) => { clearTimeout(gestaoT); gestaoT = setTimeout(gestaoPublicar, ms) };
 if(chaveGestao()){ gestaoAgenda(3000); setInterval(()=>gestaoAgenda(0), 3600e3);
   const gOrig2 = mdaGravar; mdaGravar = function(d){ gOrig2(d); gestaoAgenda() } }
-chatIniciar({modo:"programa", grava: d => mdaGravar(d), depois: d => { D = d; render() }});
+// Chat Ryrox (21-11-2026): uma conversa por entidade e por documento; mexe nos dados abertos (D) e grava como o resto do programa
+function chatDocT(e){ return {doc:e.id, docT:"Talão "+e.id, docTipo:"talao", prod:by(D.campos,e.campo).prod||e.lagar||""} }
+function chatDocG(g){ return {doc:g.id, docT:"Guia "+g.id, docTipo:"guia", prod:g.prest||""} }
+function chatDocBt(doc, prod, t, tipo){ const n = (D.mensagens||[]).filter(m=>m.doc===doc && m.tipo!=="alt").length;
+  return `<button class="act light sm" data-chabre="${esc(doc)}|${esc(prod||"")}|${esc(t)}|${tipo}" title="Conversa deste documento (notas da equipa, WhatsApp, e-mail)">💬${n?" "+n:""}</button>` };
+chatIniciar({modo:"programa", dados: () => D, guardar: () => { grava(); render() }, redesenha: () => render(),
+  abreDoc: c => { const v = {venda:"vVend", emb:"vStock", rec:"vRec", guiaT:"vRec"}[c.docTipo];
+    if(v) abre(v); else if(D.entregas.some(x=>x.id===c.doc) || D.guias.some(x=>x.id===c.doc)) irPara("doc", c.doc) }});
 </script>
 <script>// telemóvel: abrir e fechar os filtros; o botão diz quantos estão ativos
 (function(){ const fb = document.getElementById("filtrobar"), b = document.getElementById("fAbre"); if(!fb||!b) return;
