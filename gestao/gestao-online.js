@@ -5,6 +5,7 @@
 (function(){
   const LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === "file:";
   if(LOCAL) return;   // no computador da Ryrox o programa usa os seus próprios dados
+  window.MDA_SO_CONSULTA = true;   // as caixas de conversa mostram as mensagens mas não deixam escrever
   const URL_SB = "https://dxhpsgyysphzaeatafit.supabase.co/rest/v1/rpc/";
   const CHAVE_PUB = "sb_publishable_bCbZeDaIvcuvT1gQ_jDV2A_7F8DarY4";   // chave pública: só deixa chamar as funções do portal e da gestão
   const K_D = "mda-gestao-dados", K_C = "mda-gestao-cred";
