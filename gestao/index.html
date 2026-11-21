@@ -336,6 +336,28 @@ input[type=checkbox],input[type=radio]{accent-color:#141a0d}
 .docB{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.docB button,.docB label{display:inline-grid;place-items:center;width:26px;height:24px;margin:0;border:1px solid var(--line);background:#eef0e8;border-radius:var(--r);cursor:pointer;font-size:12px;padding:0}.docB button:hover,.docB label:hover{background:#e1f3cf}
 .mdaChat{height:560px;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;background:#fff}
 #chatJan{position:fixed;inset:0;z-index:70;background:#0f141088;display:flex;align-items:center;justify-content:center;padding:16px}#chatJan .cj{position:relative;width:min(620px,100%);height:min(720px,100%);background:#fff;border-radius:12px;overflow:hidden}#chatJan .cj .mdaChat{margin:0;border:0;border-radius:0}#chatJan [data-fechajan]{position:absolute;top:8px;right:10px;z-index:2;border:0;background:#eef1f5;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer}
+/* RYROX ONE Chat na coluna lateral (21-11-2026): sempre à vista, segue o que está aberto; resumo em baixo */
+body.comLado{padding-right:400px}
+body.comLado:not(.semLado) .brandnav{flex-wrap:wrap;row-gap:6px}body.comLado:not(.semLado) .ryrox-app-header .title small{display:none}
+#chatLado .clCab{justify-content:flex-end;padding:6px 10px;border-bottom:0}#chatLado .clCab span{font-weight:600;font-size:11px;color:#8a96a3;letter-spacing:.04em}
+#chatLado{position:fixed;top:0;right:0;bottom:0;width:400px;z-index:55;background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:-6px 0 24px #0f141012}
+#chatLado .clCab{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #eef1f5;font:700 13px Inter,sans-serif;color:#071a2d}
+#chatLado .clCab span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chatLado .clCab button{border:0;background:#f1f4f7;border-radius:8px;height:28px;padding:0 9px;cursor:pointer;font:600 12px Inter,sans-serif;color:#3b4855}
+#chatLado .clCab button:hover{background:#e3e8ee}
+#chatLado .clConv{flex:1;min-height:0;display:flex}#chatLado .clConv>.rc{flex:1;min-width:0}
+#chatLado .clRes{border-top:1px solid #eef1f5;background:#f8fafc;max-height:34%;overflow:auto;padding:8px 12px 10px;font:12.5px Inter,sans-serif;color:#3b4855}
+#chatLado .clRes h4{margin:0 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6b7785;display:flex;gap:8px;align-items:center}
+#chatLado .clRes h4 b{background:#E0463C;color:#fff;border-radius:9px;padding:0 6px;font-size:10px;letter-spacing:0}
+#chatLado .clRes h4 i{font-style:normal;background:#E67E22;color:#fff;border-radius:9px;padding:0 6px;font-size:10px;letter-spacing:0}
+#chatLado .clRes .l{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:8px;cursor:pointer}
+#chatLado .clRes .l:hover{background:#eef3f8}#chatLado .clRes .l b{white-space:nowrap}#chatLado .clRes .l small{flex:1;min-width:0;color:#6b7785;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chatLado .clRes .l em{font-style:normal;background:#E0463C;color:#fff;border-radius:9px;padding:0 6px;font-size:10px}
+#chatLado .clRes .l.on{background:#e6eef8}
+#ladoAbre{position:fixed;right:14px;bottom:14px;z-index:55;border:0;background:#071a2d;color:#fff;border-radius:12px;padding:11px 15px;font:700 13px Inter,sans-serif;cursor:pointer;box-shadow:0 10px 26px #0004;display:none}
+body.semLado #ladoAbre{display:block}body.semLado #chatLado{display:none}body.comLado.semLado{padding-right:0}
+@media(max-width:1100px){body.comLado{padding-right:0}#chatLado{width:min(400px,100vw)}body.comLado:not(.ladoMovel) #chatLado{display:none}body.comLado:not(.ladoMovel) #ladoAbre{display:block}}
+@media print{#chatLado,#ladoAbre{display:none}body.comLado{padding-right:0}}
 .corta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -2783,7 +2805,6 @@ function fichaGuia(g){
     <tr class="tot2"><td>Total do dia (reparte-se pelos ${kg(kgDoDia(g.campo,g.data))} entregues deste campo neste dia)</td><td class="v">${eur(c.total)}</td></tr></table></div>
   <div class="botoes">${g.estado!=="Validado"?`<button class="act ok" id="bAprov">${porConfirmar(g).length?"✔ Está tudo certo · aprovar":"✔ Aprovar"}</button>${temR?`<button class="act sec" id="bUsaR">Aprovar com o registo Ryrox</button>`:""}<button class="act bad" id="bDev">Devolver ao prestador</button><button class="act light" id="bApG">Apagar guia</button>`:`<button class="act light" id="bReab">Reabrir</button>`}</div>${g.estado==="Validado"?'<div class="sub">Uma guia validada não se apaga: reabra-a primeiro.</div>':""}
   <div class="box"><h3>Histórico</h3><div class="linha">${g.hist.map(h=>`<div>${h}</div>`).join("")}</div></div>`;
-  $("ficha").insertAdjacentHTML("beforeend", chatCaixa(chatDocG(g)));
   const up = ()=>{ grava(); render() };
   $("gData").onchange=ev=>{g.data=ev.target.value;up()}; ligaProcura("gCampo", itensCampos().filter(i=>!donoG(g)||by(D.campos,i.v).prod===donoG(g)), v=>{ g.campo = v; g.dono = by(D.campos,v).prod || g.dono; confirma(g,"onde"); aprendeGuia(g,"onde"); up() }); $("gPrest").onchange=ev=>{g.prest=ev.target.value;const o=D.obras.find(x=>x.prest===g.prest);g.obra=o?o.id:"";up()};
   $("gObra").onchange=ev=>{g.obra=ev.target.value;up()}; ligaLanc(g);
@@ -2903,7 +2924,6 @@ function fichaTalao(e){
     <tr><td>Custo por kg de azeitona</td><td class="v">${eur(r.cKgAzeitona)}</td></tr>
     <tr class="tot2"><td>Custo por kg de azeite</td><td class="v">${r.nosso?eur(r.cKgAzeite):"—"}</td></tr></table></div>
   <div class="botoes">${e.estado!=="Validado"?'<button class="act ok" id="tAprov">✔ Validar talão</button><button class="act light" id="tApT">Apagar talão</button>':'<button class="act light" id="tReab">Reabrir</button>'}</div>${e.estado==="Validado"?'<div class="sub">Um talão validado não se apaga: reabra-o primeiro.</div>':""}`;
-  $("ficha").insertAdjacentHTML("beforeend", chatCaixa(chatDocT(e)));
   const up=()=>{grava();render()};
   const nv = v => v==="" ? null : +v;
   $("tData").onchange=ev=>{e.data=ev.target.value;up()}; $("tLag").onchange=ev=>{e.lagar=ev.target.value;delete e.acordo;up()}; $("tAco").onchange=ev=>{if(ev.target.value)e.acordo=ev.target.value;else delete e.acordo;up()}; ligaProcura("tCampo", itensCampos(), v=>{ e.campo = v; up() });
@@ -3873,7 +3893,7 @@ function fichaEnt(id){
     ${fld("Nome","data-ef=nome",r0.nome)}${fld("NIF","data-ef=nif",r0.nif||"")}${fld("Morada","data-ef=morada",r0.morada||"")}${fld("Código postal",'data-ef=codPostal placeholder="0000-000"',r0.codPostal||"")}${fld("Localidade","data-ef=local",r0.local||"")}
     ${fld("Telefone","data-ef=tel",r0.tel||"")}${fld("E-mail","data-ef=email",r0.email||"")}${fld("Responsável / contacto","data-ef=contacto",r0.contacto||"")}${fld("Notas","data-ef=notas",r0.notas||"")}</div>
     <div style="margin-top:10px"><label>Papéis desta entidade</label>${Object.entries(PAPEIS).map(([k,v])=>`<label class="chk"><input type="checkbox" data-pap="${k}" ${tem(k)?"checked":""}> ${v[0]}</label>`).join("")}</div>
-    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div><div class="mdaChat" data-rchat="${esc(JSON.stringify({ent:id}))}"></div>`;
+    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div>`;
 
   if(tem("produtor")||tem("cliente")){ const p = by(D.produtores,id), Hs = D.propriedades.filter(x=>x.prod===id), vars=lista("variedades");
     h += `${tem("produtor")?`<div class="box"><h3>Fornecedor (produtor) · compra da azeitona</h3><div class="grid4">
@@ -3891,7 +3911,7 @@ function fichaEnt(id){
     <div class="box"><h3><span>Acesso ao portal do fornecedor (B2B)</span>${(p.portal||{}).ativo?`<span class="pill ok">ativo · ${mdaAcessos(p).filter(a=>a.ativo!==false).length} pessoa(s)</span>`:'<span class="pill">sem acesso</span>'}</h3>
       <div class="sub">Cada pessoa do fornecedor entra com o seu e-mail e a sua palavra-passe e vê só as entregas das propriedades dele: pesos, humidade, rendimentos, acidez, classe, azeite, o valor da azeitona, a conta corrente e a loja. Não vê os custos da Ryrox nem os dados de outros fornecedores. "Ver o portal como ele" mostra exatamente a mesma página.</div>
       <div class="grid4">${sel("Acesso do fornecedor","data-pt=ativo",[["1","Ativo"],["0","Sem acesso"]],(p.portal||{}).ativo?"1":"0")}<div><label>Acesso desde</label><input readonly class="ro" value="${(p.portal||{}).desde?dtl(p.portal.desde):"—"}"></div><div></div>
-        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="document.querySelector('.mdaChat').scrollIntoView({block:'start'})">💬 Conversa com ele</button></div></div>
+        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatLado({ent:'${id}'})">💬 Conversa com ele</button></div></div>
       ${acessoHtml(p, r0)}</div>`:""}
     <div class="box"><h3><span>Mapa das propriedades</span><button class="act light sm" id="bMapa">${mapaAberto?"Minimizar mapa":"Mostrar mapa"}</button></h3>
       ${mapaAberto?`<div class="sub" id="mapaDica">Escolha uma propriedade ou zona e carregue em "Desenhar perímetro": clique nos cantos e feche no primeiro ponto (Esc cancela). O desenho fica a ser a delimitação oficial e o centro serve para o estado do tempo.</div><div id="mapaProd" style="height:460px;border-radius:12px;border:1px solid var(--line)"></div>`:""}</div>
@@ -4314,11 +4334,11 @@ function chatJanela(r){ let j = $("chatJan"); if(!j){ j = document.createElement
     j.onclick = ev=>{ if(ev.target===j || ev.target.closest("[data-fechajan]")) j.remove() } }
   j.innerHTML = `<div class="cj"><button data-fechajan title="Fechar">×</button><div class="mdaChat" data-rchat="${esc(JSON.stringify(r))}"></div></div>`; chatMontar(j.querySelector(".mdaChat")) }
 new MutationObserver(()=>document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar)).observe(document.body, {childList:true, subtree:true});
-document.addEventListener("click", ev=>{ const b = ev.target.closest("[data-rchatabre]"); if(b){ ev.preventDefault(); ev.stopPropagation(); chatJanela(JSON.parse(b.dataset.rchatabre)) } }, true);
+document.addEventListener("click", ev=>{ const b = ev.target.closest("[data-rchatabre]"); if(b){ ev.preventDefault(); ev.stopPropagation(); chatLado(JSON.parse(b.dataset.rchatabre)) } }, true);
 function chatAbrir(ref){ if(ref.tipo==="talao" || ref.tipo==="guia") return irPara("doc", ref.id);
   if(ref.tipo==="cliente"){ const e = entidades().find(x=>x.nome===ref.id || x.nome===ref.titulo); if(e) return irPara("ent", e.id) }
   const f = {venda:[D.vendas,"cliente"], embalamento:[D.embalamentos,"embalador"], rececao:[D.rececoes,"prod"], guiaT:[D.guiasT,"lagar"]}[ref.tipo];
-  const x = f && (f[0]||[]).find(y=>y.id===ref.id); chatJanela({tipo:ref.tipo, id:ref.id, ent:x?x[f[1]]:"", titulo:ref.titulo}) }
+  const x = f && (f[0]||[]).find(y=>y.id===ref.id); chatLado({tipo:ref.tipo, id:ref.id, ent:x?x[f[1]]:"", titulo:ref.titulo}) }
 // o que o assistente fica a saber do que está aberto
 const separadorAberto = () => ((document.querySelector(".brandnav button.on")||{}).textContent||"").replace(/\d+/g,"").replace(/\s+/g," ").trim();
 window.MDA_IA = {
@@ -4328,12 +4348,52 @@ window.MDA_IA = {
     if(x){ const y = JSON.parse(JSON.stringify(x)); delete y.leitura; s += `\nDocumento aberto: ${x.id}\n${JSON.stringify(y).slice(0,6000)}` }
     if(vista==="vEntid" && selEnt) s += `\nFicha aberta: ${nomeE(selEnt)} (${selEnt})`;
     return s } };
+// ---- coluna lateral do chat (21-11-2026, pedido do Ricardo): sempre à vista em todo o programa ----
+// Em cima, a conversa do que está aberto: o talão ou a guia (Validação), a entidade (Tabelas), o documento escolhido com 💬,
+// ou a conversa geral do programa. Em baixo, o resumo: por ler, atividades e as últimas conversas.
+let ladoManual = null, ladoAuto = "", ladoChave = "", ladoM = [];
+function ladoAutoRef(){
+  if(vista==="vVal" && selG){ const e = D.entregas.find(x=>x.id===selG); if(e) return chatDocT(e); const g = D.guias.find(x=>x.id===selG); if(g) return chatDocG(g) }
+  if(vista==="vEntid" && selEnt && tabSel==="ent") return {ent:selEnt};
+  return {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"} }
+function ladoTitulo(r){ return r.tipo==="programa" ? "Conversa geral do programa" : r.tipo ? (r.titulo||((CHAT_TIPOS[r.tipo]||r.tipo)+" "+r.id)) : "Conversa com "+(chatEnt(r.ent).nome||r.ent) }
+function ladoDesenhar(){ const el = $("chatLado"); if(!el || !window.RyroxChat) return;
+  const auto = ladoAutoRef(), ka = JSON.stringify(auto);
+  if(ka!==ladoAuto){ ladoAuto = ka; ladoManual = null }   // abriu outra coisa no programa: a coluna segue
+  const r = ladoManual || auto, k = JSON.stringify(r);
+  if(k===ladoChave) return; ladoChave = k;   // a mesma conversa: não se volta a desenhar (não se perde o que está escrito)
+  const c = el.querySelector(".clConv"); c.innerHTML = ""; const d = document.createElement("div"); d.className = "mdaChat clDentro"; d.dataset.rchat = k; c.appendChild(d);
+  d.style.cssText = "height:auto;margin:0;border:0;border-radius:0;flex:1;min-height:0"; chatMontar(d); ladoResumo() }
+window.chatLado = r => { if(!$("chatLado")) return chatJanela(r); ladoManual = r; ladoMostrar(true); ladoDesenhar() };
+async function ladoResumo(){ const el = $("chatLado"); if(!el) return;
+  try{ const j = await (await fetch("/api/chat", {cache:"no-store", headers:{"X-Chave":window.MDA_MOTOR_CHAVE}})).json(); ladoM = (j.mensagens||[]).filter(m=>m.programa==="azeite") }catch(e){}
+  const eu = "Ricardo Luz", porLer = m => m.de!==eu && !(m.lido_por||{})[eu], g = new Map();
+  ladoM.forEach(m=>{ const d = m.doc||{}, k = d.tipo+"|"+d.id; (g.get(k)||g.set(k,[]).get(k)).push(m) });
+  const C = [...g.values()].map(L=>L.sort((a,b)=>String(a.data).localeCompare(String(b.data)))).sort((a,b)=>String(b[b.length-1].data).localeCompare(String(a[a.length-1].data)));
+  const nL = ladoM.filter(porLer).length, nA = ladoM.filter(m=>m.tipo==="atividade" && !(m.atividade||{}).feito).length, atual = JSON.parse(ladoChave||"{}");
+  el.querySelector(".clRes").innerHTML = `<h4>Resumo das conversas ${nL?`<b>${nL} por ler</b>`:""} ${nA?`<i>${nA} atividade(s)</i>`:""}</h4>` +
+    (C.slice(0,8).map(L=>{ const u = L[L.length-1], d = u.doc||{}, n = L.filter(porLer).length, on = d.tipo===atual.tipo && d.id===atual.id;
+      return `<div class="l${on?" on":""}" data-clabre="${esc(JSON.stringify(d))}"><b>${esc(d.tipo==="programa"?"Geral":d.tipo==="cliente"?(d.titulo||d.id):d.id)}</b><small>${esc(u.de)}: ${esc(String(u.texto||"").slice(0,70))}</small>${n?`<em>${n}</em>`:""}</div>` }).join("")
+    || '<div style="color:#8a96a3">Ainda não há conversas. Escreva em cima: uma nota para a equipa ou uma mensagem ao cliente.</div>') }
+function ladoMostrar(on){ document.body.classList.toggle("semLado", !on); document.body.classList.toggle("ladoMovel", on); try{ localStorage.setItem("mda-chat-lado", on?"":"0") }catch(e){} }
+function ladoIniciar(){
+  const el = document.createElement("aside"); el.id = "chatLado"; el.dataset.nonav = "1";
+  el.innerHTML = `<div class="clCab"><span>RYROX ONE CHAT</span><button data-cl="geral" title="Conversa geral do programa">Geral</button><button data-cl="fechar" title="Esconder a coluna do chat">⟩</button></div><div class="clConv"></div><div class="clRes"></div>`;
+  document.body.appendChild(el); document.body.classList.add("comLado");
+  const ab = document.createElement("button"); ab.id = "ladoAbre"; ab.textContent = "💬 Conversas"; ab.onclick = () => ladoMostrar(true); document.body.appendChild(ab);
+  let fechado = false; try{ fechado = localStorage.getItem("mda-chat-lado")==="0" }catch(e){} if(fechado) document.body.classList.add("semLado");
+  el.querySelector(".clCab").onclick = ev=>{ const b = ev.target.closest("[data-cl]"); if(!b) return;
+    if(b.dataset.cl==="fechar") ladoMostrar(false); else { ladoManual = {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"}; ladoDesenhar() } };
+  el.querySelector(".clRes").onclick = ev=>{ const l = ev.target.closest("[data-clabre]"); if(!l) return; const d = JSON.parse(l.dataset.clabre);
+    if(d.tipo==="programa") { ladoManual = {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"}; ladoDesenhar() } else chatAbrir(d) };
+  const r0 = render; render = function(){ const v = r0.apply(this, arguments); ladoDesenhar(); return v };
+  setInterval(ladoResumo, 20000); ladoDesenhar() }
 if(window.MDA_MOTOR_CHAVE){
   const s = document.createElement("script"); s.src = "/ryrox-chat.js?v=" + Date.now();
   s.onload = () => { RyroxChat.iniciar({programa:"azeite", eu:{nome:"Ricardo Luz"}, pessoas:()=>[], servidor:{url:location.origin, chave:window.MDA_MOTOR_CHAVE}, abrir:chatAbrir,
       mudou:()=>document.querySelectorAll("[data-rchatabre]").forEach(b=>{ const r = JSON.parse(b.dataset.rchatabre), n = RyroxChat.contar(r.tipo, r.id), t = RyroxChat.total(r.tipo, r.id); b.textContent = "💬"+(n?" "+n:t?" ("+t+")":"") })});
     const b = document.createElement("button"); b.id = "bChat"; document.querySelector(".hdr-acoes").prepend(b); RyroxChat.caixa(b);
-    document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar) };
+    document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar); ladoIniciar() };
   document.head.appendChild(s);
   const a = document.createElement("script"); a.src = "assistente.js?v=2026-11-21a"; document.head.appendChild(a);
 }
