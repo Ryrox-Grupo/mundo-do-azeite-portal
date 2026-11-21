@@ -12,7 +12,7 @@
 <script src="dados.js?v=2026-11-09a"></script>
 <script src="gestao-online.js?v=2026-11-20b"></script>
 <script src="../precos.js"></script>
-<script src="chat.js?v=2026-11-21a"></script>
+<script>window.MDA_MOTOR_CHAVE = /*TOKEN*/"";   // o motor (servidor.py) mete aqui a chave: chat e assistente só com o motor</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -334,13 +334,15 @@ input[type=checkbox],input[type=radio]{accent-color:#141a0d}
 @media(max-width:700px){.recTiles{grid-template-columns:1fr}.visorBal input:not([type=checkbox]){font-size:30px!important}}
 /* uma linha por talão: o texto comprido corta-se com "…" e vê-se inteiro ao passar o rato */
 .docB{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.docB button,.docB label{display:inline-grid;place-items:center;width:26px;height:24px;margin:0;border:1px solid var(--line);background:#eef0e8;border-radius:var(--r);cursor:pointer;font-size:12px;padding:0}.docB button:hover,.docB label:hover{background:#e1f3cf}
+.mdaChat{height:560px;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;background:#fff}
+#chatJan{position:fixed;inset:0;z-index:70;background:#0f141088;display:flex;align-items:center;justify-content:center;padding:16px}#chatJan .cj{position:relative;width:min(620px,100%);height:min(720px,100%);background:#fff;border-radius:12px;overflow:hidden}#chatJan .cj .mdaChat{margin:0;border:0;border-radius:0}#chatJan [data-fechajan]{position:absolute;top:8px;right:10px;z-index:2;border:0;background:#eef1f5;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer}
 .corta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header class="ryrox-app-header">
-  <img class="ryrox-group-logo" src="logo-mundo-do-azeite.png" alt="Mundo do Azeite">
+  <img class="ryrox-group-logo" src="logo-mundo-do-azeite.png" alt="Mundo do Azeite" title="Voltar ao Dashboard" style="cursor:pointer" onclick="abre('vDash');window.scrollTo({top:0})">
   <div class="title"><b>GESTÃO</b><small>Do produtor ao azeite vendido: colheita, lagares, stock e vendas</small></div>
   <div class="hdr-acoes">
     <span class="maq" title="Dados de exemplo; ainda não está ligado à base de dados">MAQUETE · dados de exemplo</span>
@@ -2802,12 +2804,12 @@ function fichaGuia(g){
   $("addMeio").onchange=ev=>{if(ev.target.value){(g.meios=g.meios||[]).push({m:ev.target.value,h:8});up()}};
   const agora = ()=>new Date().toLocaleString("pt-PT",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).replace(",","");
   if($("bAprov")) $("bAprov").onclick=()=>{ const pc = porConfirmar(g); if(pc.length){ g.hist.push(`${agora()} ${quemUsa()} confirmou tudo o que estava a vermelho (${pc.map(k=>CONF_NOMES[k]).join(", ")})`); g.porConf = {} }
-    g.estado="Validado"; g.hist.push(agora()+" Aprovada pelo responsável"); chatAlteracao(g.prest, chatDocG(g), "Guia aprovada"); aprendeGuia(g); up()};
+    g.estado="Validado"; g.hist.push(agora()+" Aprovada pelo responsável"); aprendeGuia(g); up()};
   if($("gReler")) $("gReler").onclick=async()=>{ $("gReler").disabled = true; $("gReler").textContent = "a ler…"; try{ await relerGuia(g) }catch(e){ alert("A leitura falhou: "+e.message); render() } };
   marcaConf(g);
-  if($("bUsaR")) $("bUsaR").onclick=()=>{g.P.horas=g.R.horas;g.P.litros=g.R.litros;g.estado="Validado";g.hist.push(agora()+" Aprovada com os valores do registo Ryrox; prestador avisado por WhatsApp");chatAlteracao(g.prest, chatDocG(g), "Guia aprovada com os valores do registo Ryrox");up()};
+  if($("bUsaR")) $("bUsaR").onclick=()=>{g.P.horas=g.R.horas;g.P.litros=g.R.litros;g.estado="Validado";g.hist.push(agora()+" Aprovada com os valores do registo Ryrox; prestador avisado por WhatsApp");up()};
   if($("bDev")) $("bDev").onclick=()=>{g.estado="Devolvido";g.hist.push(agora()+" Devolvida ao prestador para corrigir (WhatsApp)");up()};
-  if($("bReab")) $("bReab").onclick=()=>{g.estado="Por validar";g.hist.push(agora()+" Reaberta");chatAlteracao(g.prest, chatDocG(g), "Guia reaberta");up()};
+  if($("bReab")) $("bReab").onclick=()=>{g.estado="Por validar";g.hist.push(agora()+" Reaberta");up()};
   if($("bApG")) $("bApG").onclick=()=>{ if($("bApG").dataset.ok!=="1"){$("bApG").dataset.ok="1";$("bApG").textContent="Clique outra vez para apagar";return} D.guias.splice(D.guias.indexOf(g),1); selG=null; up() };
   ligaEmissor(g.id);
   $("vTit").textContent = "Guia "+g.id; $("vOrig").textContent = g.via;
@@ -3871,7 +3873,7 @@ function fichaEnt(id){
     ${fld("Nome","data-ef=nome",r0.nome)}${fld("NIF","data-ef=nif",r0.nif||"")}${fld("Morada","data-ef=morada",r0.morada||"")}${fld("Código postal",'data-ef=codPostal placeholder="0000-000"',r0.codPostal||"")}${fld("Localidade","data-ef=local",r0.local||"")}
     ${fld("Telefone","data-ef=tel",r0.tel||"")}${fld("E-mail","data-ef=email",r0.email||"")}${fld("Responsável / contacto","data-ef=contacto",r0.contacto||"")}${fld("Notas","data-ef=notas",r0.notas||"")}</div>
     <div style="margin-top:10px"><label>Papéis desta entidade</label>${Object.entries(PAPEIS).map(([k,v])=>`<label class="chk"><input type="checkbox" data-pap="${k}" ${tem(k)?"checked":""}> ${v[0]}</label>`).join("")}</div>
-    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div>${chatCaixa({prod:id})}`;
+    <div class="sub" style="margin-top:6px">Documentos gerais da entidade:</div>${anexosHtml(id,null,"")}</div><div class="mdaChat" data-rchat="${esc(JSON.stringify({ent:id}))}"></div>`;
 
   if(tem("produtor")||tem("cliente")){ const p = by(D.produtores,id), Hs = D.propriedades.filter(x=>x.prod===id), vars=lista("variedades");
     h += `${tem("produtor")?`<div class="box"><h3>Fornecedor (produtor) · compra da azeitona</h3><div class="grid4">
@@ -3889,7 +3891,7 @@ function fichaEnt(id){
     <div class="box"><h3><span>Acesso ao portal do fornecedor (B2B)</span>${(p.portal||{}).ativo?`<span class="pill ok">ativo · ${mdaAcessos(p).filter(a=>a.ativo!==false).length} pessoa(s)</span>`:'<span class="pill">sem acesso</span>'}</h3>
       <div class="sub">Cada pessoa do fornecedor entra com o seu e-mail e a sua palavra-passe e vê só as entregas das propriedades dele: pesos, humidade, rendimentos, acidez, classe, azeite, o valor da azeitona, a conta corrente e a loja. Não vê os custos da Ryrox nem os dados de outros fornecedores. "Ver o portal como ele" mostra exatamente a mesma página.</div>
       <div class="grid4">${sel("Acesso do fornecedor","data-pt=ativo",[["1","Ativo"],["0","Sem acesso"]],(p.portal||{}).ativo?"1":"0")}<div><label>Acesso desde</label><input readonly class="ro" value="${(p.portal||{}).desde?dtl(p.portal.desde):"—"}"></div><div></div>
-        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatAbre('${id}')">💬 Conversa com ele</button></div></div>
+        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="document.querySelector('.mdaChat').scrollIntoView({block:'start'})">💬 Conversa com ele</button></div></div>
       ${acessoHtml(p, r0)}</div>`:""}
     <div class="box"><h3><span>Mapa das propriedades</span><button class="act light sm" id="bMapa">${mapaAberto?"Minimizar mapa":"Mostrar mapa"}</button></h3>
       ${mapaAberto?`<div class="sub" id="mapaDica">Escolha uma propriedade ou zona e carregue em "Desenhar perímetro": clique nos cantos e feche no primeiro ponto (Esc cancela). O desenho fica a ser a delimitação oficial e o centro serve para o estado do tempo.</div><div id="mapaProd" style="height:460px;border-radius:12px;border:1px solid var(--line)"></div>`:""}</div>
@@ -4279,14 +4281,62 @@ async function gestaoPublicar(){ const k = chaveGestao(); if(!k) return;
 const gestaoAgenda = (ms=60000) => { clearTimeout(gestaoT); gestaoT = setTimeout(gestaoPublicar, ms) };
 if(chaveGestao()){ gestaoAgenda(3000); setInterval(()=>gestaoAgenda(0), 3600e3);
   const gOrig2 = mdaGravar; mdaGravar = function(d){ gOrig2(d); gestaoAgenda() } }
-// Chat Ryrox (21-11-2026): uma conversa por entidade e por documento; mexe nos dados abertos (D) e grava como o resto do programa
-function chatDocT(e){ return {doc:e.id, docT:"Talão "+e.id, docTipo:"talao", prod:by(D.campos,e.campo).prod||e.lagar||""} }
-function chatDocG(g){ return {doc:g.id, docT:"Guia "+g.id, docTipo:"guia", prod:g.prest||""} }
-function chatDocBt(doc, prod, t, tipo){ const n = (D.mensagens||[]).filter(m=>m.doc===doc && m.tipo!=="alt").length;
-  return `<button class="act light sm" data-chabre="${esc(doc)}|${esc(prod||"")}|${esc(t)}|${tipo}" title="Conversa deste documento (notas da equipa, WhatsApp, e-mail)">💬${n?" "+n:""}</button>` };
-chatIniciar({modo:"programa", dados: () => D, guardar: () => { grava(); render() }, redesenha: () => render(),
-  abreDoc: c => { const v = {venda:"vVend", emb:"vStock", rec:"vRec", guiaT:"vRec"}[c.docTipo];
-    if(v) abre(v); else if(D.entregas.some(x=>x.id===c.doc) || D.guias.some(x=>x.id===c.doc)) irPara("doc", c.doc) }});
+// ---- RYROX ONE Chat e Assistente (21-11-2026): as mesmas peças dos outros programas Ryrox ----
+// O chat é a peça comum (Projetos/_alicerce/ryrox-chat/ryrox-chat.js), servida pelo motor (servidor.py), com as conversas na
+// guarda comum. Nada de cópias: muda-se lá e muda em todos os programas. Sem o motor (ex.: a página online) não aparece.
+const CHAT_TIPOS = {talao:"Talão", guia:"Guia", venda:"Venda", embalamento:"Embalamento", rececao:"Receção", guiaT:"Guia de transporte"};
+function chatEnt(id){ const r = recs(id)[0] || {}; return {nome:r.nome||"", email:r.email||"", tel:r.tel||""} }
+// o histórico do documento entra na conversa como "alterações"
+function chatEventos(x){ const ano = String(x.data||hoje()).slice(0,4);
+  return (x.hist||[]).map(h=>{ const s = typeof h==="string" ? h : [h.ev,h.det].filter(Boolean).join(": ");
+    const m = s.match(/^(\d{2})\/(\d{2})(?:\/(\d{4}))?\s+(\d{2}):(\d{2})\s*/), d2 = s.match(/^(\d{4}-\d{2}-\d{2}):?\s*/);
+    return m ? {data:`${m[3]||ano}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:00`, texto:s.slice(m[0].length)} : d2 ? {data:d2[1]+"T12:00:00", texto:s.slice(d2[0].length)} : {data:(x.data||hoje())+"T12:00:00", texto:s} }) }
+function chatRef(tipo, id, ent, titulo, x){ const c = chatEnt(ent);
+  return {tipo, id, titulo:titulo||((CHAT_TIPOS[tipo]||tipo)+" "+id), cliente:c.nome, empresa:"Ryrox Agro", marca:"Mundo do Azeite", contacto:c, eventos:x?chatEventos(x):[]} }
+function chatDocT(e){ return {tipo:"talao", id:e.id, ent:by(D.campos,e.campo).prod||e.lagar||""} }
+function chatDocG(g){ return {tipo:"guia", id:g.id, ent:g.prest||""} }
+// alterações (validar, reabrir, retificação) ficam no histórico do documento, que a conversa mostra
+function chatAlteracao(ent, r, texto){ const x = D.entregas.find(y=>y.id===r.id) || D.guias.find(y=>y.id===r.id); if(x) (x.hist = x.hist||[]).push(agoraTxt()+" "+texto) }
+function chatCaixa(r){ return `<div class="mdaChat" data-rchat="${esc(JSON.stringify(r))}"></div>` }
+function chatDocBt(doc, ent, t, tipo){ tipo = {rec:"rececao", emb:"embalamento"}[tipo] || tipo;
+  const n = window.RyroxChat ? RyroxChat.contar(tipo, doc) : 0, tot = window.RyroxChat ? RyroxChat.total(tipo, doc) : 0;
+  return `<button class="act light sm" data-rchatabre="${esc(JSON.stringify({tipo, id:doc, ent, titulo:t}))}" title="Conversa deste documento">💬${n?" "+n:tot?" ("+tot+")":""}</button>` }
+function chatMontar(el){ if(!window.RyroxChat || el.dataset.montado) return; const r = JSON.parse(el.dataset.rchat); el.dataset.montado = "1";
+  if(r.ent && !r.tipo){ const c = chatEnt(r.ent), docs = [];
+    D.entregas.filter(e=>chatDocT(e).ent===r.ent).forEach(e=>docs.push({tipo:"talao", id:e.id, titulo:"Talão "+e.id}));
+    D.guias.filter(g=>g.prest===r.ent).forEach(g=>docs.push({tipo:"guia", id:g.id, titulo:"Guia "+g.id}));
+    D.vendas.filter(v=>v.cliente===r.ent).forEach(v=>docs.push({tipo:"venda", id:v.id, titulo:"Venda "+v.id}));
+    RyroxChat.cliente(el, {cliente:c.nome, empresa:"Ryrox Agro", contacto:c, documentos:docs}); return }
+  const x = r.tipo==="talao" ? D.entregas.find(y=>y.id===r.id) : r.tipo==="guia" ? D.guias.find(y=>y.id===r.id) : null;
+  RyroxChat.documento(el, chatRef(r.tipo, r.id, r.ent, r.titulo, x)) }
+// conversa de um documento das listas (vendas, embalamentos, receções, guias de transporte): abre numa janela
+function chatJanela(r){ let j = $("chatJan"); if(!j){ j = document.createElement("div"); j.id = "chatJan"; document.body.appendChild(j);
+    j.onclick = ev=>{ if(ev.target===j || ev.target.closest("[data-fechajan]")) j.remove() } }
+  j.innerHTML = `<div class="cj"><button data-fechajan title="Fechar">×</button><div class="mdaChat" data-rchat="${esc(JSON.stringify(r))}"></div></div>`; chatMontar(j.querySelector(".mdaChat")) }
+new MutationObserver(()=>document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar)).observe(document.body, {childList:true, subtree:true});
+document.addEventListener("click", ev=>{ const b = ev.target.closest("[data-rchatabre]"); if(b){ ev.preventDefault(); ev.stopPropagation(); chatJanela(JSON.parse(b.dataset.rchatabre)) } }, true);
+function chatAbrir(ref){ if(ref.tipo==="talao" || ref.tipo==="guia") return irPara("doc", ref.id);
+  if(ref.tipo==="cliente"){ const e = entidades().find(x=>x.nome===ref.id || x.nome===ref.titulo); if(e) return irPara("ent", e.id) }
+  const f = {venda:[D.vendas,"cliente"], embalamento:[D.embalamentos,"embalador"], rececao:[D.rececoes,"prod"], guiaT:[D.guiasT,"lagar"]}[ref.tipo];
+  const x = f && (f[0]||[]).find(y=>y.id===ref.id); chatJanela({tipo:ref.tipo, id:ref.id, ent:x?x[f[1]]:"", titulo:ref.titulo}) }
+// o que o assistente fica a saber do que está aberto
+const separadorAberto = () => ((document.querySelector(".brandnav button.on")||{}).textContent||"").replace(/\d+/g,"").replace(/\s+/g," ").trim();
+window.MDA_IA = {
+  aberto: () => (vista==="vVal" && selG ? selG+" · " : vista==="vEntid" && selEnt ? nomeE(selEnt)+" · " : "") + separadorAberto(),
+  contexto: () => { const x = vista==="vVal" && selG ? (D.entregas.find(y=>y.id===selG)||D.guias.find(y=>y.id===selG)) : null;
+    let s = `Programa: Mundo do Azeite (Projetos/mundo-do-azeite/app, aberto em http://localhost:8765; os dados estão no localStorage do Chrome, chave "${MDA_CHAVE}").\nSeparador aberto: ${separadorAberto()}\nCampanha: ${D.conf.campanha}`;
+    if(x){ const y = JSON.parse(JSON.stringify(x)); delete y.leitura; s += `\nDocumento aberto: ${x.id}\n${JSON.stringify(y).slice(0,6000)}` }
+    if(vista==="vEntid" && selEnt) s += `\nFicha aberta: ${nomeE(selEnt)} (${selEnt})`;
+    return s } };
+if(window.MDA_MOTOR_CHAVE){
+  const s = document.createElement("script"); s.src = "/ryrox-chat.js?v=" + Date.now();
+  s.onload = () => { RyroxChat.iniciar({programa:"azeite", eu:{nome:"Ricardo Luz"}, pessoas:()=>[], servidor:{url:location.origin, chave:window.MDA_MOTOR_CHAVE}, abrir:chatAbrir,
+      mudou:()=>document.querySelectorAll("[data-rchatabre]").forEach(b=>{ const r = JSON.parse(b.dataset.rchatabre), n = RyroxChat.contar(r.tipo, r.id), t = RyroxChat.total(r.tipo, r.id); b.textContent = "💬"+(n?" "+n:t?" ("+t+")":"") })});
+    const b = document.createElement("button"); b.id = "bChat"; document.querySelector(".hdr-acoes").prepend(b); RyroxChat.caixa(b);
+    document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar) };
+  document.head.appendChild(s);
+  const a = document.createElement("script"); a.src = "assistente.js?v=2026-11-21a"; document.head.appendChild(a);
+}
 </script>
 <script>// telemóvel: abrir e fechar os filtros; o botão diz quantos estão ativos
 (function(){ const fb = document.getElementById("filtrobar"), b = document.getElementById("fAbre"); if(!fb||!b) return;
@@ -4298,5 +4348,6 @@ chatIniciar({modo:"programa", dados: () => D, guardar: () => { grava(); render()
   const nav = document.querySelector(".brandnav"), mede = () => document.documentElement.style.setProperty("--navH", (nav?nav.offsetHeight:48)+"px");
   mede(); addEventListener("resize", mede); })();
 </script>
+<script src="icones.js"></script>
 </body>
 </html>
