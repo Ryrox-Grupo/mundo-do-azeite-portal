@@ -335,6 +335,7 @@ input[type=checkbox],input[type=radio]{accent-color:#141a0d}
 /* uma linha por talão: o texto comprido corta-se com "…" e vê-se inteiro ao passar o rato */
 .docB{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.docB button,.docB label{display:inline-grid;place-items:center;width:26px;height:24px;margin:0;border:1px solid var(--line);background:#eef0e8;border-radius:var(--r);cursor:pointer;font-size:12px;padding:0}.docB button:hover,.docB label:hover{background:#e1f3cf}
 .mdaChat{height:560px;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;background:#fff}
+#extJan{position:fixed;inset:0;z-index:72;background:#0f141088;display:flex;align-items:center;justify-content:center;padding:16px}#extJan .ej{width:min(680px,100%);max-height:100%;overflow:auto;background:#fff;border-radius:12px;padding:16px 18px}#extJan .ej h2{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}#extJan .ejC{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 12px}#extJan .ejC label{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--ink,#1f2a17);margin:0;padding:3px 0;cursor:pointer}#extJan .ejC label.fixo{color:#6b7785}#extJan input[type=checkbox]{width:16px;height:16px;margin:0;padding:0;flex:none}#extJan label{text-align:left;justify-content:flex-start}#extJan .ejR{margin-top:12px;padding:8px 12px;border-radius:8px;background:#f4f6ef;font-size:13px}
 #chatJan{position:fixed;inset:0;z-index:70;background:#0f141088;display:flex;align-items:center;justify-content:center;padding:16px}#chatJan .cj{position:relative;width:min(620px,100%);height:min(720px,100%);background:#fff;border-radius:12px;overflow:hidden}#chatJan .cj .mdaChat{margin:0;border:0;border-radius:0}#chatJan [data-fechajan]{position:absolute;top:8px;right:10px;z-index:2;border:0;background:#eef1f5;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer}
 /* RYROX ONE Chat na coluna lateral (21-11-2026): sempre à vista, segue o que está aberto; resumo em baixo */
 body.comLado{padding-right:400px}
@@ -354,9 +355,11 @@ body.comLado:not(.semLado) .brandnav{flex-wrap:wrap;row-gap:6px}body.comLado:not
 #chatLado .clRes .l:hover{background:#eef3f8}#chatLado .clRes .l b{white-space:nowrap}#chatLado .clRes .l small{flex:1;min-width:0;color:#6b7785;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #chatLado .clRes .l em{font-style:normal;background:#E0463C;color:#fff;border-radius:9px;padding:0 6px;font-size:10px}
 #chatLado .clRes .l.on{background:#e6eef8}
-#ladoAbre{position:fixed;right:14px;bottom:14px;z-index:55;border:0;background:#071a2d;color:#fff;border-radius:12px;padding:11px 15px;font:700 13px Inter,sans-serif;cursor:pointer;box-shadow:0 10px 26px #0004;display:none}
-body.semLado #ladoAbre{display:block}body.semLado #chatLado{display:none}body.comLado.semLado{padding-right:0}
-@media(max-width:1100px){body.comLado{padding-right:0}#chatLado{width:min(400px,100vw)}body.comLado:not(.ladoMovel) #chatLado{display:none}body.comLado:not(.ladoMovel) #ladoAbre{display:block}}
+/* encolhido: uma barra fina à direita, sempre à vista; um clique volta a abrir */
+#ladoAbre{position:fixed;top:0;right:0;bottom:0;width:44px;z-index:56;border:0;border-left:1px solid #0b2440;background:#071a2d;color:#fff;cursor:pointer;display:none;flex-direction:column;align-items:center;gap:12px;padding:16px 0 0;font:700 12px Inter,sans-serif;letter-spacing:.04em}
+#ladoAbre:hover{background:#12304f}#ladoAbre span{writing-mode:vertical-rl;transform:rotate(180deg)}#ladoAbre b{font-size:16px}
+body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.comLado.semLado{padding-right:44px}
+@media(max-width:1100px){body.comLado{padding-right:330px}#chatLado{width:330px}}@media(max-width:700px){body.comLado{padding-right:0}#chatLado{width:100vw}}
 @media print{#chatLado,#ladoAbre{display:none}body.comLado{padding-right:0}}
 .corta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
 </style>
@@ -453,7 +456,8 @@ body.semLado #ladoAbre{display:block}body.semLado #chatLado{display:none}body.co
 
 <section id="vEnt" class="appview"><div class="page">
   <div class="hero"><div><h1>Entregas no lagar</h1><p>Um talão por entrega. Conta o peso do lagar. Kg × rendimento líquido = azeite produzido; humidade, rendimento sobre matéria seca, acidez e contraprova como no talão; a maquia sai conforme a condição do lagar.</p></div>
-    <button class="bMod" id="bLagSync" title="Abre o site do lagar e traz a humidade, os rendimentos e a acidez para os talões, pelo n.º do ticket"><span class="bModIco"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg></span><span class="bModTx"><b>Atualizar do lagar</b><small>humidade, rendimentos e acidez</small></span></button></div>
+    <button class="bMod" id="bLagSync" title="Abre o site do lagar e traz a humidade, os rendimentos e a acidez para os talões, pelo n.º do ticket"><span class="bModIco"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg></span><span class="bModTx"><b>Atualizar do lagar</b><small>humidade, rendimentos e acidez</small></span></button>
+    <button class="bMod" onclick="extratoForm()" title="Extrato das pesagens de um cliente, para imprimir ou mandar em PDF"><span class="bModIco">📄</span><span class="bModTx"><b>Extrato para o cliente</b><small>pesagens, gordura, rendimentos</small></span></button></div>
   <div id="lagSync"></div>
   <section class="card"><div style="overflow:auto"><table class="tb" id="tabEnt"></table></div></section>
 </div></section>
@@ -2968,6 +2972,110 @@ function ent(){
   document.querySelectorAll("#tabEnt tr.click").forEach(t=>t.onclick=()=>{selG=t.dataset.id;$("fEst").value="";$("fTipo").value="";abre("vVal")});
 }
 
+// ---- extrato das pesagens para o cliente (22-11-2026, pedido do Ricardo) ----
+// Escolhe-se o cliente (dono do olival), o período e a propriedade; o extrato leva sempre a data, o ticket,
+// a azeitona suja e a azeitona limpa. O resto (gordura, rendimentos, acidez, azeite...) marca-se no formulário.
+// Sai numa folha A4 para imprimir ou guardar em PDF. Não vai para ninguém sem o Ricardo o mandar.
+const EXT_CAMPOS = [
+  ["lagar","Lagar"],["prop","Propriedade / zona"],["var","Variedade"],["mat","Matrícula"],["gt","Guia de transporte"],
+  ["folha","Diferença suja → limpa (folha e terra)"],["hum","Humidade"],["ms","Gordura (rendimento sobre matéria seca)"],
+  ["rb","Rendimento bruto"],["rl","Rendimento líquido"],["ac","Acidez"],["cl","Classificação do azeite"],["az","Azeite produzido"],
+  ["cp","Contraprova (n.º e rendimento bruto)"],["expl","Explicações escritas para o cliente"]];
+const extDono = e => by(D.campos, e.campo).prod || "";
+function extItens(){ const ids = new Set(D.entregas.map(extDono).filter(Boolean));
+  return [...ids].map(id=>({v:id, t:nomeE(id), sub:[numsEnt(id), D.entregas.filter(e=>extDono(e)===id).length+" entregas"].filter(Boolean).join(" · ")})).sort((a,b)=>a.t.localeCompare(b.t)) }
+function extCamp(){ const c = by(D.tabelas.campanhas, D.conf.campanha); return {de:c.inicio||"", ate:c.fim||hoje()} }
+let EXT = null;
+window.extratoForm = function(ent){
+  let mem = {}; try{ mem = JSON.parse(localStorage.getItem("mda-extrato")||"{}") }catch(e){}
+  const c = extCamp(); EXT = {ent:ent||EXT&&EXT.ent||"", de:c.de, ate:c.ate, campo:"", soVal:false, campos:new Set(mem.campos||["lagar","prop"]), nota:""};
+  extDesenha() };
+function extLista(){ return D.entregas.filter(e=>extDono(e)===EXT.ent && (!EXT.de||e.data>=EXT.de) && (!EXT.ate||e.data<=EXT.ate) && (!EXT.campo||e.campo===EXT.campo) && (!EXT.soVal||e.estado==="Validado")).sort((a,b)=>a.data.localeCompare(b.data)||String(a.id).localeCompare(String(b.id))) }
+function extDesenha(){
+  let j = $("extJan"); if(!j){ j = document.createElement("div"); j.id = "extJan"; document.body.appendChild(j) }
+  const L = EXT.ent ? extLista() : [], camposEnt = D.campos.filter(c=>c.prod===EXT.ent && D.entregas.some(e=>e.campo===c.id));
+  const sK = L.reduce((t,e)=>t+(mdaSuja(e)||0),0), lK = L.reduce((t,e)=>t+liquido(e),0);
+  j.innerHTML = `<div class="ej"><h2><span>📄 Extrato das pesagens para o cliente</span><button class="act light sm" data-ex="fechar">✕</button></h2>
+    <div class="grid2"><div><label>Cliente (dono do olival)</label>${caixaProcura("extEnt", extItens(), EXT.ent, "escreva parte do nome ou o número")}</div>
+      <div><label>Propriedade / zona</label><select id="extCampo"><option value="">Todas</option>${camposEnt.map(c=>`<option value="${c.id}" ${c.id===EXT.campo?"selected":""}>${esc(c.nome)}</option>`).join("")}</select></div>
+      <div><label>Campanha</label><select id="extCp"><option value="">— datas à mão —</option>${D.tabelas.campanhas.map(c=>`<option value="${c.id}" ${c.inicio===EXT.de&&(c.fim||"")===(EXT.ate||"")?"selected":""}>${esc(c.id)}</option>`).join("")}</select></div>
+      <div style="display:flex;gap:8px"><div style="flex:1"><label>De</label><input type="date" id="extDe" value="${EXT.de}"></div><div style="flex:1"><label>Até</label><input type="date" id="extAte" value="${EXT.ate}"></div></div></div>
+    <label style="display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;margin-top:8px"><input type="checkbox" id="extVal" ${EXT.soVal?"checked":""}> Só as entregas já validadas</label>
+    <h3 style="margin:14px 0 4px">O que vai no extrato</h3>
+    <div class="sub" style="margin:0 0 6px">Vai sempre: data, ticket, <b>azeitona suja</b> e <b>azeitona limpa</b>. Marque o que mais quer mostrar ao cliente.</div>
+    <div class="ejC">${[["base1","Data e ticket"],["base2","Azeitona suja (kg)"],["base3","Azeitona limpa (kg)"]].map(([k,t])=>`<label class="fixo"><input type="checkbox" checked disabled> ${t}</label>`).join("")}
+      ${EXT_CAMPOS.map(([k,t])=>`<label><input type="checkbox" data-exc="${k}" ${EXT.campos.has(k)?"checked":""}> ${t}</label>`).join("")}</div>
+    <div style="display:flex;gap:6px;margin-top:6px"><button class="act light sm" data-ex="tudo">Marcar tudo</button><button class="act light sm" data-ex="nada">Só os pesos</button></div>
+    <label style="margin-top:12px">Nota para o cliente (opcional, sai no fim do extrato)</label><textarea id="extNota" rows="2" style="width:100%">${esc(EXT.nota)}</textarea>
+    <div class="ejR">${!EXT.ent?"Escolha o cliente.":L.length?`<b>${L.length}</b> entrega${L.length>1?"s":""} · ${kg(sK)} sujos · <b>${kg(lK)}</b> limpos${L.some(e=>e.estado!=="Validado")?` · <span style="color:#b8860b">${L.filter(e=>e.estado!=="Validado").length} ainda por validar</span>`:""}`:"Não há entregas deste cliente neste período."}</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="act light" data-ex="fechar">Cancelar</button><button class="act sec" data-ex="gerar" ${L.length?"":"disabled style=\"opacity:.45\""}>📄 Gerar extrato</button></div></div>`;
+  ligaProcura("extEnt", extItens(), v=>{ EXT.ent = v; EXT.campo = ""; extDesenha() });
+  $("extCampo").onchange = ev=>{ EXT.campo = ev.target.value; extDesenha() };
+  $("extCp").onchange = ev=>{ const c = by(D.tabelas.campanhas, ev.target.value); if(c.id){ EXT.de = c.inicio||""; EXT.ate = c.fim||"" } extDesenha() };
+  $("extDe").onchange = ev=>{ EXT.de = ev.target.value; extDesenha() }; $("extAte").onchange = ev=>{ EXT.ate = ev.target.value; extDesenha() };
+  $("extVal").onchange = ev=>{ EXT.soVal = ev.target.checked; extDesenha() };
+  $("extNota").oninput = ev=>{ EXT.nota = ev.target.value };
+  j.querySelectorAll("[data-exc]").forEach(b=>b.onchange=()=>{ b.checked ? EXT.campos.add(b.dataset.exc) : EXT.campos.delete(b.dataset.exc) });
+  j.onclick = ev=>{ if(ev.target===j) return j.remove(); const b = ev.target.closest("[data-ex]"); if(!b) return; const a = b.dataset.ex;
+    if(a==="fechar") j.remove();
+    else if(a==="tudo"){ EXT.campos = new Set(EXT_CAMPOS.map(x=>x[0])); extDesenha() }
+    else if(a==="nada"){ EXT.campos = new Set(); extDesenha() }
+    else if(a==="gerar"){ try{ localStorage.setItem("mda-extrato", JSON.stringify({campos:[...EXT.campos]})) }catch(e){} extGerar() } } }
+function extGerar(){
+  const L = extLista(), S = EXT.campos, tem = k => S.has(k), ent = EXT.ent, r0 = recs(ent)[0]||{nome:nomeE(ent)};
+  const p2 = v => v==null ? "—" : n2(v)+" %", T = {su:0,li:0,fK:0,fS:0,hK:0,hS:0,mK:0,mS:0,bK:0,bS:0,lS:0,az:0,aK:0,aS:0};
+  // colunas: [cabeçalho, valor da linha, total, numérica]
+  const C = [["Data", e=>dtl(e.data)], ["Ticket", e=>esc(e.ticketLimpo?"n.º "+e.ticketLimpo:String(e.numDoc||e.id).replace(/^ticket\s*/i,"n.º "))]];
+  if(tem("lagar")) C.push(["Lagar", e=>esc(nomeE(e.lagar))]);
+  if(tem("prop")) C.push(["Propriedade", e=>esc(by(D.campos,e.campo).nome||"—")]);
+  if(tem("var")) C.push(["Variedade", e=>esc(by(D.campos,e.campo).variedade||"—")]);
+  if(tem("mat")) C.push(["Matrícula", e=>esc(conjunto(e)||"—")]);
+  if(tem("gt")) C.push(["Guia", e=>esc(e.gt||"—")]);
+  C.push(["Azeitona suja", e=>{ const s = mdaSuja(e); return s?kg(s):"—" }, ()=>kg(T.su), 1]);
+  C.push(["Azeitona limpa", e=>"<b>"+kg(liquido(e))+"</b>", ()=>"<b>"+kg(T.li)+"</b>", 1]);
+  if(tem("folha")) C.push(["Folha e terra", e=>{ const f = mdaFolha(e); return f?`${kg(f.kg)}<br><small>${pc(f.pct,1)}</small>`:"—" }, ()=>T.fS?`${kg(T.fK)}<br><small>${pc(T.fK/T.fS*100,1)}</small>`:"—", 1]);
+  if(tem("hum")) C.push(["Humidade", e=>p2(e.hum), ()=>T.hK?p2(T.hS/T.hK):"—", 1]);
+  if(tem("ms")) C.push(["Gordura (s/ m. seca)", e=>p2(msE(e.rb,e.hum)), ()=>T.mK?p2(T.mS/T.mK):"—", 1]);
+  if(tem("rb")) C.push(["Rend. bruto", e=>p2(e.rb), ()=>T.bK?p2(T.bS/T.bK):"—", 1]);
+  if(tem("rl")) C.push(["Rend. líquido", e=>p2(rl(e)), ()=>T.bK?p2(T.lS/T.bK):"—", 1]);
+  if(tem("ac")) C.push(["Acidez", e=>e.acidez==null?"—":n2(e.acidez)+" %", ()=>T.aK?n2(T.aS/T.aK)+" %":"—", 1]);
+  if(tem("cl")) C.push(["Classificação", e=>rl(e)==null&&e.acidez==null?"—":esc(e.classe||"Virgem extra")]);
+  if(tem("az")) C.push(["Azeite", e=>rl(e)==null?"—":kg(liquido(e)*rl(e)/100), ()=>kg(T.az), 1]);
+  if(tem("cp")) C.push(["Contraprova", e=>e.cp||e.ctRb!=null?`${esc(e.cp||"")}${e.ctRb!=null?"<br><small>"+p2(e.ctRb)+"</small>":""}`:"—"]);
+  L.forEach(e=>{ const s = mdaSuja(e)||0, l = liquido(e), f = mdaFolha(e), R = rl(e), MS = msE(e.rb,e.hum);
+    T.su += s; T.li += l; if(f){ T.fK += f.kg; T.fS += s } if(e.hum!=null){ T.hK += l; T.hS += e.hum*l } if(MS!=null){ T.mK += l; T.mS += MS*l }
+    if(e.rb!=null){ T.bK += l; T.bS += e.rb*l; T.lS += R*l; const az = l*R/100; T.az += az; if(e.acidez!=null){ T.aK += az; T.aS += e.acidez*az } } });
+  const nc = C.length, iT = C.findIndex(c=>c[3]), porVal = L.filter(e=>e.estado!=="Validado").length, semR = L.filter(e=>e.rb==null).length;
+  const linhas = L.map(e=>`<tr>${C.map(c=>`<td${c[3]?' class="n"':""}>${c[1](e)}${c[0]==="Ticket"&&e.estado!=="Validado"?" *":""}</td>`).join("")}</tr>`
+    + (tem("expl")&&e.explicForn?`<tr class="ex"><td colspan="${nc}">${esc(e.explicForn).replace(/\n/g,"<br>")}</td></tr>`:"")).join("");
+  const tot = `<tr>${C.map((c,i)=>i<iT?(i===0?`<td colspan="${iT}">Total · ${L.length} entrega${L.length>1?"s":""}</td>`:""):`<td${c[3]?' class="n"':""}>${c[2]?c[2]():""}</td>`).join("")}</tr>`;
+  const per = `${EXT.de?dtl(EXT.de):"início"} a ${EXT.ate?dtl(EXT.ate):"hoje"}`, agora = new Date();
+  const cartoes = [["Azeitona suja",kg(T.su)],["Azeitona limpa",kg(T.li)]].concat(tem("folha")&&T.fS?[["Folha e terra",pc(T.fK/T.fS*100,1)]]:[]).concat(tem("ms")&&T.mK?[["Gordura média",p2(T.mS/T.mK)]]:[])
+    .concat(tem("rl")&&T.bK?[["Rendimento líquido médio",p2(T.lS/T.bK)]]:tem("rb")&&T.bK?[["Rendimento bruto médio",p2(T.bS/T.bK)]]:[]).concat(tem("az")&&T.az?[["Azeite produzido",kg(T.az)]]:[]);
+  const notas = [porVal?`* Entrega ainda por validar: os valores podem mudar.`:"", (tem("rb")||tem("rl")||tem("ms")||tem("az"))&&semR?`${semR} entrega${semR>1?"s":""} ainda sem análise do lagar (rendimento por receber).`:"",
+    tem("hum")||tem("ms")||tem("rb")||tem("rl")?"Humidade, gordura e rendimentos no total: médias pesadas pelos kg de azeitona limpa. Acidez: média pesada pelo azeite.":"",
+    "A azeitona limpa é o peso do ticket de azeitona limpa do lagar, depois da lavagem."].filter(Boolean);
+  const w = window.open("","_blank"); if(!w) return alert("O Chrome bloqueou a janela do extrato. Autorize as janelas deste programa e volte a carregar em Gerar extrato.");
+  w.document.write(`<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>Extrato de pesagens · ${esc(r0.nome)} · ${per}</title><style>
+    @page{size:A4 ${nc>9?"landscape":"portrait"};margin:14mm}body{font:12.5px/1.45 "Segoe UI",Arial,sans-serif;color:#1f2a17;margin:24px 30px}
+    header{display:flex;align-items:center;gap:18px;border-bottom:3px solid #3d5a1e;padding-bottom:10px}header img{height:58px}h1{margin:0;font-size:20px}.m{color:#6f7764}
+    .box{border:1px solid #cfd6c2;border-radius:8px;padding:9px 14px;margin-top:12px}.cards{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.cards div{flex:1;min-width:120px;border:1px solid #cfd6c2;border-radius:8px;padding:8px 12px;background:#f6f8f1}
+    .cards small{display:block;color:#6f7764;font-size:11px;text-transform:uppercase;letter-spacing:.04em}.cards b{font-size:19px}
+    table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#eef1e6;text-align:left;padding:6px;font-size:11.5px}td{border-bottom:1px solid #e0e4d6;padding:6px;vertical-align:top}.n{text-align:right;white-space:nowrap}
+    th.n{text-align:right}tr.ex td{color:#555;font-size:11.5px;background:#fafbf7;border-bottom:1px solid #e0e4d6}tfoot td{font-weight:800;border-top:2px solid #3d5a1e;background:#f6f8f1}
+    .nt{margin-top:12px;color:#555;font-size:11.5px}.nt p{margin:2px 0}footer{margin-top:22px;border-top:1px solid #cfd6c2;padding-top:6px;color:#8a917f;font-size:10.5px;display:flex;justify-content:space-between}
+    @media print{button{display:none}body{margin:0}}</style></head><body>
+    <header><img src="${location.href.replace(/[^/]*$/,"")}logo.png"><div><h1>Extrato de pesagens de azeitona</h1><div class="m">Ryrox Agro · ${[...new Set(L.map(e=>campanhaDe(e.data)).filter(Boolean))].map(c=>"campanha "+esc(c)).join(", ")} · ${per}</div></div></header>
+    <div class="box"><b>Cliente:</b> ${esc(r0.nome)}${numsEnt(ent)?` (${numsEnt(ent)})`:""}${r0.nif?` · NIF ${esc(r0.nif)}`:""}${EXT.campo?`<br><b>Propriedade:</b> ${esc(by(D.campos,EXT.campo).nome)}`:""}</div>
+    <div class="cards">${cartoes.map(([t,v])=>`<div><small>${t}</small><b>${v}</b></div>`).join("")}</div>
+    <table><thead><tr>${C.map(c=>`<th${c[3]?' class="n"':""}>${c[0]}${c[0].startsWith("Azeitona")?"<br><small>kg</small>":""}</th>`).join("")}</tr></thead><tbody>${linhas}</tbody><tfoot>${tot}</tfoot></table>
+    ${EXT.nota.trim()?`<div class="box"><b>Nota:</b> ${esc(EXT.nota.trim()).replace(/\n/g,"<br>")}</div>`:""}
+    <div class="nt">${notas.map(n=>`<p>${n}</p>`).join("")}</div>
+    <footer><span>Mundo do Azeite · Ryrox Agro</span><span>Extrato emitido a ${agora.toLocaleDateString("pt-PT")} às ${agora.toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"})}</span></footer>
+    <p style="margin-top:16px"><button onclick="print()">Imprimir / guardar em PDF</button></p></body></html>`);
+  w.document.close();
+}
+
 // ---- stock ----
 const kgLinha = l => (+(l.rec??l.qtd)||0)*by(D.produtos,l.produto).litros*DENS;
 const embLinha = l => (+(l.rec??l.qtd)||0)*mdaCustoEmbUn(l);
@@ -3911,7 +4019,7 @@ function fichaEnt(id){
     <div class="box"><h3><span>Acesso ao portal do fornecedor (B2B)</span>${(p.portal||{}).ativo?`<span class="pill ok">ativo · ${mdaAcessos(p).filter(a=>a.ativo!==false).length} pessoa(s)</span>`:'<span class="pill">sem acesso</span>'}</h3>
       <div class="sub">Cada pessoa do fornecedor entra com o seu e-mail e a sua palavra-passe e vê só as entregas das propriedades dele: pesos, humidade, rendimentos, acidez, classe, azeite, o valor da azeitona, a conta corrente e a loja. Não vê os custos da Ryrox nem os dados de outros fornecedores. "Ver o portal como ele" mostra exatamente a mesma página.</div>
       <div class="grid4">${sel("Acesso do fornecedor","data-pt=ativo",[["1","Ativo"],["0","Sem acesso"]],(p.portal||{}).ativo?"1":"0")}<div><label>Acesso desde</label><input readonly class="ro" value="${(p.portal||{}).desde?dtl(p.portal.desde):"—"}"></div><div></div>
-        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatLado({ent:'${id}'})">💬 Conversa com ele</button></div></div>
+        <div><label>&nbsp;</label><a class="act sec" style="display:block;text-align:center;text-decoration:none" href="portal.html?ver=${id}" target="_blank">Ver o portal como ele ↗</a><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="chatLado({ent:'${id}'})">💬 Conversa com ele</button><button class="act light" style="display:block;width:100%;margin-top:6px" onclick="extratoForm('${id}')">📄 Extrato das pesagens</button></div></div>
       ${acessoHtml(p, r0)}</div>`:""}
     <div class="box"><h3><span>Mapa das propriedades</span><button class="act light sm" id="bMapa">${mapaAberto?"Minimizar mapa":"Mostrar mapa"}</button></h3>
       ${mapaAberto?`<div class="sub" id="mapaDica">Escolha uma propriedade ou zona e carregue em "Desenhar perímetro": clique nos cantos e feche no primeiro ponto (Esc cancela). O desenho fica a ser a delimitação oficial e o centro serve para o estado do tempo.</div><div id="mapaProd" style="height:460px;border-radius:12px;border:1px solid var(--line)"></div>`:""}</div>
@@ -4375,25 +4483,27 @@ async function ladoResumo(){ const el = $("chatLado"); if(!el) return;
     (C.slice(0,8).map(L=>{ const u = L[L.length-1], d = u.doc||{}, n = L.filter(porLer).length, on = d.tipo===atual.tipo && d.id===atual.id;
       return `<div class="l${on?" on":""}" data-clabre="${esc(JSON.stringify(d))}"><b>${esc(d.tipo==="programa"?"Geral":d.tipo==="cliente"?(d.titulo||d.id):d.id)}</b><small>${esc(u.de)}: ${esc(String(u.texto||"").slice(0,70))}</small>${n?`<em>${n}</em>`:""}</div>` }).join("")
     || '<div style="color:#8a96a3">Ainda não há conversas. Escreva em cima: uma nota para a equipa ou uma mensagem ao cliente.</div>') }
-function ladoMostrar(on){ document.body.classList.toggle("semLado", !on); document.body.classList.toggle("ladoMovel", on); try{ localStorage.setItem("mda-chat-lado", on?"":"0") }catch(e){} }
+function ladoMostrar(on){ document.body.classList.toggle("semLado", !on) }   // encolher é só até voltar a abrir: depois do F5 abre sempre
 function ladoIniciar(){
   const el = document.createElement("aside"); el.id = "chatLado"; el.dataset.nonav = "1";
-  el.innerHTML = `<div class="clCab"><span>RYROX ONE CHAT</span><button data-cl="geral" title="Conversa geral do programa">Geral</button><button data-cl="fechar" title="Esconder a coluna do chat">⟩</button></div><div class="clConv"></div><div class="clRes"></div>`;
+  el.innerHTML = `<div class="clCab"><span>RYROX ONE CHAT</span><button data-cl="geral" title="Conversa geral do programa">Geral</button><button data-cl="fechar" title="Encolher o chat (fica uma barra à direita para voltar a abrir)">⟩</button></div><div class="clConv"></div><div class="clRes"></div>`;
   document.body.appendChild(el); document.body.classList.add("comLado");
-  const ab = document.createElement("button"); ab.id = "ladoAbre"; ab.textContent = "💬 Conversas"; ab.onclick = () => ladoMostrar(true); document.body.appendChild(ab);
-  let fechado = false; try{ fechado = localStorage.getItem("mda-chat-lado")==="0" }catch(e){} if(fechado) document.body.classList.add("semLado");
+  const ab = document.createElement("button"); ab.id = "ladoAbre"; ab.title = "Abrir o chat"; ab.innerHTML = "<b>⟨</b><b>💬</b><span>CONVERSAS</span>"; ab.onclick = () => ladoMostrar(true); document.body.appendChild(ab);
+  if(innerWidth<700) document.body.classList.add("semLado");
   el.querySelector(".clCab").onclick = ev=>{ const b = ev.target.closest("[data-cl]"); if(!b) return;
     if(b.dataset.cl==="fechar") ladoMostrar(false); else { ladoManual = {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"}; ladoDesenhar() } };
   el.querySelector(".clRes").onclick = ev=>{ const l = ev.target.closest("[data-clabre]"); if(!l) return; const d = JSON.parse(l.dataset.clabre);
     if(d.tipo==="programa") { ladoManual = {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"}; ladoDesenhar() } else chatAbrir(d) };
-  const r0 = render; render = function(){ const v = r0.apply(this, arguments); ladoDesenhar(); return v };
-  setInterval(ladoResumo, 20000); ladoDesenhar() }
+  const r0 = render; render = function(){ const v = r0.apply(this, arguments); ladoSeguro(); return v };
+  setInterval(ladoResumo, 20000); ladoSeguro() }
+function ladoSeguro(){ try{ ladoDesenhar() }catch(e){ console.error("Coluna do chat", e); const c = document.querySelector("#chatLado .clConv"); if(c){ ladoChave = ""; c.innerHTML = `<div style="padding:14px;color:#b42318;font:13px Inter,sans-serif">Não consegui abrir a conversa: ${esc(e.message)}</div>` } } }
 if(window.MDA_MOTOR_CHAVE){
   const s = document.createElement("script"); s.src = "/ryrox-chat.js?v=" + Date.now();
   s.onload = () => { RyroxChat.iniciar({programa:"azeite", eu:{nome:"Ricardo Luz"}, pessoas:()=>[], servidor:{url:location.origin, chave:window.MDA_MOTOR_CHAVE}, abrir:chatAbrir,
       mudou:()=>document.querySelectorAll("[data-rchatabre]").forEach(b=>{ const r = JSON.parse(b.dataset.rchatabre), n = RyroxChat.contar(r.tipo, r.id), t = RyroxChat.total(r.tipo, r.id); b.textContent = "💬"+(n?" "+n:t?" ("+t+")":"") })});
     const b = document.createElement("button"); b.id = "bChat"; document.querySelector(".hdr-acoes").prepend(b); RyroxChat.caixa(b);
     document.querySelectorAll(".mdaChat:not([data-montado])").forEach(chatMontar); ladoIniciar() };
+  s.onerror = () => { const el = document.createElement("aside"); el.id = "chatLado"; el.innerHTML = '<div style="padding:16px;font:13px Inter,sans-serif;color:#b42318">O motor do programa não respondeu: o chat não abriu. Feche o separador e abra o programa pelo atalho Mundo do Azeite.</div>'; document.body.appendChild(el); document.body.classList.add("comLado") };
   document.head.appendChild(s);
   const a = document.createElement("script"); a.src = "assistente.js?v=2026-11-21a"; document.head.appendChild(a);
 }
