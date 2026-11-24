@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Assinar documentos · Ryrox</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap">
+<style>
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --fg: #142033; --muted: #5b6678; --line: #d8dee7;
+  --navy: #0F1E36; --accent: #008BD2; --ok: #1d8a52; --okbg: #e5f4ec; --warn: #b4540a;
+  --f-display: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box }
+html, body { margin: 0 }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.5 }
+.topo { background: var(--navy); color: #fff; padding-top: calc(env(safe-area-inset-top, 0px) + 18px); padding-bottom: 18px }
+.wrap { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .75 }
+h1 { font-family: var(--f-display); font-weight: 600; font-size: 25px; margin: 4px 0 4px; line-height: 1.2 }
+.en { display: block; font-size: 12.5px; opacity: .7; font-weight: 400; font-family: var(--f-body) }
+main { padding-block: 18px 40px; display: grid; gap: 16px }
+.passo { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px }
+.passo h2 { font-family: var(--f-display); font-weight: 500; font-size: 19px; margin: 0 0 10px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.25 }
+.n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 13px var(--f-body); display: inline-grid; place-items: center; flex: none; margin-top: 1px }
+.pag { margin: 0 0 16px }
+.pag figcaption { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 600 }
+.pag img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; background: #fff }
+.check { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; cursor: pointer }
+.check input { width: 24px; height: 24px; flex: none; accent-color: var(--accent); margin-top: 1px }
+.pad-box { position: relative; border: 2px dashed var(--line); border-radius: 10px; background: #fff; touch-action: none }
+.pad-box.ativo { border-color: var(--accent) }
+canvas { display: block; width: 100%; height: 200px; border-radius: 8px; touch-action: none }
+.linha { position: absolute; left: 16px; right: 16px; bottom: 46px; border-bottom: 1px solid #c7ced8; pointer-events: none }
+.dica { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font-size: 12px; color: #8a94a3; pointer-events: none }
+.acoes { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap }
+button { font: 600 15px var(--f-body); border-radius: 10px; padding: 14px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer }
+button.primario { background: var(--accent); border-color: var(--accent); color: #fff; flex: 1; min-width: 200px }
+button:disabled { opacity: .45; cursor: not-allowed }
+button:focus-visible, .check input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px }
+.estado { border-radius: 12px; padding: 16px; font-size: 15px }
+.estado.ok { background: var(--okbg); color: var(--ok); border: 1px solid var(--ok) }
+.estado.aviso { background: var(--surface); border: 1px solid var(--warn); color: var(--warn) }
+.estado strong { display: block; font-size: 17px; margin-bottom: 4px }
+.rodape { color: var(--muted); font-size: 12px; text-align: center }
+.carregar { text-align: center; color: var(--muted); padding: 40px 0 }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <div class="eyebrow">Alaranjado Célebre, Lda. · Ryrox Agro</div>
+    <h1 id="titulo">Documentos para assinar<span class="en">Documents to sign</span></h1>
+    <div id="quem"></div>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <p class="carregar" id="carregar">A carregar os documentos… / Loading…</p>
+</main>
+
+<template id="tpl">
+  <section class="passo">
+    <h2><span class="n">1</span><span>Leia os documentos<span class="en">Read the documents</span></span></h2>
+    <div id="paginas"></div>
+  </section>
+  <section class="passo">
+    <h2><span class="n">2</span><span>Confirmar<span class="en">Confirm</span></span></h2>
+    <label class="check"><input type="checkbox" id="confirmo">
+      <span>Li os documentos e confirmo que recebi os EPI indicados e que tive a formação de segurança e saúde no trabalho.
+      <span class="en" style="opacity:.75">I have read the documents and confirm that I received the PPE listed and the health and safety training.</span></span></label>
+  </section>
+  <section class="passo">
+    <h2><span class="n">3</span><span>Assine com o dedo<span class="en">Sign with your finger</span></span></h2>
+    <div class="pad-box" id="padbox">
+      <canvas id="pad" aria-label="Assinar aqui"></canvas>
+      <div class="linha"></div>
+      <div class="dica" id="dica">Assine aqui · Sign here</div>
+    </div>
+    <div class="acoes">
+      <button type="button" id="limpar">Limpar · Clear</button>
+      <button type="button" class="primario" id="assinar" disabled>Assinar · Sign</button>
+    </div>
+  </section>
+  <div id="estado" role="status" aria-live="polite"></div>
+  <p class="rodape">A assinatura fica registada com a data e a hora. · Your signature is saved with the date and time.</p>
+</template>
+
+<script>
+const URL_SB = "https://dxhpsgyysphzaeatafit.supabase.co";
+const KEY = "sb_publishable_bCbZeDaIvcuvT1gQ_jDV2A_7F8DarY4";
+const token = new URLSearchParams(location.search).get("t") || "";
+const app = document.getElementById("app");
+
+async function rpc(nome, corpo) {
+  const r = await fetch(URL_SB + "/rest/v1/rpc/" + nome, { method: "POST",
+    headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
+  const txt = await r.text();
+  if (!r.ok) { let m = txt; try { m = JSON.parse(txt).message || txt } catch (e) {} throw new Error(m); }
+  return txt ? JSON.parse(txt) : null;
+}
+function caixa(cls, titulo, texto) {
+  const b = document.createElement("div"); b.className = "estado " + cls;
+  const s = document.createElement("strong"); s.textContent = titulo;
+  const p = document.createElement("div"); p.textContent = texto;
+  b.append(s, p); return b;
+}
+function quando(iso) { const d = new Date(iso); return d.toLocaleDateString("pt-PT") + " " + d.toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" }); }
+
+(async () => {
+  let doc = null;
+  try { if (token.length >= 24) doc = await rpc("sst_documento", { p_token: token }); } catch (e) {}
+  if (!doc) { app.replaceChildren(caixa("aviso", "Link inválido · Invalid link", "Peça um novo link à Ryrox. · Please ask Ryrox for a new link.")); return; }
+
+  const quem = document.getElementById("quem");
+  const nm = document.createElement("div"); nm.style.fontWeight = "600"; nm.textContent = doc.trabalhador;
+  const tt = document.createElement("div"); tt.style.opacity = ".85"; tt.style.fontSize = "14px"; tt.textContent = doc.titulo;
+  quem.append(nm, tt);
+
+  app.replaceChildren(document.getElementById("tpl").content.cloneNode(true));
+  const pagDiv = document.getElementById("paginas");
+  (doc.paginas || []).forEach(p => {
+    const f = document.createElement("figure"); f.className = "pag";
+    const c = document.createElement("figcaption"); c.textContent = p.titulo;
+    const i = document.createElement("img"); i.alt = p.titulo; i.loading = "lazy";
+    if (typeof p.img === "string" && p.img.startsWith("data:image/")) i.src = p.img;
+    f.append(c, i); pagDiv.append(f);
+  });
+  const estado = document.getElementById("estado");
+  if (doc.assinado_em) estado.replaceChildren(caixa("ok", "Já assinado · Already signed", "Assinou em " + quando(doc.assinado_em) + ". Pode assinar de novo para substituir. · You can sign again to replace it."));
+
+  const canvas = document.getElementById("pad"), ctx = canvas.getContext("2d");
+  const padbox = document.getElementById("padbox"), dica = document.getElementById("dica");
+  const btn = document.getElementById("assinar"), confirmo = document.getElementById("confirmo");
+  let tracos = 0, desenhar = false, ultimo = null;
+  function ajustar() {
+    const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineWidth = 2.6; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#12306e"; ctx.fillStyle = "#12306e";
+    tracos = 0; dica.hidden = false; atualizar();
+  }
+  function pos(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  canvas.addEventListener("pointerdown", e => { e.preventDefault(); canvas.setPointerCapture(e.pointerId); desenhar = true; ultimo = pos(e); padbox.classList.add("ativo"); dica.hidden = true;
+    ctx.beginPath(); ctx.arc(ultimo.x, ultimo.y, 1.3, 0, Math.PI * 2); ctx.fill(); });
+  canvas.addEventListener("pointermove", e => { if (!desenhar) return; e.preventDefault(); const p = pos(e);
+    ctx.beginPath(); ctx.moveTo(ultimo.x, ultimo.y); ctx.lineTo(p.x, p.y); ctx.stroke(); ultimo = p; });
+  function fim() { if (desenhar) { desenhar = false; tracos++; padbox.classList.remove("ativo"); atualizar(); } }
+  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => canvas.addEventListener(ev, fim));
+  document.getElementById("limpar").addEventListener("click", () => { ctx.clearRect(0, 0, canvas.width, canvas.height); tracos = 0; dica.hidden = false; atualizar(); });
+  confirmo.addEventListener("change", atualizar);
+  function atualizar() { btn.disabled = !(confirmo.checked && tracos > 0); }
+  function png() {
+    const w = canvas.width, h = canvas.height, px = ctx.getImageData(0, 0, w, h).data;
+    let x0 = w, y0 = h, x1 = 0, y1 = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (px[(y * w + x) * 4 + 3] > 10) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    const m = 8; x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(w, x1 + m); y1 = Math.min(h, y1 + m);
+    const c = document.createElement("canvas"); c.width = x1 - x0; c.height = y1 - y0;
+    c.getContext("2d").drawImage(canvas, x0, y0, c.width, c.height, 0, 0, c.width, c.height);
+    return c.toDataURL("image/png");
+  }
+  btn.addEventListener("click", async () => {
+    if (btn.disabled) return;
+    btn.disabled = true; btn.textContent = "A enviar… · Sending…";
+    try {
+      const r = await rpc("sst_assinar", { p_token: token, p_assinatura: png(), p_dispositivo: navigator.userAgent });
+      estado.replaceChildren(caixa("ok", "Assinado. Obrigado! · Signed. Thank you!", "Assinatura registada em " + quando(r.assinado_em) + ". Já pode fechar esta página. · You can close this page."));
+      estado.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (e) {
+      estado.replaceChildren(caixa("aviso", "Não foi enviado · Not sent", "Verifique a internet e tente outra vez. · Check your connection and try again. (" + e.message + ")"));
+    }
+    btn.textContent = "Assinar · Sign"; atualizar();
+  });
+  window.addEventListener("resize", () => { if (!tracos) ajustar(); });
+  ajustar();
+})();
+</script>
+</body>
+</html>
