@@ -128,6 +128,11 @@ function quando(iso) { const d = new Date(iso); return d.toLocaleDateString("pt-
     if (typeof p.img === "string" && p.img.startsWith("data:image/")) i.src = p.img;
     f.append(c, i); pagDiv.append(f);
   });
+  if (doc.confirmacao) {
+    const alvo = document.querySelector(".check > span");
+    alvo.textContent = doc.confirmacao;
+    document.querySelector(".rodape").textContent = "A assinatura fica registada com a data e a hora.";
+  }
   const estado = document.getElementById("estado");
   if (doc.assinado_em) estado.replaceChildren(caixa("ok", "Já assinado · Already signed", "Assinou em " + quando(doc.assinado_em) + ". Pode assinar de novo para substituir. · You can sign again to replace it."));
 
