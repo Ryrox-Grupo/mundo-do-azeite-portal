@@ -183,7 +183,7 @@ async function abrir(token, opts = {}) {
   confirmo.addEventListener("change", atualizar);
   function atualizar() { btn.disabled = !(confirmo.checked && (tracos > 0 || reusar)); }
 
-  if (opts.voltar && ultimaAssinatura) {
+  if (opts.reusar && ultimaAssinatura) {
     const b = document.createElement("button"); b.type = "button"; b.className = "reusar"; b.textContent = "Usar a mesma assinatura do anterior";
     b.addEventListener("click", () => {
       const im = new Image();
@@ -197,7 +197,7 @@ async function abrir(token, opts = {}) {
   }
 
   function png() {
-    if (reusar && ultimaAssinatura) return ultimaAssinatura;
+    if (reusar && ultimaAssinatura && opts.reusar) return ultimaAssinatura;
     const w = canvas.width, h = canvas.height, px = ctx.getImageData(0, 0, w, h).data;
     let x0 = w, y0 = h, x1 = 0, y1 = 0;
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (px[(y * w + x) * 4 + 3] > 10) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
@@ -248,7 +248,7 @@ async function painel(ptoken) {
     const n = document.createElement("span"); n.textContent = i.trabalhador || "—";
     const c = document.createElement("span"); c.className = "chip" + (i.assinado_em ? " ok" : ""); c.textContent = i.assinado_em ? "Assinado ✓" : "Por assinar";
     b.append(n, c);
-    b.addEventListener("click", () => abrir(i.token, { nomeTrab: i.trabalhador, voltar: () => painel(ptoken), assinado: () => painel(ptoken) }));
+    b.addEventListener("click", () => abrir(i.token, { nomeTrab: i.trabalhador, voltar: () => painel(ptoken), assinado: () => painel(ptoken), reusar: !/cada trabalhador/i.test(dados.papel_txt || "") }));
     lista.append(b);
   });
   sec.append(h, lista);
