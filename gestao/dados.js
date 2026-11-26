@@ -109,7 +109,22 @@ function mdaCompra(e){
 }
 
 function mdaCarregar(){ let d; try{ d = JSON.parse(localStorage.getItem(MDA_CHAVE)) }catch(e){} return d || mdaExemplo(); }
-function mdaGravar(d){ try{ const t = JSON.stringify(d); localStorage.setItem(MDA_CHAVE, t);
+// cópia no disco pelo motor (26-11-2026): cada gravação vai também para S:/Ricardo/MUNDO DO AZEITE (só quando o programa abre pelo motor)
+let mdaDiscoT = null, mdaSincOk = false, mdaPorGravar = null;   // só se grava no disco depois de comparar com ele (não estragar o disco com dados velhos)
+function mdaDisco(d){ if(typeof window==="undefined" || !window.MDA_MOTOR_CHAVE) return; if(!mdaSincOk){ mdaPorGravar = d; return } clearTimeout(mdaDiscoT);
+  mdaDiscoT = setTimeout(()=>{ const quando = new Date().toISOString().slice(0,19);
+    fetch("/api/dados/gravar", {method:"POST", headers:{"Content-Type":"application/json","X-Chave":window.MDA_MOTOR_CHAVE}, body:JSON.stringify({dados:d, quando})})
+      .then(r=>r.json()).then(j=>{ if(j.ok){ try{ localStorage.setItem(MDA_CHAVE+"-quando", j.quando) }catch(e){} } else console.warn("Disco:", j.erro) }).catch(e=>console.warn("Disco:", e)) }, 1200) }
+// ao abrir: o disco é a referência. Se o disco tem uma gravação mais recente do que este navegador, o navegador fica igual ao disco;
+// se o disco ainda está vazio, leva a cópia deste navegador (tal como está).
+async function mdaSincronizar(){ if(typeof window==="undefined" || !window.MDA_MOTOR_CHAVE) return;
+  try{ const j = await (await fetch("/api/dados", {cache:"no-store", headers:{"X-Chave":window.MDA_MOTOR_CHAVE}})).json();
+    const local = localStorage.getItem(MDA_CHAVE), qLocal = localStorage.getItem(MDA_CHAVE+"-quando") || "";
+    if(!j.dados){ mdaSincOk = true; if(local) mdaDisco(JSON.parse(local)); return }
+    if(j.quando > qLocal && JSON.stringify(j.dados) !== local){ localStorage.setItem(MDA_CHAVE, JSON.stringify(j.dados)); localStorage.setItem(MDA_CHAVE+"-quando", j.quando); return location.reload() }
+    mdaSincOk = true; if(mdaPorGravar){ const d = mdaPorGravar; mdaPorGravar = null; mdaDisco(d) }
+  }catch(e){ console.warn("Disco:", e) } }
+function mdaGravar(d){ mdaDisco(d); try{ const t = JSON.stringify(d); localStorage.setItem(MDA_CHAVE, t);
   if((d.entregas||[]).length || (d.custos||[]).length || (d.vendas||[]).length) localStorage.setItem(MDA_CHAVE+"-copia", JSON.stringify({quando:new Date().toISOString(), dados:d})) }catch(e){} }
 function mdaCopia(){ try{ return JSON.parse(localStorage.getItem(MDA_CHAVE+"-copia")) }catch(e){ return null } }
 
