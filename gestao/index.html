@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-<script src="dados.js?v=2026-11-09a"></script>
+<script src="dados.js?v=2026-11-26a"></script>
 <script src="gestao-online.js?v=2026-11-20b"></script>
 <script src="../precos.js"></script>
 <script>window.MDA_MOTOR_CHAVE = /*TOKEN*/"";   // o motor (servidor.py) mete aqui a chave: chat e assistente só com o motor</script>
@@ -34,6 +34,31 @@ body{margin:0;font:14px/1.4 "Segoe UI",Arial,sans-serif;background:var(--bg);col
 .title b{font-size:16px;letter-spacing:.02em;color:var(--navy)}.title b span{color:var(--red)}
 .title small{margin-top:4px;font-size:12px;color:var(--mut)}
 .hdr-acoes{margin-left:auto;display:flex;gap:8px;align-items:center}
+/* menu lateral e financeiro como no Smart Farm (26-11-2026) */
+.brandnav h6{display:none}
+@media(min-width:901px){
+  body{padding-left:224px!important}
+  .brandnav{position:fixed!important;left:0;top:0;bottom:0;width:224px;z-index:58;flex-direction:column;align-items:stretch;flex-wrap:nowrap!important;overflow-y:auto;overflow-x:hidden!important;padding:14px 10px 24px!important;gap:1px!important}
+  .brandnav>button,.brandnav>a{width:100%;text-align:left;display:flex;align-items:center;gap:8px;padding:8px 12px!important;white-space:normal;font-size:13.5px}
+  .brandnav>button .badge{margin-left:auto}
+  .brandnav h6{display:block;color:#a9b89a;font:800 10.5px Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;margin:14px 12px 4px}
+  .brandnav .sp{flex:1}
+  #finTabs{display:none}
+  #maisMenu{position:fixed}
+}
+@media(max-width:700px){.brandnav>[data-fin]:not([data-fin="contas"]){display:none!important}}
+.fxBarra{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.fxChk{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;margin:0}.fxChk input{width:16px}
+.fxAnt>div{display:grid;grid-template-columns:120px 1fr 110px 1fr 110px;gap:8px;align-items:center;margin:6px 0;font-size:13px}.fxAnt i{display:block;height:16px;border-radius:4px;min-width:2px;cursor:pointer}.fxAnt i.r,.fxL.r{background:#3d9a2b}.fxAnt i.p,.fxL.p{background:#1f6fb8}.fxAnt b{text-align:right;font-variant-numeric:tabular-nums}
+.fxL{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle}
+.fxDocCab{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;background:#f6f8f1;border:1px solid var(--line);border-radius:10px;padding:10px 12px}.fxDocCab label{margin:0}
+.fxForma{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}.fxForma span{font-weight:800;margin-right:4px}.fxForma button{border:2px solid var(--line);background:#fff;border-radius:10px;padding:9px 16px;font:700 14px Inter,sans-serif;cursor:pointer}.fxForma button.on{border-color:#3d5a1e;background:#eef6e3}
+.fxAtrib{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.fxAtrib label{margin:0}
+.fxAz{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-top:12px;padding:10px 12px;border:2px solid #9cc36b;border-radius:10px;background:#f4f9ec}.fxKg{display:flex;flex-direction:column}.fxKg b{font-size:24px;color:#3d5a1e}.fxKg small{color:var(--mut)}
+#docPag{position:fixed;top:0;bottom:0;left:0;right:0;z-index:57;background:#f5f6f1;overflow:auto;padding:14px 18px}
+@media(min-width:901px){#docPag{left:224px}}body.comLado:not(.semLado):not(.semAssunto) #docPag{right:400px}@media(max-width:1100px){body.comLado:not(.semLado):not(.semAssunto) #docPag{right:330px}}@media(max-width:700px){body.comLado #docPag{right:0}}
+#docPag .dpCab{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}#docPag .dpCab h2{margin:0}
+#docPag .dpCorpo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:14px}@media(max-width:1000px){#docPag .dpCorpo{grid-template-columns:1fr}}
+#docPag .dpLin,#docPag .dpPdf{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}#docPag .dpPdf iframe{width:100%;height:76vh;border:0;border-radius:8px;margin-bottom:6px}
 body.semAssunto #chatLado,body.semAssunto #ladoAbre{display:none!important}body.semAssunto{padding-right:0!important}
 /* menu Mais e telemóvel (23-11-2026) */
 #maisMenu{position:fixed;z-index:90;min-width:220px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px #0003;padding:6px;display:flex;flex-direction:column}
@@ -416,17 +441,29 @@ body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.com
 </header>
 <nav class="brandnav">
   <button data-v="vDash" class="on">Dashboard</button>
+  <h6>Operação</h6>
   <button data-v="vVal">Validação <span class="badge" id="bdVal"></span></button>
   <button data-v="vRec">Receção <span class="badge" id="bdRec"></span></button>
   <button data-v="vEnt">Entregas no lagar <span class="badge" id="bdEnt"></span><span id="alEnt" style="margin-left:4px;color:#ffb020"></span></button>
+  <h6>Azeite</h6>
   <button data-v="vStock">Stock</button>
   <button data-v="vVend">Vendas <span class="badge" id="bdVend"></span></button>
-  <button data-v="vContas">Financeiro</button>
-  <button data-v="vEntid">Tabelas</button>
+  <h6>Financeiro</h6>
+  <button data-v="vContas" data-fin="contas">Contas correntes</button>
+  <button data-v="vContas" data-fin="liq">Liquidações</button>
+  <button data-v="vContas" data-fin="recibos">Pedidos de pagamento e recibos</button>
+  <button data-v="vContas" data-fin="campanha">Resultado da campanha</button>
+  <button data-v="vContas" data-fin="validacao">Validação com as entidades</button>
+  <button data-v="vContas" data-fin="pedidos">Pedidos dos fornecedores</button>
+  <button data-v="vContas" data-fin="cc">Conta corrente e guias (anterior)</button>
+  <button data-v="vContas" data-fin="jur">Jurídico (cobranças)</button>
+  <h6>Entidades</h6>
+  <button data-v="vEntid">Entidades e tabelas</button>
   <button data-v="vCont">Contratos</button>
-  <span class="sp"></span>
+  <h6>Ligações</h6>
   <a class="loja" href="portal.html" target="_blank" title="Portal do fornecedor">👤 B2B ↗</a>
   <a class="loja" href="loja.html" target="_blank">🛒 Loja online ↗</a>
+  <span class="sp"></span>
   <button data-v="vConf">⚙ Configuração</button>
 </nav>
 <div id="avisoCamp"></div>
@@ -594,7 +631,7 @@ const MODOS = {1:"1 · pré-aprovada",2:"2 · validada por nós",3:"3 · registo
 const PAPEIS = {lagar:["Lagar","lagares","Lagares"],produtor:["Fornecedor","produtores","Fornecedores (produtores)"],prestador:["Prestador","prestadores","Prestadores"],cliente:["Cliente","clientes","Clientes"]};
 let CLASSES = ["Virgem extra","Virgem","Lampante"];
 
-let D = mdaCarregar();
+let D = mdaCarregar(); mdaSincronizar();   // cópia no disco S: (26-11-2026)
 const grava = () => mdaGravar(D);
 let novoCliVenda = null;
 // outra aba gravou: só se redesenha se mudaram dados a sério. Valores calculados (custo do azeite para o portal) não contam,
@@ -804,7 +841,7 @@ function passaV(v){
 
 // ---- navegação ----
 let vista = "vDash";
-document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.onclick=()=>abre(b.dataset.v));
+document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.onclick=()=>{ if(b.dataset.fin) finTab = b.dataset.fin; abre(b.dataset.v) });
 function abre(v){ vista=v; document.querySelectorAll(".appview").forEach(s=>s.classList.toggle("active",s.id===v));
   document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); render(); }
 // ---- navegação em todo o programa (09-11-2026, pedido do Ricardo) ----
@@ -1816,13 +1853,14 @@ function contasDetalhe(X, ctDrill = ctDrillG(), alvo = "ctDrill"){
 
 // ---- contas da campanha: vendas, registo de custos (com fatura, a repartir, investimento, pendente) e resultado ----
 const ESTADOS_CUSTO = {confirmado:"Confirmado",a_repartir:"A repartir",investimento:"Investimento",pendente:"Pendente",outro_servico:"Outro serviço"};   // outro serviço: custo de outro trabalho (ex.: colheita para outro cliente), fora de todas as contas do azeite
-let ctCat = "", ctEst = "", ctDrill = "", finTab = "campanha";
+let ctCat = "", ctEst = "", ctDrill = "", finTab = "contas";
 const ctDrillG = () => ctDrill, fechaDrill = () => { ctDrill = ""; contas() };
 // separadores do Financeiro (03-11-2026): a Campanha é o que eram as "Contas"; os outros leem os mesmos dados
 // Financeiro (03-11-2026, refeito a pedido do Ricardo): Campanha · Validação · A pagar · A receber · Conta corrente.
 // O que devemos sai dos talões e das guias × o acordo de cada um; o fornecedor/prestador valida; validado passa para "A pagar";
 // paga-se e recebe-se na conta corrente da entidade.
-const FIN_TABS = [["campanha","Campanha"],["validacao","Validação"],["cc","Conta corrente"],["pedidos","Pedidos dos fornecedores"]];   // A pagar e A receber passaram para dentro da conta corrente
+// Financeiro como no Smart Farm (26-11-2026): contas correntes, liquidações, pedidos de pagamento e recibos, resultado, jurídico (financeiro.js)
+const FIN_TABS = [["contas","Contas correntes"],["liq","Liquidações"],["recibos","Pedidos de pagamento e recibos"],["campanha","Resultado da campanha"],["validacao","Validação com as entidades"],["pedidos","Pedidos dos fornecedores"],["cc","Conta corrente e guias (anterior)"],["jur","Jurídico (cobranças)"]];   // A pagar e A receber passaram para dentro da conta corrente
 const FORMAS_PAG = ["Transferência","Numerário","Cheque","MB Way","Compensação"];
 const VAL_EST = {por_enviar:["Por enviar","w"], enviado:["Enviado, à espera","info"], validado:["Validado","ok"], contestado:["Contestado","bad"]};
 // o ticket de conta é sempre o da azeitona limpa (regra do Ricardo, 03-11-2026)
@@ -1899,16 +1937,22 @@ function envioDoc(ent, itens, num){
 }
 function finSep(X){
   if(!FIN_TABS.some(t=>t[0]===finTab)) finTab = "campanha";
+  document.querySelectorAll(".brandnav [data-fin]").forEach(b=>b.classList.toggle("on", vista==="vContas" && b.dataset.fin===finTab));
   $("finTabs").innerHTML = FIN_TABS.map(([k,t])=>`<button data-fin="${k}" class="${k===finTab?"on":""}">${t}</button>`).join("");
   document.querySelectorAll("#finTabs [data-fin]").forEach(b=>b.onclick=()=>{ finTab = b.dataset.fin; contas() });
   const camp = finTab==="campanha", el = $("finOutro"), up = () => { grava(); contas() };
   $("finCamp").style.display = camp ? "" : "none"; $("finCampP").style.display = camp ? "" : "none";
   const sub = {validacao:"Enviar aos fornecedores, prestadores e lagares a lista do que lhes devemos, para confirmarem e faturarem. O que eles validam passa para \"A pagar\".",
     apagar:"O que devemos, já validado por quem recebe: fornecedores de azeitona e prestadores de serviços.", areceber:"O que os clientes nos devem, pelo que já faturámos.",
-    cc:"Escolha a entidade: aparece a conta corrente toda e é aqui que se paga e se recebe.",
+    cc:"A conta corrente e as guias de pagamento como estavam antes das Liquidações (fica para consulta).",
+    contas:"O que está em aberto, a receber e a pagar, por antiguidade: o que o programa tem (talões, maquias, guias, faturas) e as faturas do Eticadata das entidades do azeite.",
+    liq:"Escolha a entidade, pique os documentos e atribua os valores. Ao fornecedor paga-se em dinheiro ou em maquia de azeite.",
+    recibos:"Os pedidos que saíram das Liquidações: feche cada um com a data e o n.º da transferência ou do recibo.",
+    jur:"Clientes passados ao jurídico, só por decisão sua.",
     pedidos:"O que os fornecedores pedem no portal: em dinheiro ou em azeite (a granel ou embalado, com a embalagem e a margem da Ryrox). Aceite o pedido e, quando estiver pago ou entregue, marque como pago."}[finTab]||"";
   $("finSub").style.display = camp ? "none" : ""; $("finSub").textContent = sub;
   if(camp){ el.innerHTML = ""; return }
+  const NOVO = {contas:finContas, liq:finLiquidar, recibos:finRecibos, jur:finJuridico}[finTab]; if(NOVO){ NOVO(el); return }
   if(finTab==="pedidos"){
     const P = (D.pedidosPag||[]).slice().sort((a,b)=>b.data.localeCompare(a.data)||b.id.localeCompare(a.id)), cor = {Pedido:"w", Aceite:"ok", Pago:"ok", Recusado:"bad"};
     el.innerHTML = `<section class="card"><h2>Pedidos dos fornecedores</h2>${P.length ? `<div style="overflow:auto"><table class="tb"><thead><tr><th>Pedido</th><th>Data</th><th>Fornecedor</th><th>Campanha</th><th>O quê</th><th class="num">Azeite</th><th class="num">Embalagem</th><th class="num">Total</th><th>Nota</th><th>Onde está</th><th>Passo seguinte</th></tr></thead><tbody>
@@ -3687,7 +3731,7 @@ function entid(){
   const E = entidades(), txt = $("entTxt").value.toLowerCase(), Mv = movIds(), EV = entVis(E, Mv);
   $("papTabs").innerHTML = [["","Todas",EV.length],...Object.entries(PAPEIS).map(([k,v])=>[k,v[2],EV.filter(e=>e.papeis.includes(k)).length])].map(([k,t,n])=>`<button data-p="${k}" class="${k===papel?"on":""}">${t} (${n})</button>`).join("");
   document.querySelectorAll("#papTabs button").forEach(b=>b.onclick=()=>{papel=b.dataset.p;entid()});
-  $("entFicha").innerHTML = selEnt ? fichaEnt(selEnt) : ""; if(selEnt) ligaFicha(selEnt);
+  $("entFicha").innerHTML = selEnt ? `<div id="entCC" data-ent="${esc(selEnt)}"></div>` + fichaEnt(selEnt) : ""; if(selEnt){ ligaFicha(selEnt); try{ entCC(selEnt) }catch(e){ console.warn(e) } }
   if(selEnt){ $("fxEnt").onclick=()=>{selEnt=null;entid()}; $("fxFiltra").onclick=()=>{ const e=E.find(x=>x.id===selEnt); Object.keys(F).forEach(k=>F[k]="");
     if(e.papeis.includes("lagar")) F.lagar=e.id; if(e.papeis.includes("produtor")) F.forn=e.id; if(e.papeis.includes("prestador")) F.prest=e.id; if(e.papeis.includes("cliente")) F.cli=e.id;
     abre(e.papeis.length===1&&e.papeis[0]==="cliente"?"vVend":"vDash"); }; }
@@ -4455,7 +4499,7 @@ if(chaveGestao()){ gestaoAgenda(3000); setInterval(()=>gestaoAgenda(0), 3600e3);
 // ---- RYROX ONE Chat e Assistente (21-11-2026): as mesmas peças dos outros programas Ryrox ----
 // O chat é a peça comum (Projetos/_alicerce/ryrox-chat/ryrox-chat.js), servida pelo motor (servidor.py), com as conversas na
 // guarda comum. Nada de cópias: muda-se lá e muda em todos os programas. Sem o motor (ex.: a página online) não aparece.
-const CHAT_TIPOS = {talao:"Talão", guia:"Guia", venda:"Venda", embalamento:"Embalamento", rececao:"Receção", guiaT:"Guia de transporte"};
+const CHAT_TIPOS = {fatura:"Fatura", compra:"Documento de compra", talao:"Talão", guia:"Guia", venda:"Venda", embalamento:"Embalamento", rececao:"Receção", guiaT:"Guia de transporte"};
 function chatEnt(id){ const r = recs(id)[0] || {}; return {nome:r.nome||"", email:r.email||"", tel:r.tel||""} }
 // o histórico do documento entra na conversa como "alterações"
 function chatEventos(x){ const ano = String(x.data||hoje()).slice(0,4);
@@ -4504,6 +4548,7 @@ window.MDA_IA = {
 // ou a conversa geral do programa. Em baixo, o resumo: por ler, atividades e as últimas conversas.
 let ladoManual = null, ladoAuto = "", ladoChave = "", ladoM = [];
 function ladoAutoRef(){
+  if(window.docAberto) return window.docAberto;   // página do documento: a conversa desse documento
   if(vista==="vVal" && selG){ const e = D.entregas.find(x=>x.id===selG); if(e) return chatDocT(e); const g = D.guias.find(x=>x.id===selG); if(g) return chatDocG(g) }
   if(vista==="vEntid" && selEnt && tabSel==="ent") return {ent:selEnt};
   return null }   // sem assunto (Dashboard, listas, Financeiro): não há chat, como no Smart Farm (26-11-2026)
@@ -4600,9 +4645,10 @@ if(window.MDA_MOTOR_CHAVE){
   fb.addEventListener("change", ()=>{ conta(); setTimeout(()=>{ fb.classList.remove("aberto"); b.setAttribute("aria-expanded", false) }, 150) });
   document.getElementById("fLimpar").addEventListener("click", ()=>setTimeout(conta, 50));
   setTimeout(conta, 500);
-  const nav = document.querySelector(".brandnav"), mede = () => document.documentElement.style.setProperty("--navH", (nav?nav.offsetHeight:48)+"px");
+  const nav = document.querySelector(".brandnav"), mede = () => document.documentElement.style.setProperty("--navH", (nav&&getComputedStyle(nav).position!=="fixed"?nav.offsetHeight:0)+"px");
   mede(); addEventListener("resize", mede); })();
 </script>
 <script src="icones.js"></script>
+<script src="financeiro.js?v=2026-11-26e"></script>
 </body>
 </html>
