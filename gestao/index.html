@@ -34,6 +34,7 @@ body{margin:0;font:14px/1.4 "Segoe UI",Arial,sans-serif;background:var(--bg);col
 .title b{font-size:16px;letter-spacing:.02em;color:var(--navy)}.title b span{color:var(--red)}
 .title small{margin-top:4px;font-size:12px;color:var(--mut)}
 .hdr-acoes{margin-left:auto;display:flex;gap:8px;align-items:center}
+body.semAssunto #chatLado,body.semAssunto #ladoAbre{display:none!important}body.semAssunto{padding-right:0!important}
 /* menu Mais e telemóvel (23-11-2026) */
 #maisMenu{position:fixed;z-index:90;min-width:220px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px #0003;padding:6px;display:flex;flex-direction:column}
 #maisMenu button{border:0;background:none;text-align:left;padding:10px 12px;border-radius:8px;font:600 14px Inter,sans-serif;cursor:pointer;color:#1f2a17}#maisMenu button:hover{background:#f1f4ea}#maisMenu small{color:#8a917f;font-weight:500}
@@ -4505,12 +4506,13 @@ let ladoManual = null, ladoAuto = "", ladoChave = "", ladoM = [];
 function ladoAutoRef(){
   if(vista==="vVal" && selG){ const e = D.entregas.find(x=>x.id===selG); if(e) return chatDocT(e); const g = D.guias.find(x=>x.id===selG); if(g) return chatDocG(g) }
   if(vista==="vEntid" && selEnt && tabSel==="ent") return {ent:selEnt};
-  return {tipo:"programa", id:"geral", titulo:"Mundo do Azeite · conversa geral"} }
+  return null }   // sem assunto (Dashboard, listas, Financeiro): não há chat, como no Smart Farm (26-11-2026)
 function ladoTitulo(r){ return r.tipo==="programa" ? "Conversa geral do programa" : r.tipo ? (r.titulo||((CHAT_TIPOS[r.tipo]||r.tipo)+" "+r.id)) : "Conversa com "+(chatEnt(r.ent).nome||r.ent) }
 function ladoDesenhar(){ const el = $("chatLado"); if(!el || !window.RyroxChat) return;
   const auto = ladoAutoRef(), ka = JSON.stringify(auto);
   if(ka!==ladoAuto){ ladoAuto = ka; ladoManual = null }   // abriu outra coisa no programa: a coluna segue
   const r = ladoManual || auto, k = JSON.stringify(r);
+  document.body.classList.toggle("semAssunto", !r); if(!r){ ladoChave = ""; return }
   if(k===ladoChave) return; ladoChave = k;   // a mesma conversa: não se volta a desenhar (não se perde o que está escrito)
   const c = el.querySelector(".clConv"); c.innerHTML = ""; const d = document.createElement("div"); d.className = "mdaChat clDentro"; d.dataset.rchat = k; c.appendChild(d);
   d.style.cssText = "height:auto;margin:0;border:0;border-radius:0;flex:1;min-height:0"; chatMontar(d); ladoResumo() }
