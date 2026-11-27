@@ -265,9 +265,17 @@ async function docAbrir(x){
       <tfoot><tr><td colspan="5">Sem IVA</td><td class="num">${eur(siva)}</td></tr><tr><td colspan="5">IVA</td><td class="num">${eur(+c.iva||0)}</td></tr><tr><td colspan="5">Total</td><td class="num"><b>${eur(+c.total||0)}</b></td></tr></tfoot></table>
       ${c.pend!=null?`<div style="margin-top:6px">${Math.abs(+c.pend)<0.01?'<span class="pill ok">paga</span>':`<span class="pill w">por pagar ${eur(+c.pend)}</span>`}</div>`:""}
       ${(d.anexos||[]).length>1?`<div class="sub" style="margin-top:8px">Outros anexos: ${d.anexos.slice(1).map(a=>`<a href="/api/erp/anexo?id=${a.id}&chave=${encodeURIComponent(window.MDA_MOTOR_CHAVE)}" target="_blank">${esc(a.nome)}</a>`).join(" · ")}</div>`:""}`;
-    const a = (d.anexos||[])[0];
-    $("dpPdf").innerHTML = a ? `<iframe src="/api/erp/anexo?id=${a.id}&chave=${encodeURIComponent(window.MDA_MOTOR_CHAVE)}"></iframe><a class="act light sm" target="_blank" href="/api/erp/anexo?id=${a.id}&chave=${encodeURIComponent(window.MDA_MOTOR_CHAVE)}">Abrir o PDF noutra janela</a>`
+    const a = (d.anexos||[])[0], K = encodeURIComponent(window.MDA_MOTOR_CHAVE);
+    // PDF: o do arquivo digital do Eticadata ou, nas faturas emitidas, o original impresso (o mesmo do Smart Farm)
+    let u = a ? `/api/erp/anexo?id=${a.id}&chave=${K}` : null;
+    if(!u && ref.lado!=="compra" && c.num){ const o = `/api/erp/original?num=${encodeURIComponent(c.num)}&chave=${K}`; try{ const r = await fetch(o); if(r.ok && /pdf/.test(r.headers.get("Content-Type")||"")) u = o }catch(e){} }
+    if(u && window.docAberto){ window.docAberto.pdf = async () => { const r = await fetch(u); if(!r.ok) throw new Error("o Eticadata não devolveu o PDF");
+        const b = await r.blob(), dados = await new Promise(ok=>{ const f = new FileReader(); f.onload = ()=>ok(f.result); f.readAsDataURL(b) });
+        return {nome: String(c.num||titulo).replace(/[\/:*?"<>|]+/g,"-").replace(/\s+/g,"_")+".pdf", dados} };   // "Juntar este documento" no chat
+      try{ ladoChave = ""; ladoDesenhar() }catch(e){} }
+    $("dpPdf").innerHTML = u ? `<div id="dpVisor" style="--rx-pdf-h:76vh;margin-bottom:6px"></div><a class="act light sm" target="_blank" href="${u}">Abrir o PDF noutra janela</a>`
       : '<div class="sub" style="padding:20px">O Eticadata não tem o PDF deste documento no arquivo digital.</div>';
+    if(u && $("dpVisor")){ if(window.RyroxUI) RyroxUI.pdf($("dpVisor"), u); else $("dpVisor").outerHTML = `<iframe src="${u}"></iframe>` }   // aumentar e arrastar com o rato (27-11-2026)
   }catch(e){ $("dpLin").innerHTML = `<div class="alerta">Não consegui ler o documento no Eticadata: ${esc(e.message||e)}</div>` }
 }
 window.docFechar = () => { const p = $("docPag"); if(p) p.remove(); window.docAberto = null; document.body.classList.remove("comDoc"); try{ ladoDesenhar() }catch(e){} };
