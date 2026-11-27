@@ -1,0 +1,122 @@
+/* RYROX UI · a moldura comum de todos os programas Ryrox (27-11-2026)
+   Fonte única: Projetos/_alicerce/ryrox-ui/ (como o RYROX ONE Chat). O motor de cada programa serve /ryrox-ui.css e
+   /ryrox-ui.js a partir daqui; nenhum programa tem cópia. Mudar aqui muda todos.
+   Modelo: Ryrox Smart Farm. Topo branco (logótipo + nome + pesquisa + atalhos), menu lateral escuro com ícones,
+   recolhível aos ícones, grupos que abrem e fecham; no telemóvel menu em baixo com "Mais".
+   Cada programa só muda as cores (variáveis --rx-*) no seu :root. Letra: Barlow (texto) e Barlow Condensed (títulos). */
+:root {
+  --f-ui: "Barlow", "Segoe UI", Arial, sans-serif;
+  --f-tit: "Barlow Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  /* cores da moldura (por defeito as do Smart Farm; cada programa troca as suas) */
+  --rx-menu: #123620;        /* fundo do menu lateral */
+  --rx-menu2: #1f5430;       /* botões do menu em barra (ecrã estreito) */
+  --rx-ativo: #3d9a2b;       /* página aberta */
+  --rx-ativo-txt: #fff;
+  --rx-grupo: #a9d29f;       /* títulos dos grupos do menu */
+  --rx-menu-txt: #fff;
+  --rx-marca: #3d9a2b;       /* segunda palavra do nome do programa */
+  --rx-claro: #e6f3e1;       /* fundo ao passar nos atalhos */
+  --rx-linha: #d9e1d6;
+  --rx-sup2: #f6f8f5;
+  --rx-texto: #17231a;
+  --rx-mudo: #5f6f63;
+  --rx-perigo: #c0392b;
+  --rx-largura: 232px;       /* largura do menu lateral */
+}
+
+/* ---------- Topo ---------- */
+.cab { background: #fff; display: flex; align-items: center; gap: 22px; padding-block: 10px; padding-inline: 24px; flex-wrap: wrap; font-family: var(--f-ui); }
+.cab img { height: 50px; width: auto; display: block; }
+.cab .tit { border-left: 1px solid var(--rx-linha); padding-left: 20px; line-height: 1.2; }
+.cab .tit b { display: block; font-size: 17px; letter-spacing: .01em; color: var(--rx-texto); }
+.cab .tit b span { color: var(--rx-marca); }
+.cab .tit small { color: var(--rx-mudo); font-size: 13px; }
+.cab .db { font-size: 12.5px; color: var(--rx-mudo); }
+.cab .db.erro { color: var(--rx-perigo); font-weight: 700; }
+.cab .pesq { margin-left: auto; flex: 0 1 380px; min-width: 0; padding: 11px 14px; border: 1px solid #c9d4c5; border-radius: 22px; font: 15px var(--f-ui); background: var(--rx-sup2); }
+.cab .pesq:focus { outline: 2px solid var(--rx-ativo); border-color: var(--rx-ativo); }
+.hdr-acoes { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+header.cab { position: sticky; top: 0; z-index: 958; box-shadow: 0 1px 0 var(--rx-linha), 0 4px 12px #0f14100d; }
+
+/* Atalhos no topo (também estão no menu) */
+.atalhos { display: flex; gap: 6px; flex-wrap: wrap; }
+.atalhos button { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--rx-linha); background: var(--rx-sup2); color: var(--rx-texto); border-radius: 9px; padding: 7px 11px; font: 500 14px var(--f-ui); cursor: pointer; position: relative; }
+.atalhos button:hover { background: var(--rx-claro); }
+.atalhos button.on { background: var(--rx-ativo); border-color: var(--rx-ativo); color: var(--rx-ativo-txt); }
+.atalhos .bol { background: var(--rx-perigo); color: #fff; border-radius: 10px; min-width: 18px; padding: 0 5px; font-size: 11px; line-height: 18px; text-align: center; font-weight: 700; }
+@media (max-width: 1300px) { .atalhos button span { display: none; } }
+
+/* Lista da pesquisa geral (RyroxUI.pesquisa) */
+.rx-res { position: fixed; z-index: 2100; background: #fff; border: 1px solid var(--rx-linha); border-radius: 12px; box-shadow: 0 16px 40px #0f14102e; padding: 6px; max-height: min(70vh, 520px); overflow-y: auto; font-family: var(--f-ui); }
+.rx-res button { display: flex; width: 100%; gap: 10px; align-items: center; border: 0; background: none; text-align: left; padding: 8px 10px; border-radius: 8px; cursor: pointer; font: 500 14.5px var(--f-ui); color: var(--rx-texto); }
+.rx-res button:hover, .rx-res button.on { background: var(--rx-claro); }
+.rx-res button small { margin-left: auto; color: var(--rx-mudo); font-size: 12.5px; white-space: nowrap; }
+.rx-res h6 { margin: 8px 10px 4px; font: 700 11px var(--f-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--rx-mudo); }
+.rx-res .vaz { padding: 10px; color: var(--rx-mudo); font-size: 14px; }
+
+/* ---------- Menu (barra) ---------- */
+.barra { background: var(--rx-menu); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 950; font-family: var(--f-ui); }
+.barra nav { display: flex; gap: 8px; padding-block: 11px; padding-inline: 24px; overflow-x: auto; justify-content: flex-start; }
+.barra button, .barra a { flex: none; background: var(--rx-menu2); color: var(--rx-menu-txt); border: 1px solid rgba(255,255,255,.14); border-radius: 9px; padding: 10px 15px; font: 500 15px var(--f-ui); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 7px; align-items: center; text-decoration: none; }
+.barra button:hover, .barra a:hover { background: rgba(255,255,255,.12); }
+.barra button.on { background: var(--rx-ativo); border-color: var(--rx-ativo); color: var(--rx-ativo-txt); }
+.barra .bol { background: #fff; color: var(--rx-perigo); border-radius: 10px; min-width: 20px; padding: 0 6px; font-size: 12px; line-height: 20px; text-align: center; }
+.barra .badge:empty { display: none; }
+.barra .badge { font-size: 12px; opacity: .7; font-weight: 600; }
+.barra .sp { flex: 1; }
+.barra .icm { flex: none; opacity: .9; }
+.barra button:focus-visible, .atalhos button:focus-visible { outline: 3px solid #ffd54a; outline-offset: 2px; }
+.barra .rx-mais { display: none; }
+@media (max-width: 900px) { .barra h6, .barra button .n, .barra .mtog { display: none; } header.cab { position: static; } }
+
+/* Menu lateral (ecrã largo) */
+@media (min-width: 901px) {
+  body { padding-left: var(--rx-largura); transition: padding-left .18s; }
+  .barra { position: fixed; left: 0; top: 0; bottom: 0; width: var(--rx-largura); overflow-y: auto; overflow-x: hidden; z-index: 960; transition: width .18s; }
+  .barra nav { flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 16px 12px 30px; gap: 2px; overflow: visible; min-height: 100%; }
+  .barra button, .barra a { background: transparent; border: 0; justify-content: flex-start; padding: 9px 12px; font-size: 14.5px; font-weight: 500; border-radius: 8px; gap: 11px; white-space: normal; text-align: left; line-height: 1.25; }
+  .barra button:hover, .barra a:hover { background: rgba(255,255,255,.08); }
+  .barra button.on { background: var(--rx-ativo); color: var(--rx-ativo-txt); }
+  .barra button.sub { padding-left: 24px; font-size: 14px; }
+  .barra button .n, .barra button .badge, .barra button .bol { margin-left: auto; }
+  .barra button .n { font-size: 12px; opacity: .65; font-weight: 600; }
+  .barra button.esc, .barra a.esc { display: none; }
+  .barra .mtog { color: var(--rx-grupo); margin-bottom: 6px; }
+  .barra h6 { color: var(--rx-grupo); font: 600 11px var(--f-ui); letter-spacing: .09em; text-transform: uppercase; margin: 16px 12px 4px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; padding: 4px 0; }
+  .barra h6:hover { color: #fff; }
+  .barra h6 .icm { width: 14px; height: 14px; transition: transform .15s; }
+  .barra h6.fech .icm { transform: rotate(-90deg); }
+  body.menuCurto { padding-left: 64px; }
+  body.menuCurto .barra { width: 64px; }
+  body.menuCurto .barra nav { padding-inline: 8px; }
+  body.menuCurto .barra button, body.menuCurto .barra a { justify-content: center; padding: 10px 0; position: relative; }
+  body.menuCurto .barra button.esc, body.menuCurto .barra a.esc { display: flex; }
+  body.menuCurto .barra .lb, body.menuCurto .barra button .n, body.menuCurto .barra button .badge { display: none; }
+  body.menuCurto .barra h6 { font-size: 0; height: 1px; margin: 10px 8px; padding: 0; background: rgba(255,255,255,.15); pointer-events: none; }
+  body.menuCurto .barra h6 .icm { display: none; }
+  body.menuCurto .barra .bol { position: absolute; top: 3px; right: 6px; min-width: 16px; line-height: 16px; font-size: 10px; padding: 0 4px; }
+}
+
+/* Telemóvel: menu em baixo com as páginas marcadas .mv e o botão "Mais", que abre o menu todo */
+@media (max-width: 700px) {
+  .cab { padding-inline: 16px; gap: 12px; } .cab img { height: 38px; } .cab .tit { display: none; }
+  .cab .pesq { flex-basis: 100%; order: 3; }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .barra { position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 960; box-shadow: 0 -4px 16px #0003; }
+  .barra nav { padding: 4px 2px calc(4px + env(safe-area-inset-bottom, 0px)); gap: 0; justify-content: space-around; overflow: visible; }
+  body:not(.rxMais) .barra nav > :not(.mv):not(.rx-mais) { display: none; }
+  .barra nav > .mv, .barra .rx-mais { flex: 1 1 0; min-width: 0; flex-direction: column; gap: 2px; padding: 6px 2px; font-size: 10.5px; line-height: 1.15; border: 0; background: transparent; white-space: normal; text-align: center; position: relative; display: flex; align-items: center; }
+  .barra nav > .mv .icm, .barra .rx-mais .icm { width: 21px; height: 21px; }
+  .barra nav > .mv.on { color: #fff; background: rgba(255,255,255,.14); border-radius: 10px; box-shadow: inset 0 3px 0 var(--rx-ativo); }
+  .barra nav > .mv .n, .barra nav > .mv .badge { display: none; }
+  .barra nav > .mv .bol { position: absolute; top: 2px; right: 18%; font-size: 9px; line-height: 15px; min-width: 15px; padding: 0 4px; }
+  body.rxMais .barra { top: 0; overflow-y: auto; }
+  body.rxMais .barra nav { flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 16px 14px 90px; gap: 2px; }
+  body.rxMais .barra nav > * { display: flex; flex: none; flex-direction: row; font-size: 15px; text-align: left; padding: 11px 12px; gap: 11px; background: transparent; border: 0; border-radius: 8px; box-shadow: none; }
+  body.rxMais .barra nav > .on { background: var(--rx-ativo); color: var(--rx-ativo-txt); }
+  body.rxMais .barra nav > .rx-mais { position: fixed; left: 0; right: 0; bottom: 0; justify-content: center; background: var(--rx-menu); padding: 12px; font-size: 15px; }
+  body.rxMais .barra h6 { display: block; color: var(--rx-grupo); font: 600 11px var(--f-ui); letter-spacing: .09em; text-transform: uppercase; margin: 14px 12px 2px; padding: 0; }
+  body.rxMais .barra h6 .icm, body.rxMais .barra .mtog { display: none; }
+  body.rxMais .barra .esc { display: flex; }
+}
+@media print { .barra, .atalhos, .rx-res { display: none !important; } body { padding: 0 !important; } }
