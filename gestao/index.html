@@ -200,7 +200,7 @@ input,select,textarea{width:100%;padding:7px 8px;border:1px solid #cfd6c2;border
 .linha div:before{content:"";position:absolute;left:-14px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--azul)}
 .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}.tabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font-weight:800;color:var(--azul);cursor:pointer}
 .tabs button.on{background:var(--azul);color:#fff;border-color:var(--azul)}
-.tblay{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}
+.tblay{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}.tblay.semLado{grid-template-columns:minmax(0,1fr)}
 #tabLado{position:sticky;top:0;max-height:calc(100vh - 190px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 8px;box-shadow:0 8px 25px #0000000b}
 #tabLado .gr{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);padding:10px 10px 4px}
 #tabLado .gr:first-child{padding-top:2px}
@@ -403,6 +403,13 @@ body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.com
   <button data-v="vVal" data-ic="validacao" class="mv">Validação <span class="badge" id="bdVal"></span></button>
   <button data-v="vRec" data-ic="rececao">Receção <span class="badge" id="bdRec"></span></button>
   <button data-v="vEnt" data-ic="pesagem" class="mv">Entregas no lagar <span class="badge" id="bdEnt"></span><span id="alEnt" style="margin-left:4px;color:#ffb020"></span></button>
+  <h6>Entidades</h6>
+  <button data-v="vEntid" data-me="" data-ic="entidades">Todas <span class="n" data-cnt="ent:"></span></button>
+  <button data-v="vEntid" data-me="lagar" data-ic="lagar">Lagares <span class="n" data-cnt="ent:lagar"></span></button>
+  <button data-v="vEntid" data-me="produtor" data-ic="forn">Fornecedores <span class="n" data-cnt="ent:produtor"></span></button>
+  <button data-v="vEntid" data-me="prestador" data-ic="maquinas">Prestadores <span class="n" data-cnt="ent:prestador"></span></button>
+  <button data-v="vEntid" data-me="cliente" data-ic="cli">Clientes <span class="n" data-cnt="ent:cliente"></span></button>
+  <button data-v="vCont" data-ic="contratos">Contratos</button>
   <h6>Azeite</h6>
   <button data-v="vStock" data-ic="stock">Stock</button>
   <button data-v="vVend" data-ic="vendas">Vendas <span class="badge" id="bdVend"></span></button>
@@ -415,9 +422,20 @@ body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.com
   <button data-v="vContas" data-fin="pedidos" data-ic="pedidos">Pedidos dos fornecedores</button>
   <button data-v="vContas" data-fin="cc" data-ic="anterior">Conta corrente e guias (anterior)</button>
   <button data-v="vContas" data-fin="jur" data-ic="juridico">Jurídico (cobranças)</button>
-  <h6>Entidades</h6>
-  <button data-v="vEntid" data-ic="entidades">Entidades e tabelas</button>
-  <button data-v="vCont" data-ic="contratos">Contratos</button>
+  <h6>Tabelas</h6>
+  <button data-v="vEntid" data-mt="campanhas" data-ic="calendario"><span data-tbnome="campanhas">campanhas</span> <span class="n" data-cnt="tb:campanhas"></span></button>
+  <button data-v="vEntid" data-mt="postos" data-ic="herdades"><span data-tbnome="postos">postos</span> <span class="n" data-cnt="tb:postos"></span></button>
+  <button data-v="vEntid" data-mt="qualidades" data-ic="estrela"><span data-tbnome="qualidades">qualidades</span> <span class="n" data-cnt="tb:qualidades"></span></button>
+  <button data-v="vEntid" data-mt="veiculos" data-ic="forn"><span data-tbnome="veiculos">veiculos</span> <span class="n" data-cnt="tb:veiculos"></span></button>
+  <button data-v="vEntid" data-mt="variedades" data-ic="folha"><span data-tbnome="variedades">variedades</span> <span class="n" data-cnt="tb:variedades"></span></button>
+  <button data-v="vEntid" data-mt="modos" data-ic="certo"><span data-tbnome="modos">modos</span> <span class="n" data-cnt="tb:modos"></span></button>
+  <button data-v="vEntid" data-mt="estadosAz" data-ic="stock"><span data-tbnome="estadosAz">estadosAz</span> <span class="n" data-cnt="tb:estadosAz"></span></button>
+  <button data-v="vEntid" data-mt="classes" data-ic="percent"><span data-tbnome="classes">classes</span> <span class="n" data-cnt="tb:classes"></span></button>
+  <button data-v="vEntid" data-mt="produtos" data-ic="garrafa"><span data-tbnome="produtos">produtos</span> <span class="n" data-cnt="tb:produtos"></span></button>
+  <button data-v="vEntid" data-mt="locais" data-ic="armazem"><span data-tbnome="locais">locais</span> <span class="n" data-cnt="tb:locais"></span></button>
+  <button data-v="vEntid" data-mt="tiposContrato" data-ic="contratos"><span data-tbnome="tiposContrato">tiposContrato</span> <span class="n" data-cnt="tb:tiposContrato"></span></button>
+  <button data-v="vEntid" data-mt="tiposCliente" data-ic="sub"><span data-tbnome="tiposCliente">tiposCliente</span> <span class="n" data-cnt="tb:tiposCliente"></span></button>
+  <button data-v="vEntid" data-mt="meios" data-ic="maquinas"><span data-tbnome="meios">meios</span> <span class="n" data-cnt="tb:meios"></span></button>
   <h6>Ligações</h6>
   <a href="portal.html" target="_blank" data-ic="portal" title="Portal do fornecedor (abre noutra janela)">Portal B2B ↗</a>
   <a href="loja.html" target="_blank" data-ic="loja" title="Loja online (abre noutra janela)">Loja online ↗</a>
@@ -799,9 +817,19 @@ function passaV(v){
 
 // ---- navegação ----
 let vista = "vDash";
-document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.onclick=()=>{ if(b.dataset.fin) finTab = b.dataset.fin; abre(b.dataset.v) });
+document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.onclick=()=>{ if(b.dataset.fin) finTab = b.dataset.fin;
+  if(b.dataset.me!=null){ tabSel = "ent"; papel = b.dataset.me; selEnt = null; selProp = null }   // entidades e tabelas no menu verde (27-11-2026)
+  if(b.dataset.mt){ tabSel = b.dataset.mt; selEnt = null; selProp = null }
+  abre(b.dataset.v) });
+// o botão do menu que fica aceso nas Entidades/Tabelas e as contagens ao lado de cada um
+function menuEntTab(){ const nav = $("nav"); if(!nav) return;
+  nav.querySelectorAll("[data-tbnome]").forEach(x=>{ const T = TABELAS[x.dataset.tbnome]; if(T && x.textContent!==T.titulo) x.textContent = T.titulo });
+  nav.querySelectorAll("[data-cnt]").forEach(x=>{ const [t,k] = x.dataset.cnt.split(":"); let n = "";
+    try{ n = t==="ent" ? (k ? D[PAPEIS[k][1]].length : entidades().length) : TABELAS[k].arr().length }catch(e){} if(String(x.textContent)!==String(n)) x.textContent = n });
+  nav.querySelectorAll("[data-me],[data-mt]").forEach(b=>{ const on = vista==="vEntid" && (b.dataset.mt ? tabSel===b.dataset.mt : tabSel==="ent" && (papel||"")===b.dataset.me);
+    if(b.classList.contains("on")!==on) b.classList.toggle("on", on) }) }
 function abre(v){ vista=v; document.querySelectorAll(".appview").forEach(s=>s.classList.toggle("active",s.id===v));
-  document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); render(); }
+  document.querySelectorAll(".brandnav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); render(); try{ menuEntTab() }catch(e){} }
 // ---- navegação em todo o programa (09-11-2026, pedido do Ricardo) ----
 // Em qualquer quadro, o n.º de um talão ou de uma guia leva à ficha dele (Validação) e o nome de uma entidade leva à ficha
 // da entidade. Não é preciso marcar cada quadro: depois de cada desenho procuram-se as células cujo texto é exatamente
@@ -3634,6 +3662,17 @@ function lado(){
   const ab = (()=>{ try{ return JSON.parse(localStorage.getItem("mda-tab-abertos")||"[]") }catch(e){ return [] } })();
   const temSel = (g,ks) => g==="ent" ? tabSel==="ent" : ks.includes(tabSel);
   const ii = (k,t=15) => `<span class="ii">${ico(k,t)}</span>`;
+  // 27-11-2026: entidades e tabelas escolhem-se no menu verde; aqui só fica a lista dos produtores e das propriedades
+  document.querySelector("#vEntid .hero h1").textContent = tabSel==="ent" ? "Entidades" : "Tabelas";
+  document.querySelector("#vEntid .hero p").textContent = tabSel==="ent" ? "" : "As listas de que o programa se serve: campanhas, postos, variedades, classes de azeite, produtos, meios e as restantes.";
+  $("tabLado").hidden = !arvore; document.querySelector("#vEntid .tblay").classList.toggle("semLado", !arvore);
+  try{ menuEntTab() }catch(e){}
+  if(!arvore){ $("tabLado").innerHTML = ""; return }
+  $("tabLado").innerHTML = `<div class="gr">Fornecedores e propriedades</div>${arvore}`;
+  document.querySelectorAll("#tabLado [data-pe]").forEach(b=>b.onclick=()=>{tabSel="ent";papel="produtor";selEnt=b.dataset.pe;selProp=null;tabelas();$("vEntid").scrollTop=0});
+  document.querySelectorAll("#tabLado [data-pr]").forEach(b=>b.onclick=()=>{const h=by(D.propriedades,b.dataset.pr);tabSel="ent";papel="produtor";selEnt=h.prod;selProp=h.id;tabelas();
+    setTimeout(()=>{const c=$("prop-"+h.id); if(c) c.scrollIntoView({block:"start",behavior:"smooth"})},80)});
+  return;
   $("tabLado").innerHTML = GR.map(([g,t,icn,bg,fg,ks])=>{
     const itens = g==="ent"
       ? [["","Todas",E.filter(e=>vis(e.id)).length],...Object.entries(PAPEIS).map(([k,v])=>[k,v[2],D[v[1]].filter(x=>vis(x.id)).length])].map(([k,tt,c])=>`<button data-pp="${k}" class="${tabSel==="ent"&&papel===k&&!selEnt?"on":""}">${ii(IC_PP[k])}<span class="tx">${tt}</span><small>${c}</small></button>`+(k==="produtor"?arvore:"")).join("")
