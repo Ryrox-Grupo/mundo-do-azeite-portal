@@ -1,7 +1,7 @@
 /* RYROX UI · peças comuns de todos os programas Ryrox (27-11-2026). Fonte única: Projetos/_alicerce/ryrox-ui/.
    O motor de cada programa serve /ryrox-ui.js daqui; nenhum programa tem cópia.
    - RyroxUI.IC / RyroxUI.ic(k)      ícones do menu (traço, 24×24), os mesmos em todos os programas
-   - RyroxUI.menu(nav, {chave})      liga um menu escrito no HTML: ícones (data-ic), recolher aos ícones, grupos que fecham, "Mais" no telemóvel
+   - RyroxUI.menu(nav, {chave, alfabetica})  liga um menu escrito no HTML: ícones (data-ic), recolher aos ícones, grupos que fecham, "Mais" no telemóvel, ordem alfabética nos grupos
    - RyroxUI.atalhos(el, nav, sels)  atalhos no topo, copiados do menu (mesma ação, mesmo estado)
    - RyroxUI.pesquisa(input, fn)     pesquisa geral do topo com lista de resultados
    - RyroxUI.pdf(el, url)            visor de PDF com zoom e arrastar com o rato (botão direito ou esquerdo) */
@@ -66,6 +66,13 @@
      que ficam no menu de baixo do telemóvel (até 4). Pode chamar-se outra vez sem estragar nada. */
   function menu(nav, o) {
     o = o || {}; const ch = o.chave || 'rx';
+    if (o.alfabetica && !nav.dataset.rxAlfa) { nav.dataset.rxAlfa = '1';   // dentro de cada grupo, por ordem alfabética (data-fixo fica em cima)
+      const nome = b => b.textContent.replace(/[\d↗]+/g, ' ').replace(/\s+/g, ' ').trim();
+      let grupo = [];
+      const arruma = () => { if (grupo.length < 2) { grupo = []; return; } const ant = grupo[0].previousSibling, fix = grupo.filter(b => b.hasAttribute('data-fixo')), resto = grupo.filter(b => !b.hasAttribute('data-fixo')).sort((a, b) => nome(a).localeCompare(nome(b), 'pt'));
+        let ref = ant; [...fix, ...resto].forEach(b => { ref ? ref.after(b) : nav.prepend(b); ref = b; }); grupo = []; };
+      [...nav.children].forEach(x => { if (x.tagName === 'H6') { arruma(); return; } if (x.matches('button, a')) grupo.push(x); else arruma(); }); arruma();
+    }
     nav.querySelectorAll('button, a').forEach(b => {
       if (b.dataset.rxOk || b.classList.contains('mtog') || b.classList.contains('rx-mais')) return; b.dataset.rxOk = '1';
       if (!b.title) b.title = b.textContent.replace(/\s+/g, ' ').trim();
