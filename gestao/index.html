@@ -404,7 +404,7 @@ body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.com
   <button data-v="vRec" data-ic="rececao">Receção <span class="badge" id="bdRec"></span></button>
   <button data-v="vEnt" data-ic="pesagem" class="mv">Entregas no lagar <span class="badge" id="bdEnt"></span><span id="alEnt" style="margin-left:4px;color:#ffb020"></span></button>
   <h6>Entidades</h6>
-  <button data-v="vEntid" data-me="" data-ic="entidades">Todas <span class="n" data-cnt="ent:"></span></button>
+  <button data-v="vEntid" data-me="" data-ic="entidades" data-fixo>Todas <span class="n" data-cnt="ent:"></span></button>
   <button data-v="vEntid" data-me="lagar" data-ic="lagar">Lagares <span class="n" data-cnt="ent:lagar"></span></button>
   <button data-v="vEntid" data-me="produtor" data-ic="forn">Fornecedores <span class="n" data-cnt="ent:produtor"></span></button>
   <button data-v="vEntid" data-me="prestador" data-ic="maquinas">Prestadores <span class="n" data-cnt="ent:prestador"></span></button>
@@ -423,19 +423,19 @@ body.semLado #ladoAbre{display:flex}body.semLado #chatLado{display:none}body.com
   <button data-v="vContas" data-fin="cc" data-ic="anterior">Conta corrente e guias (anterior)</button>
   <button data-v="vContas" data-fin="jur" data-ic="juridico">Jurídico (cobranças)</button>
   <h6>Tabelas</h6>
-  <button data-v="vEntid" data-mt="campanhas" data-ic="calendario"><span data-tbnome="campanhas">campanhas</span> <span class="n" data-cnt="tb:campanhas"></span></button>
-  <button data-v="vEntid" data-mt="postos" data-ic="herdades"><span data-tbnome="postos">postos</span> <span class="n" data-cnt="tb:postos"></span></button>
-  <button data-v="vEntid" data-mt="qualidades" data-ic="estrela"><span data-tbnome="qualidades">qualidades</span> <span class="n" data-cnt="tb:qualidades"></span></button>
-  <button data-v="vEntid" data-mt="veiculos" data-ic="forn"><span data-tbnome="veiculos">veiculos</span> <span class="n" data-cnt="tb:veiculos"></span></button>
-  <button data-v="vEntid" data-mt="variedades" data-ic="folha"><span data-tbnome="variedades">variedades</span> <span class="n" data-cnt="tb:variedades"></span></button>
-  <button data-v="vEntid" data-mt="modos" data-ic="certo"><span data-tbnome="modos">modos</span> <span class="n" data-cnt="tb:modos"></span></button>
-  <button data-v="vEntid" data-mt="estadosAz" data-ic="stock"><span data-tbnome="estadosAz">estadosAz</span> <span class="n" data-cnt="tb:estadosAz"></span></button>
-  <button data-v="vEntid" data-mt="classes" data-ic="percent"><span data-tbnome="classes">classes</span> <span class="n" data-cnt="tb:classes"></span></button>
-  <button data-v="vEntid" data-mt="produtos" data-ic="garrafa"><span data-tbnome="produtos">produtos</span> <span class="n" data-cnt="tb:produtos"></span></button>
-  <button data-v="vEntid" data-mt="locais" data-ic="armazem"><span data-tbnome="locais">locais</span> <span class="n" data-cnt="tb:locais"></span></button>
-  <button data-v="vEntid" data-mt="tiposContrato" data-ic="contratos"><span data-tbnome="tiposContrato">tiposContrato</span> <span class="n" data-cnt="tb:tiposContrato"></span></button>
-  <button data-v="vEntid" data-mt="tiposCliente" data-ic="sub"><span data-tbnome="tiposCliente">tiposCliente</span> <span class="n" data-cnt="tb:tiposCliente"></span></button>
-  <button data-v="vEntid" data-mt="meios" data-ic="maquinas"><span data-tbnome="meios">meios</span> <span class="n" data-cnt="tb:meios"></span></button>
+  <button data-v="vEntid" data-mt="campanhas" data-ic="calendario"><span class="lb" data-tbnome="campanhas">Campanhas</span> <span class="n" data-cnt="tb:campanhas"></span></button>
+  <button data-v="vEntid" data-mt="postos" data-ic="herdades"><span class="lb" data-tbnome="postos">Postos de receção</span> <span class="n" data-cnt="tb:postos"></span></button>
+  <button data-v="vEntid" data-mt="qualidades" data-ic="estrela"><span class="lb" data-tbnome="qualidades">Qualidades da azeitona</span> <span class="n" data-cnt="tb:qualidades"></span></button>
+  <button data-v="vEntid" data-mt="veiculos" data-ic="forn"><span class="lb" data-tbnome="veiculos">Veículos que entregam</span> <span class="n" data-cnt="tb:veiculos"></span></button>
+  <button data-v="vEntid" data-mt="variedades" data-ic="folha"><span class="lb" data-tbnome="variedades">Variedades</span> <span class="n" data-cnt="tb:variedades"></span></button>
+  <button data-v="vEntid" data-mt="modos" data-ic="certo"><span class="lb" data-tbnome="modos">Modos de produção</span> <span class="n" data-cnt="tb:modos"></span></button>
+  <button data-v="vEntid" data-mt="estadosAz" data-ic="stock"><span class="lb" data-tbnome="estadosAz">Estados da azeitona</span> <span class="n" data-cnt="tb:estadosAz"></span></button>
+  <button data-v="vEntid" data-mt="classes" data-ic="percent"><span class="lb" data-tbnome="classes">Classes de azeite</span> <span class="n" data-cnt="tb:classes"></span></button>
+  <button data-v="vEntid" data-mt="produtos" data-ic="garrafa"><span class="lb" data-tbnome="produtos">Produtos (formatos)</span> <span class="n" data-cnt="tb:produtos"></span></button>
+  <button data-v="vEntid" data-mt="locais" data-ic="armazem"><span class="lb" data-tbnome="locais">Locais de stock</span> <span class="n" data-cnt="tb:locais"></span></button>
+  <button data-v="vEntid" data-mt="tiposContrato" data-ic="contratos"><span class="lb" data-tbnome="tiposContrato">Tipos de contrato</span> <span class="n" data-cnt="tb:tiposContrato"></span></button>
+  <button data-v="vEntid" data-mt="tiposCliente" data-ic="sub"><span class="lb" data-tbnome="tiposCliente">Tipos de cliente</span> <span class="n" data-cnt="tb:tiposCliente"></span></button>
+  <button data-v="vEntid" data-mt="meios" data-ic="maquinas"><span class="lb" data-tbnome="meios">Meios próprios</span> <span class="n" data-cnt="tb:meios"></span></button>
   <h6>Ligações</h6>
   <a href="portal.html" target="_blank" data-ic="portal" title="Portal do fornecedor (abre noutra janela)">Portal B2B ↗</a>
   <a href="loja.html" target="_blank" data-ic="loja" title="Loja online (abre noutra janela)">Loja online ↗</a>
@@ -3665,8 +3665,9 @@ function lado(){
   // 27-11-2026: entidades e tabelas escolhem-se no menu verde; aqui só fica a lista dos produtores e das propriedades
   document.querySelector("#vEntid .hero h1").textContent = tabSel==="ent" ? "Entidades" : "Tabelas";
   document.querySelector("#vEntid .hero p").textContent = tabSel==="ent" ? "" : "As listas de que o programa se serve: campanhas, postos, variedades, classes de azeite, produtos, meios e as restantes.";
-  $("tabLado").hidden = !arvore; document.querySelector("#vEntid .tblay").classList.toggle("semLado", !arvore);
+  $("tabLado").hidden = true; document.querySelector("#vEntid .tblay").classList.add("semLado");   // sem lista repetida à esquerda (pedido de 27-11-2026)
   try{ menuEntTab() }catch(e){}
+  $("tabLado").innerHTML = ""; return;
   if(!arvore){ $("tabLado").innerHTML = ""; return }
   $("tabLado").innerHTML = `<div class="gr">Fornecedores e propriedades</div>${arvore}`;
   document.querySelectorAll("#tabLado [data-pe]").forEach(b=>b.onclick=()=>{tabSel="ent";papel="produtor";selEnt=b.dataset.pe;selProp=null;tabelas();$("vEntid").scrollTop=0});
@@ -3734,7 +3735,7 @@ function entid(){
     abre(e.papeis.length===1&&e.papeis[0]==="cliente"?"vVend":"vDash"); }; }
   if(selEnt){ $("entCorpo").innerHTML = cadernoHtml(selEnt); ligaCaderno(selEnt); return; }
   const sem = E.filter(e=>(!papel||e.papeis.includes(papel))&&!Mv.has(e.id)).length;
-  const lista = (txt ? E : EV).filter(e=>(!papel||e.papeis.includes(papel))&&(!txt||e.nome.toLowerCase().includes(txt)||e.local.toLowerCase().includes(txt)||numsEnt(e.id).toLowerCase().includes(txt)));
+  const lista = (txt ? E : EV).filter(e=>(!papel||e.papeis.includes(papel))&&(!txt||e.nome.toLowerCase().includes(txt)||e.local.toLowerCase().includes(txt)||numsEnt(e.id).toLowerCase().includes(txt))).sort((a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt"));   // ordem alfabética
   let html = `<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px"><div class="sub" style="margin:0">${entTodas?"Todas as entidades registadas.":`Só as entidades com movimentos na campanha <b>${esc(D.conf.campanha)}</b> (talões, guias, receções, obras, vendas ou faturas).`} Compras e vendas desta campanha.${txt&&!entTodas?" A procura encontra também as que não têm movimentos.":""}</div>
     ${sem?`<button class="act light sm" id="entTodasB">${entTodas?"Mostrar só as com movimentos":`Mostrar também as sem movimentos (${sem})`}</button>`:""}</div>
     <table class="tb"><thead><tr><th>N.º</th><th>Entidade</th><th>Papéis</th><th>Localidade</th><th class="num">Compras a esta entidade (${esc(D.conf.campanha)})</th><th class="num">Vendas a esta entidade (${esc(D.conf.campanha)})</th></tr></thead><tbody>`+(lista.length?"":`<tr><td colspan="6" class="vazio">Nenhuma entidade com movimentos nesta campanha.</td></tr>`)+lista.map(e=>{
@@ -3743,7 +3744,7 @@ function entid(){
   if(papel==="prestador") html += `<section class="card"><h2>Condições dos prestadores nesta campanha</h2><div class="sub">O programa segue o que estiver aqui.</div><div style="overflow:auto"><table class="tb" id="tabPrest"></table></div><div class="alerta info">Modos de validação: <b>1</b> guia do prestador entra pré-aprovada · <b>2</b> guia do prestador, validada por nós · <b>3</b> registo nosso, aceite pelo prestador · <b>4</b> os dois registam e o programa compara. Em todos os modos a aprovação final é do responsável da obra.</div></section>`;
   if(papel==="produtor") html += `<section class="card"><h2><span>Propriedades ${entTodas?"":"com movimentos nesta campanha"}</span></h2><div class="sub">Uma linha por propriedade: de quem é, as zonas, o certificado bio, o que está combinado e a azeitona que já entrou na campanha ${esc(D.conf.campanha)}. Clique no nome para abrir a ficha; 📍 mostra no mapa.</div><div style="overflow:auto"><table class="tb" id="tabCampos"></table></div></section>
     <section class="card"><h2>Mapa das propriedades</h2><div class="sub">Verde: biológico · amarelo: convencional. A tracejado, zonas ainda sem perímetro desenhado.</div><div id="mapa"></div></section>`;
-  if(papel==="cliente") html += `<section class="card"><h2>Clientes</h2><table class="tb">`+`<thead><tr><th>Cliente</th><th>Tipo</th><th class="num">Vendas</th><th class="num">Total</th></tr></thead><tbody>`+D.clientes.filter(c=>entTodas||Mv.has(c.id)).map(c=>{const vs=D.vendas.filter(v=>vendaNaCampanha(v)&&v.cliente===c.id);return `<tr class="click" data-ent="${c.id}"><td><b>${c.nome}</b></td><td>${c.tipo}</td><td class="num">${vs.length}</td><td class="num">${eur(vs.reduce((t,v)=>t+totalVenda(v),0))}</td></tr>`}).join("")+"</tbody></table></section>";
+  if(papel==="cliente") html += `<section class="card"><h2>Clientes</h2><table class="tb">`+`<thead><tr><th>Cliente</th><th>Tipo</th><th class="num">Vendas</th><th class="num">Total</th></tr></thead><tbody>`+D.clientes.filter(c=>entTodas||Mv.has(c.id)).sort((a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt")).map(c=>{const vs=D.vendas.filter(v=>vendaNaCampanha(v)&&v.cliente===c.id);return `<tr class="click" data-ent="${c.id}"><td><b>${c.nome}</b></td><td>${c.tipo}</td><td class="num">${vs.length}</td><td class="num">${eur(vs.reduce((t,v)=>t+totalVenda(v),0))}</td></tr>`}).join("")+"</tbody></table></section>";
   $("entCorpo").innerHTML = html;
   document.querySelectorAll("[data-ent]").forEach(t=>t.onclick=()=>{selEnt=t.dataset.ent;selProp=null;entid();$("vEntid").scrollTop=0});
   if($("entTodasB")) $("entTodasB").onclick = ()=>{ entTodas = !entTodas; entid() };
@@ -4624,7 +4625,7 @@ function entCurto(){
   try{ if(vista==="vEnt") entCurto(); if(vista==="vVal") movValAplica(); else movVal = "lista"; document.body.dataset.movval = movVal }catch(e){ console.warn(e) } return v } })();
 // Moldura comum RYROX UI (27-11-2026): menu com ícones, recolher aos ícones, grupos que fecham, "Mais" no telemóvel,
 // atalhos no topo e pesquisa geral, iguais ao Smart Farm. A peça está em Projetos/_alicerce/ryrox-ui (não há cópia aqui).
-if(window.RyroxUI){ const nav = $("nav"); RyroxUI.menu(nav, {chave:"mda"});
+if(window.RyroxUI){ const nav = $("nav"); RyroxUI.menu(nav, {chave:"mda", alfabetica:true});
   RyroxUI.atalhos($("atalhos"), nav, ['[data-v="vVal"]','[data-v="vEnt"]','[data-fin="contas"]','[data-fin="liq"]']);
   const sa = x => String(x||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
   RyroxUI.pesquisa($("pesqGlobal"), q => { const t = sa(q), dig = q.replace(/\D/g,"");
