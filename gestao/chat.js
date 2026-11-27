@@ -60,7 +60,7 @@
   window.chatAtualiza = () => { if(O){ const t = document.getElementById("chTxt"), v = t ? t.value : ""; desenha(); const t2 = document.getElementById("chTxt"); if(t2 && v) t2.value = v } };
   window.addEventListener("storage", ev=>{ if(ev.key===MDA_CHAVE) setTimeout(()=>window.chatAtualiza(), 0) });
   const css = document.createElement("style"); css.textContent = `
-#chatBt{position:fixed;right:22px;bottom:22px;z-index:60;border:0;background:#141a0d;color:#fff;font:700 15px Inter,"Segoe UI",sans-serif;padding:13px 18px;border-radius:3px;box-shadow:0 12px 30px #0004;cursor:pointer;display:flex;gap:8px;align-items:center}
+#chatBt{position:fixed;right:22px;bottom:22px;z-index:60;border:0;background:#141a0d;color:#fff;font:700 15px Barlow,"Segoe UI",sans-serif;padding:13px 18px;border-radius:3px;box-shadow:0 12px 30px #0004;cursor:pointer;display:flex;gap:8px;align-items:center}
 #chatBt i{font-style:normal;background:#7cd23a;color:#141a0d;border-radius:3px;padding:1px 7px;font-size:13px}#chatBt.on{background:#3d5a1e}
 #chatP{position:fixed;right:22px;bottom:80px;z-index:60;width:min(400px,calc(100vw - 24px));height:min(600px,calc(100vh - 110px));background:#fff;border:1.5px solid #141a0d;border-radius:3px;box-shadow:0 24px 60px #0005;display:flex;flex-direction:column;font:14px/1.4 Inter,"Segoe UI",sans-serif;color:#141a0d}
 #chatP header{display:flex;align-items:center;gap:8px;background:#141a0d;color:#fff;padding:11px 12px;position:static;border:0;box-shadow:none}#chatP header b{flex:1;font-size:15px}
@@ -76,8 +76,8 @@
 .chM.ele{align-self:flex-start}.chM.int{align-self:flex-end;align-items:flex-end}.chM.int .chB{background:#fff6d6;border:1px dashed #b8860b}
 .chVz{color:#5a6350;font-size:13px;text-align:center;margin:20px 10px}
 .chEsc{border-top:1px solid #e3e6dc;padding:8px}
-.chCan{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.chCan button{border:1px solid #e3e6dc;background:#fff;border-radius:3px;padding:4px 8px;font:600 12px Inter,sans-serif;cursor:pointer}.chCan button.on{background:#141a0d;color:#fff;border-color:#141a0d}
-.chLin{display:flex;gap:6px;align-items:flex-end}.chLin textarea{flex:1;resize:none;font:14px Inter,sans-serif;padding:8px 10px;border:1.5px solid #e3e6dc;border-radius:3px;background:#f6f7f2}
+.chCan{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.chCan button{border:1px solid #e3e6dc;background:#fff;border-radius:3px;padding:4px 8px;font:600 12px Barlow,sans-serif;cursor:pointer}.chCan button.on{background:#141a0d;color:#fff;border-color:#141a0d}
+.chLin{display:flex;gap:6px;align-items:flex-end}.chLin textarea{flex:1;resize:none;font:14px Barlow,sans-serif;padding:8px 10px;border:1.5px solid #e3e6dc;border-radius:3px;background:#f6f7f2}
 .chLin button{border:0;background:#7cd23a;color:#141a0d;width:44px;height:44px;border-radius:3px;font-size:18px;cursor:pointer;font-weight:800}
 @media print{#chatBt,#chatP{display:none}}`;
   document.head.appendChild(css);
